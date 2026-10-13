@@ -7,7 +7,7 @@
 // Chemical data: blank where not confirmed. Verify every CAS / MW / formula against the manufacturer's spec sheet before launch.
 // Lot data below is SAMPLE ONLY — replace with real ISO 17025 lab reports before going live.
 
-const BRAND = { name: "Unchudme Peptides", tagline: "Research peptides, documented to the lot." };
+const BRAND = { name: "Based Chems", tagline: "Research peptides, documented to the batch." };
 
 const CATEGORIES = [
   { id: "peptide", label: "Peptides" },
@@ -117,14 +117,14 @@ const PRODUCTS = [
 // Common to every product
 const SPEC = {
   form: "Lyophilized powder, sealed glass vial",
-  purity: "≥ 98% (HPLC), lot-specific result on COA",
+  purity: "≥ 98% (HPLC), batch-specific result on COA",
   storage: "−20 °C, desiccated, protected from light",
 };
 
 // SAMPLE lots — deterministic fake data so the COA UI can be designed. Not real results.
 const LOTS = PRODUCTS.flatMap((p, i) =>
   [0, 1].map((k) => ({
-    lot: `UP-${p.id.replace(/[^a-z0-9]/g, "").slice(0, 4).toUpperCase()}-26${String(3 + k * 4 + (i % 3)).padStart(2, "0")}`,
+    lot: `BC-${p.id.replace(/[^a-z0-9]/g, "").slice(0, 4).toUpperCase()}-26${String(3 + k * 4 + (i % 3)).padStart(2, "0")}`,
     productId: p.id,
     date: `2026-${String(3 + k * 4 + (i % 3)).padStart(2, "0")}-1${i % 9}`,
     purity: (98.6 + ((i * 7 + k * 3) % 13) / 10).toFixed(2),

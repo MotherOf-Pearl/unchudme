@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Certificates · Unchudme Peptides</title>
+<title>Certificates · Based Chems</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -11,15 +11,15 @@
 <body data-page="coa">
 <main><section><div class="wrap">
   <div class="eyebrow">Certificates of analysis</div>
-  <h1 style="font-size:2.4rem">Look up your lot</h1>
-  <p class="muted">The lot number is printed on every vial label.</p>
+  <h1 style="font-size:2.4rem">Look up your batch</h1>
+  <p class="muted">The batch number is printed on every vial label.</p>
   <form id="coa-form" class="toolbar" style="max-width:560px">
-    <input id="lot" class="field" placeholder="e.g. UP-BPC1-2603" aria-label="Lot number" autocomplete="off">
+    <input id="lot" class="field" placeholder="e.g. BC-BPC1-2603" aria-label="Batch number" autocomplete="off">
     <button class="btn primary" type="submit">Find certificate</button>
   </form>
   <div id="coa-out"></div>
-  <h2 style="margin-top:56px">All published lots <span class="sample-badge">Sample data</span></h2>
-  <div class="table-scroll"><table class="coa-table"><thead><tr><th>Lot</th><th>Compound</th><th>Tested</th><th>Purity</th></tr></thead><tbody id="coa-list"></tbody></table></div>
+  <h2 style="margin-top:56px">All published batches <span class="sample-badge">Sample data</span></h2>
+  <div class="table-scroll"><table class="coa-table"><thead><tr><th>Batch</th><th>Compound</th><th>Tested</th><th>Purity</th></tr></thead><tbody id="coa-list"></tbody></table></div>
 </div></section></main>
 <script src="data.js"></script>
 <script src="prices.js"></script>

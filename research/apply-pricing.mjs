@@ -53,12 +53,16 @@ for (const r of raw.prices) {
 }
 
 const round = (n) => Math.round(n) - 0.01;   // $88.4 → $87.99, $88.6 → $88.99
+// Manual prices — win over the competitor average.
+const OVERRIDES = {
+  tesamorelin: { "10 mg": 79.99 },
+};
 const prices = {}; const rows = [];
 for (const p of PRODUCTS) for (const s of p.sizes) {
   const pts = buckets[p.id]?.[s.label] ?? [];
   const v = pts.map((x) => x.price), n = v.length;
   const mean = n ? v.reduce((a, b) => a + b, 0) / n : null;
-  const price = n ? round(mean) : null;
+  const price = OVERRIDES[p.id]?.[s.label] ?? (n ? round(mean) : null);
   if (price != null) (prices[p.id] ??= {})[s.label] = price;
   rows.push({ name: p.name, label: s.label, cost: COSTS[p.id]?.[s.label] ?? null, n, min: n ? Math.min(...v) : null, max: n ? Math.max(...v) : null, mean, price });
 }

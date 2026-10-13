@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>html,body{margin:0;overflow:hidden;background:transparent;width:100%;height:100%}#box{position:absolute;inset:0}canvas{display:block}</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js" } }
+</script>
+</head><body><div id="box"></div>
+<script type="module">
+// Still of the live home-page hero (js/hero3d.js) — the fallback image shown when WebGL isn't available.
+// window.renderHero([left, centre, right]) — each { name, option, lot }.
+import { mountHero } from './js/hero3d.js';
+window.renderHero = (specs) => mountHero(document.getElementById('box'), { face: window.FACE_PATHS, specs, animate: false });
+window.READY = true;
+</script>
+</body></html>

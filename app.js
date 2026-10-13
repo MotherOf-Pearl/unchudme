@@ -7,7 +7,7 @@ const byId = (id) => PRODUCTS.find((p) => p.id === id);
 const catLabel = (id) => CATEGORIES.find((c) => c.id === id)?.label ?? id;
 const priced = (p) => p.sizes.filter((s) => s.price != null);
 const minPrice = (p) => (priced(p).length ? Math.min(...priced(p).map((s) => s.price)) : Infinity);
-const priceTag = (p) => (priced(p).length ? `${priced(p).length > 1 ? "From " : ""}${money(minPrice(p))}` : "Price on request");
+const priceTag = (p) => (priced(p).length ? money(minPrice(p)) : "Price on request");
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 const store = {
@@ -20,7 +20,9 @@ const RUO_LONG = `All products sold by ${BRAND.name} are intended solely for in 
 
 // Rendered product shots from tools/vials (one per product option)
 const optSlug = (label) => label.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
-const vialImg = (p, s) => `media/vials/${p.id}--${optSlug(s.label)}.webp`;
+// media/ is served with a 1-year immutable cache — bump MEDIA_V whenever the vial renders change
+const MEDIA_V = 4;
+const vialImg = (p, s) => `media/vials/${p.id}--${optSlug(s.label)}.webp?v=${MEDIA_V}`;
 
 // Logo: featureless face outline — swept hair, clean hairline, high cheekbones, hollow cheeks, sharp jaw.
 const FACE_PATHS = `<path d="M10.3 13.4L12.4 10.3C14 9.7 16.5 9.5 20 9.5S26 9.7 27.6 10.3L29.7 13.4C31.2 11.3 31.7 8.6 31.1 6.4C30.4 4 28.3 2.2 25.4 1.5C22 .7 17.6 1 14.6 2.4C11.8 3.7 9.7 6 9.3 8.8C9.1 10.5 9.5 12.1 10.3 13.4Z" fill="currentColor" stroke="none"/><path d="M13.6 9.4C15.6 6.4 19.6 4.3 25.4 4.4M17.4 9.1C19.6 7.2 23.4 6.2 28.6 6.9" stroke="var(--bg,#0f1215)" stroke-width="1"/><path d="M20 9.5C23.5 9.5 26 9.7 27.6 10.3L29.7 13.4C30.6 15.6 31 18.2 30.8 20.6C30.6 23 29 24.4 28.7 26.6C28.5 28.4 29.4 29.9 29.3 31.4L23.4 38.6C22.4 39.3 21.2 39.5 20 39.5S17.6 39.3 16.6 38.6L10.7 31.4C10.6 29.9 11.5 28.4 11.3 26.6C11 24.4 9.4 23 9.2 20.6C9 18.2 9.4 15.6 10.3 13.4L12.4 10.3C14 9.7 16.5 9.5 20 9.5Z"/><path d="M13.4 34.9L13.9 46M26.6 34.9L26.1 46" opacity=".55"/>`;
@@ -37,9 +39,7 @@ function renderChrome() {
   const page = document.body.dataset.page;
   const nav = [["shop", "shop.html", "Shop"], ["coa", "coa.html", "Certificates"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"]];
   document.body.insertAdjacentHTML("afterbegin", `
-    <div class="bg-video" aria-hidden="true">
-      <video muted loop playsinline preload="auto" poster="media/dna-poster.jpg">
-        <source src="media/dna-loop.mp4" type="video/mp4"></video></div>
+    <div class="bg" aria-hidden="true"></div>
     <div class="ruo-strip">${RUO_SHORT}</div>
     <header class="site"><div class="wrap">
       <a class="logo" href="index.html">${logoSVG()}${esc(BRAND.name)}</a>
@@ -70,8 +70,6 @@ function renderChrome() {
   $(".cart-btn").onclick = openCart;
   $(".drawer-bg").onclick = closeCart;
   $(".drawer [data-close]").onclick = closeCart;
-  // Respect reduced-motion: keep the still poster instead of playing the loop.
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) $(".bg-video video").play().catch(() => {});
   renderCart();
   gate();
 }
@@ -128,10 +126,12 @@ function optionSummary(p) {
 function productCard(p) {
   return `<a class="card" href="product.html?id=${p.id}">
     <div class="vial"><img src="${vialImg(p, p.sizes[0])}" alt="${esc(p.name)} vial" loading="lazy" width="1000" height="1000"></div>
-    <span class="tag">${catLabel(p.cat)}</span>
-    <span class="name">${esc(p.name)}</span>
-    <span class="meta">${optionSummary(p)}</span>
-    <span class="price">${priceTag(p)}</span>
+    <div class="card-body">
+      <span class="tag">${catLabel(p.cat)}</span>
+      <span class="name">${esc(p.name)}</span>
+      <span class="meta">${optionSummary(p)}</span>
+      <span class="price">${priceTag(p)}<span class="go" aria-hidden="true">→</span></span>
+    </div>
   </a>`;
 }
 
@@ -139,17 +139,6 @@ function productCard(p) {
 const pages = {
   home() {
     $("#featured").innerHTML = PRODUCTS.slice(0, 8).map(productCard).join("");
-    const l = LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
-    $("#hero-lot").innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <b>${esc(p.name)}</b><span class="sample-badge">Sample data</span></div>
-      <div class="row"><span class="muted">Lot</span><span>${l.lot}</span></div>
-      <div class="row"><span class="muted">Purity (HPLC)</span><span class="pass">${l.purity}%</span></div>
-      <div class="row"><span class="muted">Identity (LC-MS)</span><span class="pass">Conforms</span></div>
-      <div class="row"><span class="muted">Endotoxin</span><span>${l.endotoxin}</span></div>
-      <div class="row"><span class="muted">Residual TFA</span><span>${l.tfa}</span></div>
-      <div class="row"><span class="muted">Heavy metals</span><span class="pass">Pass</span></div>
-      <a class="btn small" style="margin-top:14px" href="coa.html?lot=${l.lot}">Open full certificate →</a>`;
   },
 
   shop() {
@@ -200,9 +189,9 @@ const pages = {
           <tr><th>Storage</th><td>${SPEC.storage}</td></tr>
         </table>
         <h3 style="margin-top:28px">Certificates for this compound</h3>
-        <div class="table-scroll"><table class="coa-table"><tr><th>Lot</th><th>Tested</th><th>Purity</th><th></th></tr>
+        <div class="table-scroll"><table class="coa-table"><tr><th>Batch</th><th>Tested</th><th>Purity</th><th></th></tr>
           ${lots.map((l) => `<tr><td class="mono">${l.lot}</td><td>${l.date}</td><td class="mono">${l.purity}%</td>
-            <td><a href="coa.html?lot=${l.lot}">View</a> <span class="sample-badge">Sample</span></td></tr>`).join("")}
+            <td><a href="coa.html?batch=${l.lot}">View</a> <span class="sample-badge">Sample</span></td></tr>`).join("")}
         </table></div>
       </div>`;
     const setPrice = () => { $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
@@ -219,7 +208,7 @@ const pages = {
   coa() {
     const show = (code) => {
       const l = LOTS.find((x) => x.lot.toLowerCase() === code.trim().toLowerCase());
-      if (!l) { $("#coa-out").innerHTML = code ? `<div class="coa-panel"><p>No certificate found for <span class="mono">${esc(code)}</span>. Lot numbers are printed on the vial label.</p></div>` : ""; return; }
+      if (!l) { $("#coa-out").innerHTML = code ? `<div class="coa-panel"><p>No certificate found for <span class="mono">${esc(code)}</span>. Batch numbers are printed on the vial label.</p></div>` : ""; return; }
       const p = byId(l.productId);
       const rows = [["Appearance", "White lyophilized powder", "Conforms"], ["Identity (LC-MS)", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
         ["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`], ["Endotoxin (LAL)", "< 1.0 EU/mg", l.endotoxin],
@@ -228,20 +217,20 @@ const pages = {
       $("#coa-out").innerHTML = `<div class="coa-panel">
         <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div><div class="eyebrow">Certificate of analysis</div><h2 style="margin:0">${esc(p.name)}</h2>
-          <p class="muted mono" style="margin:6px 0 0">Lot ${l.lot} · tested ${l.date}</p></div>
+          <p class="muted mono" style="margin:6px 0 0">Batch ${l.lot} · tested ${l.date}</p></div>
           <div><span class="sample-badge">Sample data — not a real result</span></div></div>
         <div class="table-scroll" style="margin-top:18px"><table class="coa-table">
           <tr><th>Test</th><th>Specification</th><th>Result</th></tr>
           ${rows.map((r) => `<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono pass">${r[2]}</td></tr>`).join("")}
         </table></div>
         <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${l.lab}. Original signed PDF will be linked here.</p></div>`;
-      history.replaceState(null, "", `?lot=${l.lot}`);
+      history.replaceState(null, "", `?batch=${l.lot}`);
     };
     $("#coa-form").onsubmit = (e) => { e.preventDefault(); show($("#lot").value); };
     $("#coa-list").innerHTML = LOTS.map((l) => `<tr><td class="mono"><a href="#" data-lot="${l.lot}">${l.lot}</a></td>
       <td>${esc(byId(l.productId).name)}</td><td>${l.date}</td><td class="mono">${l.purity}%</td></tr>`).join("");
     $("#coa-list").onclick = (e) => { const a = e.target.closest("[data-lot]"); if (!a) return; e.preventDefault(); $("#lot").value = a.dataset.lot; show(a.dataset.lot); scrollTo({ top: 0, behavior: "smooth" }); };
-    const pre = new URLSearchParams(location.search).get("lot");
+    const qs = new URLSearchParams(location.search), pre = qs.get("batch") ?? qs.get("lot"); // ?lot= kept for old links
     if (pre) { $("#lot").value = pre; show(pre); }
   },
 };

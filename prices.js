@@ -21,7 +21,7 @@ const PRICES = {
  },
  "tesamorelin": {
   "5 mg": 64.99,
-  "10 mg": 74.99,
+  "10 mg": 79.99,
   "20 mg": 184.99
  },
  "sermorelin": {
