@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop · Unchudme Peptides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="shop">
+<main><section><div class="wrap">
+  <div class="eyebrow">Catalog</div>
+  <h1 style="font-size:2.4rem">All compounds</h1>
+  <p class="muted" style="margin-top:-6px">Browse by category or search by name, sequence or CAS.</p>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Search name, sequence or CAS" aria-label="Search">
+    <select id="sort" aria-label="Sort"><option value="name">Name A–Z</option><option value="price">Price</option><option value="mw">Molecular weight</option></select>
+    <span class="muted mono" id="count" style="font-size:.85rem"></span>
+  </div>
+  <div class="chips" id="chips" style="margin-bottom:24px"></div>
+  <div class="grid" id="results"></div>
+</div></section></main>
+<script src="data.js"></script>
+<script src="prices.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+node_modules/
+tools/vials/preview.png
+# private: supplier cost sheet and the margin report built from it
+research/supplier-costs.json
+research/pricing-report.md

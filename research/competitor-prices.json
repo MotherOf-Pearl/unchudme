@@ -1,0 +1,2737 @@
+{
+  "collected": "2026-10-12",
+  "vendors": [
+    {
+      "name": "Honest Peptide",
+      "url": "https://honestpeptide.com/",
+      "notes": "PB rank 8.51 (Strong). WooCommerce; house names GLP-2 TZ = tirzepatide, GLP-3 R = retatrutide. Some items on 20% sale. Narrow size range (mostly one size per product)."
+    },
+    {
+      "name": "Unyx Peptides",
+      "url": "https://unyxpeptides.com/",
+      "notes": "PB rank 8.04 (Strong). Arizona. House names GLP2-T = tirzepatide, GLP3-R = retatrutide. List prices, no sale shown. Broad size ladders."
+    },
+    {
+      "name": "IDUN Peptides",
+      "url": "https://idunpeptides.com/",
+      "notes": "Perfect Peptide Critic score per PB. Sells Single Vial / 5-vial / 10-vial options; single-vial prices recorded. Very low prices vs field. House names GLP-2 TZ / GLP-3 RT. Some products (DSIP, Ipamorelin etc.) have no single-vial option for some sizes."
+    },
+    {
+      "name": "Kylo Peptides",
+      "url": "https://kylopeptides.com/",
+      "notes": "PB rank 6.35 (Curated: Strong). Sheridan WY. Several items on sale. Premium pricing. Also sells multi-vial 'Stacks' (excluded)."
+    },
+    {
+      "name": "Enhanced Chems",
+      "url": "https://enhancedchems.com/",
+      "notes": "PB rank 6.36. US-based. Almost every item shows a sale price (strikethrough regular). House codes GLP2 = tirzepatide, GLP-3 RT = retatrutide."
+    },
+    {
+      "name": "BIOLENO",
+      "url": "https://bioleno.com/",
+      "notes": "PB rank 6.35 (Promising). Wyoming-registered, domain registered Apr 2026. Lowest-price outlier; many blends out of stock. House codes BL-TR2 / BL-RT3 (assumed tirzepatide / retatrutide, not stated on listing)."
+    },
+    {
+      "name": "Artemyx Research",
+      "url": "https://artemyxresearch.com/",
+      "notes": "Delaware-mailed US. Small catalog (~12 SKUs). Everything shown at 20% off sale price."
+    },
+    {
+      "name": "Prime Lab Peptides",
+      "url": "https://primelabpeptides.com/",
+      "notes": "Miami. Every item shown as sale (~25-50% off strikethrough). Uses non-standard GLP sizes (Retatrutide 6/12/24mg). Also sells 10-vial packs (excluded; single vials recorded)."
+    },
+    {
+      "name": "Alpha Peps",
+      "url": "https://alphapeps.com/",
+      "notes": "US-oriented. Product-page prices recorded (store API also carries stale subscription variation prices, ignored). Duplicate listings for some items (e.g. two BPC-157 10mg SKUs at $59 and $43). No GLP-class products listed."
+    },
+    {
+      "name": "ezPeps",
+      "url": "https://ezpeps.com/",
+      "notes": "Michigan. All items on sale (~20-25% off). Sells overfilled vials at odd sizes (11mg, 22mg, 24mg, 33mg, 45mg, 57mg...) so many items don't match standard sizes; recorded at their stated size."
+    }
+  ],
+  "prices": [
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 78.0,
+      "url": "https://honestpeptide.com/product/glp3r?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "Honest Peptide",
+      "price": 168.0,
+      "url": "https://honestpeptide.com/product/glp3r?attribute_pa_size=30mg",
+      "note": "sale price (regular $210.00)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 52.0,
+      "url": "https://honestpeptide.com/product/glp2tz?attribute_pa_size=10mg",
+      "note": "sale price (regular $65.00)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Honest Peptide",
+      "price": 104.0,
+      "url": "https://honestpeptide.com/product/glp2tz?attribute_pa_size=30mg",
+      "note": "sale price (regular $130.00)"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 35.0,
+      "url": "https://honestpeptide.com/product/mots-c?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 49.0,
+      "url": "https://honestpeptide.com/product/semax?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 59.0,
+      "url": "https://honestpeptide.com/product/sermorelin?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 49.0,
+      "url": "https://honestpeptide.com/product/ipamorelin?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 49.0,
+      "url": "https://honestpeptide.com/product/bpc157?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 63.0,
+      "url": "https://honestpeptide.com/product/tb500?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10+10",
+      "vendor": "Honest Peptide",
+      "price": 91.0,
+      "url": "https://honestpeptide.com/product/bpc157tb500-blend?attribute_pa_size=10-10mg",
+      "note": ""
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Honest Peptide",
+      "price": 133.0,
+      "url": "https://honestpeptide.com/product/klow-blend?attribute_size=80mg",
+      "note": ""
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Honest Peptide",
+      "price": 95.2,
+      "url": "https://honestpeptide.com/product/glow-blend?attribute_size=10%2F10%2F50mg",
+      "note": "sale price (regular $119.00)"
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 31.5,
+      "url": "https://honestpeptide.com/product/melanotan2?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "DSIP",
+      "mg": "5",
+      "vendor": "Honest Peptide",
+      "price": 28.0,
+      "url": "https://honestpeptide.com/product/dsip?attribute_pa_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Honest Peptide",
+      "price": 63.0,
+      "url": "https://honestpeptide.com/product/nad?attribute_pa_size=500mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "Honest Peptide",
+      "price": 112.0,
+      "url": "https://honestpeptide.com/product/nad?attribute_pa_size=1000mg",
+      "note": ""
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 70.0,
+      "url": "https://honestpeptide.com/product/tesamorelin?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "Honest Peptide",
+      "price": 50.0,
+      "url": "https://honestpeptide.com/product/cjc-1295-ipamorelin?attribute_pa_size=5-5mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "5",
+      "vendor": "Honest Peptide",
+      "price": 35.0,
+      "url": "https://honestpeptide.com/product/cjc-1295?attribute_pa_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 40.0,
+      "url": "https://honestpeptide.com/product/pt-141?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Kisspeptin-10",
+      "mg": "10",
+      "vendor": "Honest Peptide",
+      "price": 45.0,
+      "url": "https://honestpeptide.com/product/kisspeptin-copy?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Honest Peptide",
+      "price": 39.2,
+      "url": "https://honestpeptide.com/product/ghk-cu?attribute_pa_size=100mg",
+      "note": "sale price (regular $49.00)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 75.0,
+      "url": "https://unyxpeptides.com/product/glp3-r/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 100.0,
+      "url": "https://unyxpeptides.com/product/glp3-r/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "15",
+      "vendor": "Unyx Peptides",
+      "price": 109.99,
+      "url": "https://unyxpeptides.com/product/glp3-r/?attribute_size=15mg",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "20",
+      "vendor": "Unyx Peptides",
+      "price": 150.0,
+      "url": "https://unyxpeptides.com/product/glp3-r/?attribute_size=20mg",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "Unyx Peptides",
+      "price": 200.0,
+      "url": "https://unyxpeptides.com/product/glp3-r/?attribute_size=30mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 49.99,
+      "url": "https://unyxpeptides.com/product/glp2-t/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 79.99,
+      "url": "https://unyxpeptides.com/product/glp2-t/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "15",
+      "vendor": "Unyx Peptides",
+      "price": 109.99,
+      "url": "https://unyxpeptides.com/product/glp2-t/?attribute_size=15mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "20",
+      "vendor": "Unyx Peptides",
+      "price": 129.99,
+      "url": "https://unyxpeptides.com/product/glp2-t/?attribute_size=20mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Unyx Peptides",
+      "price": 149.99,
+      "url": "https://unyxpeptides.com/product/glp2-t/?attribute_size=30mg",
+      "note": ""
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 80.0,
+      "url": "https://unyxpeptides.com/product/tesamorelin/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 135.0,
+      "url": "https://unyxpeptides.com/product/tesamorelin/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "20",
+      "vendor": "Unyx Peptides",
+      "price": 230.0,
+      "url": "https://unyxpeptides.com/product/tesamorelin/?attribute_size=20mg",
+      "note": "out of stock"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 60.0,
+      "url": "https://unyxpeptides.com/product/mots-c/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "40",
+      "vendor": "Unyx Peptides",
+      "price": 189.99,
+      "url": "https://unyxpeptides.com/product/mots-c/?attribute_size=40mg",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 55.0,
+      "url": "https://unyxpeptides.com/product/sermorelin/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 100.0,
+      "url": "https://unyxpeptides.com/product/sermorelin/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Semax",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 40.0,
+      "url": "https://unyxpeptides.com/product/semax/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 60.0,
+      "url": "https://unyxpeptides.com/product/semax/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 35.0,
+      "url": "https://unyxpeptides.com/product/selank/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 60.0,
+      "url": "https://unyxpeptides.com/product/selank/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Unyx Peptides",
+      "price": 90.0,
+      "url": "https://unyxpeptides.com/product/nad-plus/?attribute_size=500mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "Unyx Peptides",
+      "price": 120.0,
+      "url": "https://unyxpeptides.com/product/nad-plus/?attribute_size=1000mg",
+      "note": ""
+    },
+    {
+      "product": "TB-500",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 59.99,
+      "url": "https://unyxpeptides.com/product/tb-500-thymosin-beta-4/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 109.99,
+      "url": "https://unyxpeptides.com/product/tb-500-thymosin-beta-4/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 45.0,
+      "url": "https://unyxpeptides.com/product/ipamorelin/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 80.0,
+      "url": "https://unyxpeptides.com/product/ipamorelin/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "Unyx Peptides",
+      "price": 45.0,
+      "url": "https://unyxpeptides.com/product/ghk-cu-copper-peptide/?attribute_size=50mg",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Unyx Peptides",
+      "price": 65.0,
+      "url": "https://unyxpeptides.com/product/ghk-cu-copper-peptide/?attribute_size=100mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 60.0,
+      "url": "https://unyxpeptides.com/product/cjc-1295-without-dac/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 100.0,
+      "url": "https://unyxpeptides.com/product/cjc-1295-without-dac/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 40.0,
+      "url": "https://unyxpeptides.com/product/bpc-157/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 65.0,
+      "url": "https://unyxpeptides.com/product/bpc-157/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "DSIP",
+      "mg": "5",
+      "vendor": "Unyx Peptides",
+      "price": 59.99,
+      "url": "https://unyxpeptides.com/product/dsip-delta-sleep-inducing-peptide/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Kisspeptin-10",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 149.99,
+      "url": "https://unyxpeptides.com/product/kisspeptin-10/?attribute_size=10mg",
+      "note": "out of stock"
+    },
+    {
+      "product": "SS-31",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 119.99,
+      "url": "https://unyxpeptides.com/product/ss-31-elamipretide/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 89.99,
+      "url": "https://unyxpeptides.com/product/kpv/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 49.99,
+      "url": "https://unyxpeptides.com/product/epitalon/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 69.99,
+      "url": "https://unyxpeptides.com/product/melanotan-2-mt-2/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Melanotan I",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 79.99,
+      "url": "https://unyxpeptides.com/product/melanotan-1-mt-1/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Unyx Peptides",
+      "price": 150.0,
+      "url": "https://unyxpeptides.com/product/klow/?attribute_size=80mg",
+      "note": ""
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Unyx Peptides",
+      "price": 130.0,
+      "url": "https://unyxpeptides.com/product/glow-ghk-cu-skin-peptide/?attribute_size=70mg",
+      "note": ""
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "Unyx Peptides",
+      "price": 74.99,
+      "url": "https://unyxpeptides.com/product/pt-141/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "5+5",
+      "vendor": "Unyx Peptides",
+      "price": 79.99,
+      "url": "https://unyxpeptides.com/product/bpc-157-tb-500-blend/?attribute_size=BPC+5mg+%2B+TB+5mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10+10",
+      "vendor": "Unyx Peptides",
+      "price": 139.99,
+      "url": "https://unyxpeptides.com/product/bpc-157-tb-500-blend/?attribute_size=BPC+10mg+%2B+TB+10mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "10 total",
+      "vendor": "Unyx Peptides",
+      "price": 109.0,
+      "url": "https://unyxpeptides.com/product/cjc-1295-ipamorelin-blend/?attribute_pa_size=10mg",
+      "note": "listed as 10mg; component split not stated"
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "IDUN Peptides",
+      "price": 69.99,
+      "url": "https://idunpeptides.com/research-peptides/nad-plus-buffered/?attribute_pa_mass=1000mg",
+      "note": "single-vial option; buffered"
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "IDUN Peptides",
+      "price": 34.99,
+      "url": "https://idunpeptides.com/research-peptides/nad-plus-buffered/?attribute_pa_mass=500mg",
+      "note": "single-vial option; buffered"
+    },
+    {
+      "product": "SS-31",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 34.99,
+      "url": "https://idunpeptides.com/research-peptides/ss-31/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "SS-31",
+      "mg": "50",
+      "vendor": "IDUN Peptides",
+      "price": 119.99,
+      "url": "https://idunpeptides.com/research-peptides/ss-31/?attribute_pa_mass=50mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "IDUN Peptides",
+      "price": 49.99,
+      "url": "https://idunpeptides.com/research-peptides/cjc-1295-no-dac-ipamorelin-blend/?attribute_pa_mass=10mg",
+      "note": "single-vial option; listed as 10mg = 5mg+5mg per description"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "IDUN Peptides",
+      "price": 34.99,
+      "url": "https://idunpeptides.com/research-peptides/ghk-cu/?attribute_pa_mass=100mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "IDUN Peptides",
+      "price": 19.99,
+      "url": "https://idunpeptides.com/research-peptides/ghk-cu/?attribute_pa_mass=50mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "DSIP",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 29.99,
+      "url": "https://idunpeptides.com/research-peptides/dsip/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 29.99,
+      "url": "https://idunpeptides.com/research-peptides/ipamorelin/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 24.99,
+      "url": "https://idunpeptides.com/research-peptides/pt-141/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 39.99,
+      "url": "https://idunpeptides.com/research-peptides/cjc-1295-no-dac/?attribute_pa_mass=10mg",
+      "note": "single-vial option; out of stock"
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 34.99,
+      "url": "https://idunpeptides.com/research-peptides/kpv/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 27.99,
+      "url": "https://idunpeptides.com/research-peptides/bpc-157-10mg-vial/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 44.99,
+      "url": "https://idunpeptides.com/research-peptides/tb-500/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 49.99,
+      "url": "https://idunpeptides.com/research-peptides/tesamorelin-ghrh-analog/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 34.99,
+      "url": "https://idunpeptides.com/research-peptides/mots-c-mitochondrial-peptide/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "40",
+      "vendor": "IDUN Peptides",
+      "price": 64.99,
+      "url": "https://idunpeptides.com/research-peptides/mots-c-mitochondrial-peptide/?attribute_pa_mass=40mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10+10",
+      "vendor": "IDUN Peptides",
+      "price": 59.99,
+      "url": "https://idunpeptides.com/research-peptides/bpc-157-tb-500-wolverine-blend/?attribute_pa_mass=20mg",
+      "note": "single-vial option; listed as 20mg = 10mg+10mg per description"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 19.99,
+      "url": "https://idunpeptides.com/research-peptides/epitalon/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 19.99,
+      "url": "https://idunpeptides.com/research-peptides/melanotan-ii/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 29.99,
+      "url": "https://idunpeptides.com/research-peptides/selank/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 24.99,
+      "url": "https://idunpeptides.com/research-peptides/semax/?attribute_pa_mass=10mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "IDUN Peptides",
+      "price": 64.99,
+      "url": "https://idunpeptides.com/research-peptides/klow/?attribute_pa_mass=80mg",
+      "note": "single-vial option"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 39.99,
+      "url": "https://idunpeptides.com/research-peptides/glp-3-rt-triple-agonist-peptide/?attribute_pa_mass=10mg",
+      "note": "single-vial option; house name GLP-3 RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "20",
+      "vendor": "IDUN Peptides",
+      "price": 59.99,
+      "url": "https://idunpeptides.com/research-peptides/glp-3-rt-triple-agonist-peptide/?attribute_pa_mass=20mg",
+      "note": "single-vial option; house name GLP-3 RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "IDUN Peptides",
+      "price": 79.99,
+      "url": "https://idunpeptides.com/research-peptides/glp-3-rt-triple-agonist-peptide/?attribute_pa_mass=30mg",
+      "note": "single-vial option; house name GLP-3 RT"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "IDUN Peptides",
+      "price": 29.99,
+      "url": "https://idunpeptides.com/research-peptides/glp-2-tz-peptide/?attribute_pa_mass=10mg",
+      "note": "single-vial option; house name GLP-2 TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "IDUN Peptides",
+      "price": 49.99,
+      "url": "https://idunpeptides.com/research-peptides/glp-2-tz-peptide/?attribute_pa_mass=30mg",
+      "note": "single-vial option; house name GLP-2 TZ"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 89.95,
+      "url": "https://kylopeptides.com/product/glp-3-rt/?attribute_pa_size=10mg",
+      "note": "sale price (regular $99.95)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "20",
+      "vendor": "Kylo Peptides",
+      "price": 169.95,
+      "url": "https://kylopeptides.com/product/glp-3-rt/?attribute_pa_size=20mg",
+      "note": "sale price (regular $189.95)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "Kylo Peptides",
+      "price": 229.95,
+      "url": "https://kylopeptides.com/product/glp-3-rt/?attribute_pa_size=30mg",
+      "note": "sale price (regular $279.95)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "60",
+      "vendor": "Kylo Peptides",
+      "price": 459.95,
+      "url": "https://kylopeptides.com/product/glp-3-rt/?attribute_pa_size=60mg",
+      "note": "sale price (regular $499.95)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 99.95,
+      "url": "https://kylopeptides.com/product/glp-2-tz/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Kylo Peptides",
+      "price": 249.95,
+      "url": "https://kylopeptides.com/product/glp-2-tz/?attribute_pa_size=30mg",
+      "note": ""
+    },
+    {
+      "product": "KPV",
+      "mg": "5",
+      "vendor": "Kylo Peptides",
+      "price": 44.95,
+      "url": "https://kylopeptides.com/product/kpv/?attribute_pa_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 59.95,
+      "url": "https://kylopeptides.com/product/kpv/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Kisspeptin-10",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 99.95,
+      "url": "https://kylopeptides.com/product/kisspeptin/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 109.95,
+      "url": "https://kylopeptides.com/product/sermorelin/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 64.95,
+      "url": "https://kylopeptides.com/product/mots-c/?attribute_pa_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "40",
+      "vendor": "Kylo Peptides",
+      "price": 169.95,
+      "url": "https://kylopeptides.com/product/mots-c/?attribute_pa_size=40mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Kylo Peptides",
+      "price": 99.95,
+      "url": "https://kylopeptides.com/product/nad/?attribute_pa_size=500mg",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "Kylo Peptides",
+      "price": 159.95,
+      "url": "https://kylopeptides.com/product/nad/?attribute_pa_size=1000mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "5",
+      "vendor": "Kylo Peptides",
+      "price": 49.95,
+      "url": "https://kylopeptides.com/product/bpc-157/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 69.95,
+      "url": "https://kylopeptides.com/product/bpc-157/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "Kylo Peptides",
+      "price": 39.95,
+      "url": "https://kylopeptides.com/product/ghk-cu/?attribute_size=50mg",
+      "note": "sale price (regular $54.95)"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Kylo Peptides",
+      "price": 59.95,
+      "url": "https://kylopeptides.com/product/ghk-cu/?attribute_size=100mg",
+      "note": "sale price (regular $79.95)"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "5",
+      "vendor": "Kylo Peptides",
+      "price": 79.95,
+      "url": "https://kylopeptides.com/product/ipamorelin/?attribute_size=5mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 109.95,
+      "url": "https://kylopeptides.com/product/ipamorelin/?attribute_size=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "5+5",
+      "vendor": "Kylo Peptides",
+      "price": 79.95,
+      "url": "https://kylopeptides.com/product/wolverine-blend/?attribute_pa_size=10mg",
+      "note": "listed as 10mg; SKU/description = 5mg+5mg"
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Kylo Peptides",
+      "price": 159.95,
+      "url": "https://kylopeptides.com/product/glow/",
+      "note": "size 70 mg (10+10+50)"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Kylo Peptides",
+      "price": 179.95,
+      "url": "https://kylopeptides.com/product/klow/",
+      "note": "size 80 mg (10+10+50+10)"
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 69.95,
+      "url": "https://kylopeptides.com/product/melanotan-ii/",
+      "note": "size from SKU MT2-10"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 69.95,
+      "url": "https://kylopeptides.com/product/epithalon/",
+      "note": "size from SKU EPI-10"
+    },
+    {
+      "product": "SS-31",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 59.95,
+      "url": "https://kylopeptides.com/product/ss-31/",
+      "note": ""
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 49.95,
+      "url": "https://kylopeptides.com/product/semax/",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 49.95,
+      "url": "https://kylopeptides.com/product/selank/",
+      "note": ""
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 49.95,
+      "url": "https://kylopeptides.com/product/pt-141/",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "Kylo Peptides",
+      "price": 89.95,
+      "url": "https://kylopeptides.com/product/cjc-1295-ipamorelin-no-dac/",
+      "note": "listed as 10 mg (5 + 5)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 99.95,
+      "url": "https://kylopeptides.com/product/tesamorelin/",
+      "note": ""
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Kylo Peptides",
+      "price": 69.95,
+      "url": "https://kylopeptides.com/product/tb-500/",
+      "note": ""
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 79.99,
+      "url": "https://enhancedchems.com/product/glp-3rt-10mg/",
+      "note": "sale price (regular $89.99)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "15",
+      "vendor": "Enhanced Chems",
+      "price": 109.99,
+      "url": "https://enhancedchems.com/product/glp-3rt-15mg/",
+      "note": "sale price (regular $121.99)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "20",
+      "vendor": "Enhanced Chems",
+      "price": 134.99,
+      "url": "https://enhancedchems.com/product/glp-3rt-20mg/",
+      "note": "sale price (regular $149.99)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "Enhanced Chems",
+      "price": 189.99,
+      "url": "https://enhancedchems.com/product/glp-3rt-30mg/",
+      "note": "sale price (regular $210.99)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "40",
+      "vendor": "Enhanced Chems",
+      "price": 219.99,
+      "url": "https://enhancedchems.com/product/glp-3rt-40mg/",
+      "note": "sale price (regular $244.99)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 39.99,
+      "url": "https://enhancedchems.com/product/glp2/",
+      "note": "sale price (regular $88.99); house code GLP2"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "20",
+      "vendor": "Enhanced Chems",
+      "price": 64.99,
+      "url": "https://enhancedchems.com/product/glp2-20mg/",
+      "note": "sale price (regular $79.99); house code GLP2"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Enhanced Chems",
+      "price": 99.99,
+      "url": "https://enhancedchems.com/product/glp2-30mg/",
+      "note": "sale price (regular $169.99); house code GLP2"
+    },
+    {
+      "product": "Eloralintide",
+      "mg": "unspecified",
+      "vendor": "Enhanced Chems",
+      "price": 99.99,
+      "url": "https://enhancedchems.com/product/eloralintide/",
+      "note": "sale price (regular $114.99); vial size not stated on listing or product page"
+    },
+    {
+      "product": "Cagrilintide",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 62.99,
+      "url": "https://enhancedchems.com/product/cagrilintide/",
+      "note": "sale price (regular $69.99)"
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 39.99,
+      "url": "https://enhancedchems.com/product/sermorelin-5mg/",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "DSIP",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 44.99,
+      "url": "https://enhancedchems.com/product/dsip5mg/",
+      "note": "sale price (regular $54.99)"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 49.99,
+      "url": "https://enhancedchems.com/product/mots-c-10mg/",
+      "note": "sale price (regular $59.99)"
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 44.99,
+      "url": "https://enhancedchems.com/product/cjc-1295-no-dac-5mg/",
+      "note": "sale price (regular $49.99)"
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 64.99,
+      "url": "https://enhancedchems.com/product/cjc-1295-no-dac-10mg/",
+      "note": "sale price (regular $71.99)"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 34.99,
+      "url": "https://enhancedchems.com/product/bpc-157-5mg/",
+      "note": "sale price (regular $38.99); out of stock"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 41.99,
+      "url": "https://enhancedchems.com/product/bpc-157-10-mg/",
+      "note": "sale price (regular $46.99)"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "20",
+      "vendor": "Enhanced Chems",
+      "price": 54.99,
+      "url": "https://enhancedchems.com/product/bpc-157-20mg/",
+      "note": "sale price (regular $59.99)"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "Enhanced Chems",
+      "price": 64.99,
+      "url": "https://enhancedchems.com/product/ipamorelin-cjc-1295-no-dac-5mg/",
+      "note": "sale price (regular $71.99); listed as 5mg; description = 5mg each"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "10+10",
+      "vendor": "Enhanced Chems",
+      "price": 104.99,
+      "url": "https://enhancedchems.com/product/ipamorelin-cjc-1295-no-dac-10mg/",
+      "note": "sale price (regular $115.99); listed as 10mg; description = 10mg each"
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 37.99,
+      "url": "https://enhancedchems.com/product/selank-10mg/",
+      "note": "sale price (regular $42.99)"
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 41.99,
+      "url": "https://enhancedchems.com/product/semax-10mg/",
+      "note": "sale price (regular $46.99)"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "Enhanced Chems",
+      "price": 34.99,
+      "url": "https://enhancedchems.com/product/ghk-cu-50mg/",
+      "note": "sale price (regular $38.99); out of stock"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Enhanced Chems",
+      "price": 48.99,
+      "url": "https://enhancedchems.com/product/ghk-cu-100mg/",
+      "note": "sale price (regular $54.99)"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 39.99,
+      "url": "https://enhancedchems.com/product/ipamorelin-5mg/",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 59.99,
+      "url": "https://enhancedchems.com/product/ipamorelin-10mg/",
+      "note": "sale price (regular $66.99)"
+    },
+    {
+      "product": "KPV",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 31.99,
+      "url": "https://enhancedchems.com/product/kpv-5mg/",
+      "note": "sale price (regular $35.99)"
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 54.99,
+      "url": "https://enhancedchems.com/product/kpv-10mg/",
+      "note": "sale price (regular $61.99)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 79.99,
+      "url": "https://enhancedchems.com/product/tesamorelin-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 37.99,
+      "url": "https://enhancedchems.com/product/melanotan-2-10mg/",
+      "note": "sale price (regular $42.99)"
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Enhanced Chems",
+      "price": 64.99,
+      "url": "https://enhancedchems.com/product/nad-500mg/",
+      "note": "sale price (regular $72.99)"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "5 total",
+      "vendor": "Enhanced Chems",
+      "price": 64.99,
+      "url": "https://enhancedchems.com/product/bpc-157-tb-500-mix-5mg/",
+      "note": "sale price (regular $72.99); listed as \"Mix 5mg\"; component split not stated"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10 total",
+      "vendor": "Enhanced Chems",
+      "price": 94.99,
+      "url": "https://enhancedchems.com/product/bpc-157-tb-500-mix-10mg/",
+      "note": "sale price (regular $105.99); listed as \"Mix 10mg\"; component split not stated"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Enhanced Chems",
+      "price": 104.99,
+      "url": "https://enhancedchems.com/product/klow-80mg/",
+      "note": "sale price (regular $133.99)"
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Enhanced Chems",
+      "price": 88.99,
+      "url": "https://enhancedchems.com/product/glow-70mg/",
+      "note": "sale price (regular $98.99)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "5",
+      "vendor": "Enhanced Chems",
+      "price": 37.99,
+      "url": "https://enhancedchems.com/product/tb-500-5mg/",
+      "note": "sale price (regular $42.99)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Enhanced Chems",
+      "price": 49.99,
+      "url": "https://enhancedchems.com/product/tb-500-10mg/",
+      "note": "sale price (regular $54.99)"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10 total",
+      "vendor": "BIOLENO",
+      "price": 50.0,
+      "url": "https://bioleno.com/product/bpc-157-tb-500/?attribute_product-weight=10mg",
+      "note": "listed as 10mg; split not stated; out of stock"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "BIOLENO",
+      "price": 55.0,
+      "url": "https://bioleno.com/product/ghk-cu-kpv-bpc-157-tb-500/?attribute_product-weight=80mg",
+      "note": "KLOW-type blend (GHK-Cu+KPV+BPC+TB, not branded KLOW); out of stock"
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "BIOLENO",
+      "price": 55.0,
+      "url": "https://bioleno.com/product/ghk-cu-bpc-157-tb-500/?attribute_product-weight=70mg",
+      "note": "GLOW-type blend (not branded GLOW); out of stock"
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 30.0,
+      "url": "https://bioleno.com/product/kpv/?attribute_product-weight=10mg",
+      "note": "out of stock"
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "BIOLENO",
+      "price": 50.0,
+      "url": "https://bioleno.com/product/nad/?attribute_weight-of-the-peptide=1000mg",
+      "note": ""
+    },
+    {
+      "product": "Adamax",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 50.0,
+      "url": "https://bioleno.com/product/adamax/?attribute_weight-of-the-peptide=10mg",
+      "note": "out of stock"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 45.0,
+      "url": "https://bioleno.com/product/tesamorelin/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 40.0,
+      "url": "https://bioleno.com/product/bl-tr2/?attribute_weight-of-the-peptide=10mg",
+      "note": "house code BL-TR2, assumed tirzepatide (not stated)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 40.0,
+      "url": "https://bioleno.com/product/bl-rt3/?attribute_weight-of-the-peptide=10mg",
+      "note": "house code BL-RT3, assumed retatrutide (not stated)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 45.0,
+      "url": "https://bioleno.com/product/tb-500/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 45.0,
+      "url": "https://bioleno.com/product/sermorelin/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 35.0,
+      "url": "https://bioleno.com/product/semax/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 35.0,
+      "url": "https://bioleno.com/product/selank/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 30.0,
+      "url": "https://bioleno.com/product/melanotan-ii/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Melanotan I",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 30.0,
+      "url": "https://bioleno.com/product/melanotan-i/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 32.0,
+      "url": "https://bioleno.com/product/mots-c/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 44.0,
+      "url": "https://bioleno.com/product/ipamorelin/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "BIOLENO",
+      "price": 30.0,
+      "url": "https://bioleno.com/product/ghk-cu/?attribute_weight-of-the-peptide=100mg",
+      "note": ""
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 35.0,
+      "url": "https://bioleno.com/product/epitalon/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 50.0,
+      "url": "https://bioleno.com/product/cjc-1295/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "BIOLENO",
+      "price": 30.0,
+      "url": "https://bioleno.com/product/bpc-157/?attribute_weight-of-the-peptide=10mg",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 47.99,
+      "url": "https://www.artemyxresearch.com/product/ipamorelin-10-mg/",
+      "note": "sale price (regular $59.99); size from product URL slug"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 43.99,
+      "url": "https://www.artemyxresearch.com/product/bpc-157-10-mg/",
+      "note": "sale price (regular $54.99); size from product URL slug"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Artemyx Research",
+      "price": 51.99,
+      "url": "https://www.artemyxresearch.com/product/ghk-cu-100-mg/",
+      "note": "sale price (regular $64.99); size from product URL slug"
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "5",
+      "vendor": "Artemyx Research",
+      "price": 31.99,
+      "url": "https://www.artemyxresearch.com/product/cjc-1295-no-dac-5-mg/",
+      "note": "sale price (regular $39.99); size from product URL slug"
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Artemyx Research",
+      "price": 47.99,
+      "url": "https://www.artemyxresearch.com/product/nad-plus-500-mg/",
+      "note": "sale price (regular $59.99); size from product URL slug"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 67.99,
+      "url": "https://www.artemyxresearch.com/product/tesamorelin-10-mg/",
+      "note": "sale price (regular $84.99); size from product URL slug"
+    },
+    {
+      "product": "Melanotan I",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 31.99,
+      "url": "https://www.artemyxresearch.com/product/mt-1-10-mg/",
+      "note": "sale price (regular $39.99); size from product URL slug"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Artemyx Research",
+      "price": 103.99,
+      "url": "https://www.artemyxresearch.com/product/klow-80-mg/",
+      "note": "sale price (regular $129.99); size from product URL slug"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 39.99,
+      "url": "https://www.artemyxresearch.com/product/mots-c-10-mg/",
+      "note": "sale price (regular $49.99); size from product URL slug"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "Artemyx Research",
+      "price": 71.99,
+      "url": "https://www.artemyxresearch.com/product/glp-3-rt/?attribute_dose=10mg",
+      "note": "sale price (regular $89.99); house name GLP-3R"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "Artemyx Research",
+      "price": 127.99,
+      "url": "https://www.artemyxresearch.com/product/glp-3-rt/?attribute_dose=30mg",
+      "note": "sale price (regular $159.99); house name GLP-3R"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Artemyx Research",
+      "price": 87.99,
+      "url": "https://www.artemyxresearch.com/product/glp-2t/?attribute_dose=30mg",
+      "note": "sale price (regular $109.99); house name GLP-2T"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "40",
+      "vendor": "Artemyx Research",
+      "price": 103.99,
+      "url": "https://www.artemyxresearch.com/product/glp-2t/?attribute_dose=40mg",
+      "note": "sale price (regular $129.99); house name GLP-2T"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "60",
+      "vendor": "Artemyx Research",
+      "price": 127.99,
+      "url": "https://www.artemyxresearch.com/product/glp-2t/?attribute_dose=60mg",
+      "note": "sale price (regular $159.99); house name GLP-2T; out of stock"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 70.0,
+      "url": "https://primelabpeptides.com/products/tb-500-10mg",
+      "note": "sale price (regular $92.50)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 45.0,
+      "url": "https://primelabpeptides.com/products/tb-500-thymosin-beta-4-43-aa-5mg",
+      "note": "sale price (regular $60.00)"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "50",
+      "vendor": "Prime Lab Peptides",
+      "price": 115.0,
+      "url": "https://primelabpeptides.com/products/epithalon-50mg",
+      "note": "sale price (regular $152.50)"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 45.0,
+      "url": "https://primelabpeptides.com/products/epithalon-10mg",
+      "note": "sale price (regular $60.00)"
+    },
+    {
+      "product": "DSIP",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 40.0,
+      "url": "https://primelabpeptides.com/products/dsip-5mg",
+      "note": "sale price (regular $52.50)"
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 55.0,
+      "url": "https://primelabpeptides.com/products/kpv-10mg",
+      "note": "sale price (regular $72.50)"
+    },
+    {
+      "product": "KPV",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 35.0,
+      "url": "https://primelabpeptides.com/products/kpv-5mg",
+      "note": "sale price (regular $47.50)"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "50",
+      "vendor": "Prime Lab Peptides",
+      "price": 100.0,
+      "url": "https://primelabpeptides.com/products/5-amino-1mq-50mg",
+      "note": "sale price (regular $132.50)"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "20",
+      "vendor": "Prime Lab Peptides",
+      "price": 65.0,
+      "url": "https://primelabpeptides.com/products/5-amino-1mq-20mg",
+      "note": "sale price (regular $87.50)"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 45.0,
+      "url": "https://primelabpeptides.com/products/5-amino-1mq-10mg",
+      "note": "sale price (regular $60.00)"
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "Prime Lab Peptides",
+      "price": 112.0,
+      "url": "https://primelabpeptides.com/products/nad-1000mg",
+      "note": "sale price (regular $150.00)"
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Prime Lab Peptides",
+      "price": 75.0,
+      "url": "https://primelabpeptides.com/products/nad-500mg",
+      "note": "sale price (regular $100.00)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "20",
+      "vendor": "Prime Lab Peptides",
+      "price": 140.0,
+      "url": "https://primelabpeptides.com/products/tesamorelin-20mg",
+      "note": "sale price (regular $185.00)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 85.0,
+      "url": "https://primelabpeptides.com/products/tesamorelin-10-mg",
+      "note": "sale price (regular $130.00)"
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 50.0,
+      "url": "https://primelabpeptides.com/products/pt-141-10-mg",
+      "note": "sale price (regular $67.50)"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Prime Lab Peptides",
+      "price": 75.0,
+      "url": "https://primelabpeptides.com/products/ghk-cu-100-mg",
+      "note": "sale price (regular $100.00)"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "Prime Lab Peptides",
+      "price": 50.0,
+      "url": "https://primelabpeptides.com/products/ghk-cu-50mg",
+      "note": "sale price (regular $67.50)"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "5+5",
+      "vendor": "Prime Lab Peptides",
+      "price": 70.0,
+      "url": "https://primelabpeptides.com/products/bpc-157-tb-500-5-mg-5-mg",
+      "note": "sale price (regular $92.50)"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 50.0,
+      "url": "https://primelabpeptides.com/products/mots-c-10-mg",
+      "note": "sale price (regular $67.50)"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 70.0,
+      "url": "https://primelabpeptides.com/products/ipamorelin-10-mg",
+      "note": "sale price (regular $85.00)"
+    },
+    {
+      "product": "Semax",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 70.0,
+      "url": "https://primelabpeptides.com/products/semax-5-mg",
+      "note": "sale price (regular $90.00)"
+    },
+    {
+      "product": "Selank",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 50.0,
+      "url": "https://primelabpeptides.com/products/selank-5-mg",
+      "note": "sale price (regular $65.00)"
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Prime Lab Peptides",
+      "price": 115.0,
+      "url": "https://primelabpeptides.com/products/glow-blend",
+      "note": "sale price (regular $152.50)"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "Prime Lab Peptides",
+      "price": 85.0,
+      "url": "https://primelabpeptides.com/products/grow-h-10mg-cjc-1295-no-dac-ipamorelin",
+      "note": "sale price (regular $110.00); \"Grow-H 10mg\" = 5mg each per description"
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 85.0,
+      "url": "https://primelabpeptides.com/products/sermorelin-10mg",
+      "note": "sale price (regular $112.50)"
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 55.0,
+      "url": "https://primelabpeptides.com/products/sermorelin-5mg",
+      "note": "sale price (regular $72.50)"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Prime Lab Peptides",
+      "price": 135.0,
+      "url": "https://primelabpeptides.com/products/klow-70mg",
+      "note": "sale price (regular $180.00)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "6",
+      "vendor": "Prime Lab Peptides",
+      "price": 90.0,
+      "url": "https://primelabpeptides.com/products/retatrutide-6mg",
+      "note": "sale price (regular $150.00)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "12",
+      "vendor": "Prime Lab Peptides",
+      "price": 150.0,
+      "url": "https://primelabpeptides.com/products/retatrutide-12mg",
+      "note": "sale price (regular $180.00)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "24",
+      "vendor": "Prime Lab Peptides",
+      "price": 195.0,
+      "url": "https://primelabpeptides.com/products/retatrutide-24mg",
+      "note": "sale price (regular $280.00)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "5",
+      "vendor": "Prime Lab Peptides",
+      "price": 70.0,
+      "url": "https://primelabpeptides.com/products/tirzepatide-5mg",
+      "note": "sale price (regular $120.00)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 100.0,
+      "url": "https://primelabpeptides.com/products/tirzepatide-10mg",
+      "note": "sale price (regular $150.00)"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "30",
+      "vendor": "Prime Lab Peptides",
+      "price": 170.0,
+      "url": "https://primelabpeptides.com/products/tirzepatide-30mg",
+      "note": "sale price (regular $280.00)"
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 45.0,
+      "url": "https://primelabpeptides.com/products/melanotan-ii-10mg",
+      "note": "sale price (regular $60.00)"
+    },
+    {
+      "product": "Cagrilintide",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 150.0,
+      "url": "https://primelabpeptides.com/products/cagrilintide-10mg",
+      "note": "sale price (regular $160.00)"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Prime Lab Peptides",
+      "price": 55.0,
+      "url": "https://primelabpeptides.com/products/bpc-157-10mg",
+      "note": "sale price (regular $72.50)"
+    },
+    {
+      "product": "SS-31",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 25.0,
+      "url": "https://www.alphapeps.com/product/ss-31-10mg/",
+      "note": ""
+    },
+    {
+      "product": "SS-31",
+      "mg": "50",
+      "vendor": "Alpha Peps",
+      "price": 63.75,
+      "url": "https://www.alphapeps.com/product/ss-31-50mg/",
+      "note": "sale price (regular $85.00)"
+    },
+    {
+      "product": "Oxytocin",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 55.0,
+      "url": "https://www.alphapeps.com/product/oxytocin-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Oxytocin",
+      "mg": "2",
+      "vendor": "Alpha Peps",
+      "price": 40.0,
+      "url": "https://www.alphapeps.com/product/oxytocin-2mg/",
+      "note": ""
+    },
+    {
+      "product": "Cagrilintide",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 70.0,
+      "url": "https://www.alphapeps.com/product/cagrilintide-5mg/",
+      "note": ""
+    },
+    {
+      "product": "Cagrilintide",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 90.0,
+      "url": "https://www.alphapeps.com/product/cagrlintide-10mg/",
+      "note": ""
+    },
+    {
+      "product": "DSIP",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 50.0,
+      "url": "https://www.alphapeps.com/product/dsip-10mg/",
+      "note": ""
+    },
+    {
+      "product": "DSIP",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 35.0,
+      "url": "https://www.alphapeps.com/product/dsip-5mg/",
+      "note": ""
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 50.0,
+      "url": "https://www.alphapeps.com/product/epithalon-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Epitalon",
+      "mg": "50",
+      "vendor": "Alpha Peps",
+      "price": 85.0,
+      "url": "https://www.alphapeps.com/product/epitalon-epithalon-50mg/",
+      "note": ""
+    },
+    {
+      "product": "GHRP-2",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 35.0,
+      "url": "https://www.alphapeps.com/product/ghrp-2-10mg/",
+      "note": ""
+    },
+    {
+      "product": "KPV",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 75.0,
+      "url": "https://www.alphapeps.com/product/kpv-10mg/",
+      "note": ""
+    },
+    {
+      "product": "KPV",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 50.0,
+      "url": "https://www.alphapeps.com/product/kpv-5mg-2/",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "Alpha Peps",
+      "price": 145.0,
+      "url": "https://www.alphapeps.com/product/nad-500mg/",
+      "note": ""
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "Alpha Peps",
+      "price": 180.0,
+      "url": "https://www.alphapeps.com/product/nad-1000mg/",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 35.0,
+      "url": "https://www.alphapeps.com/product/selank-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Selank",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 28.0,
+      "url": "https://www.alphapeps.com/product/selank-5mg/",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 70.0,
+      "url": "https://www.alphapeps.com/product/sermorelin-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 50.0,
+      "url": "https://www.alphapeps.com/product/sermorelin-5mg/",
+      "note": ""
+    },
+    {
+      "product": "Thymalin",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 45.0,
+      "url": "https://www.alphapeps.com/product/thymelin-10mg/",
+      "note": "listed as \"Thymelin\""
+    },
+    {
+      "product": "SLU-PP-332",
+      "mg": "60 x 500mcg capsules",
+      "vendor": "Alpha Peps",
+      "price": 145.0,
+      "url": "https://www.alphapeps.com/product/slu-pp-332-capsule-500mcg/",
+      "note": "capsules, not a vial"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 55.0,
+      "url": "https://www.alphapeps.com/product/5-amino-1mq-10mg/",
+      "note": ""
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "60 x 50mg capsules",
+      "vendor": "Alpha Peps",
+      "price": 200.0,
+      "url": "https://www.alphapeps.com/product/5-amino-1mq-capsule-50mg/",
+      "note": "capsules, not a vial"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "Alpha Peps",
+      "price": 150.0,
+      "url": "https://www.alphapeps.com/product/klow-ghk-cu-tb-500-bpc-157-kpv-50-10-10-10mg/",
+      "note": "50/10/10/10mg"
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 35.0,
+      "url": "https://www.alphapeps.com/product/semax-10mg/",
+      "note": ""
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 57.0,
+      "url": "https://www.alphapeps.com/product/pt-141-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Melanotan I",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 49.0,
+      "url": "https://www.alphapeps.com/product/melanotan-1-10mg/",
+      "note": ""
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 49.0,
+      "url": "https://www.alphapeps.com/product/melanotan-2-10mg/",
+      "note": ""
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "Alpha Peps",
+      "price": 51.75,
+      "url": "https://www.alphapeps.com/product/glow-blend-10-10-50mg/",
+      "note": "sale price (regular $69.00); 10/10/50mg"
+    },
+    {
+      "product": "Kisspeptin-10",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 60.0,
+      "url": "https://www.alphapeps.com/product/kisspeptin-10-10mg/",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 90.0,
+      "url": "https://www.alphapeps.com/product/cjc-1295-no-dac-10mg/",
+      "note": ""
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 59.0,
+      "url": "https://www.alphapeps.com/product/bpc-157-10mg/",
+      "note": "a second listing \"BPC 10mg\" shows $43.00"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 35.0,
+      "url": "https://www.alphapeps.com/product/bpc-157-5mg/",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 57.0,
+      "url": "https://www.alphapeps.com/product/ipamorelin-10mg-2/",
+      "note": ""
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 40.0,
+      "url": "https://www.alphapeps.com/product/ipamorelin-5mg/",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 46.0,
+      "url": "https://www.alphapeps.com/product/mots-c-10mg/",
+      "note": ""
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 37.0,
+      "url": "https://www.alphapeps.com/product/mots-c-5mg/",
+      "note": ""
+    },
+    {
+      "product": "IGF-1 LR3",
+      "mg": "1",
+      "vendor": "Alpha Peps",
+      "price": 59.0,
+      "url": "https://www.alphapeps.com/product/igf1-lr3-1mg/",
+      "note": ""
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 49.5,
+      "url": "https://www.alphapeps.com/product/tesamorelin-10mg/",
+      "note": "sale price (regular $66.00)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "5",
+      "vendor": "Alpha Peps",
+      "price": 49.0,
+      "url": "https://www.alphapeps.com/product/tesamorelin-5mg/",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "Alpha Peps",
+      "price": 85.0,
+      "url": "https://www.alphapeps.com/product/ghk-cu-100mg/",
+      "note": ""
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "Alpha Peps",
+      "price": 60.0,
+      "url": "https://www.alphapeps.com/product/ghk-cu-50mg/",
+      "note": ""
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "Alpha Peps",
+      "price": 31.5,
+      "url": "https://www.alphapeps.com/product/blend-cjc-ipamorelin-5-5mg/",
+      "note": "sale price (regular $42.00)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "Alpha Peps",
+      "price": 58.0,
+      "url": "https://www.alphapeps.com/product/tb-500-10mg-2/",
+      "note": ""
+    },
+    {
+      "product": "GLOW",
+      "mg": "70",
+      "vendor": "ezPeps",
+      "price": 89.99,
+      "url": "https://ezpeps.com/product/glow-70/?attribute_size=70mg",
+      "note": "sale price (regular $114.99)"
+    },
+    {
+      "product": "KLOW",
+      "mg": "80",
+      "vendor": "ezPeps",
+      "price": 99.99,
+      "url": "https://ezpeps.com/product/klow-80/?attribute_size=80mg",
+      "note": "sale price (regular $124.99)"
+    },
+    {
+      "product": "Selank",
+      "mg": "11",
+      "vendor": "ezPeps",
+      "price": 39.99,
+      "url": "https://ezpeps.com/product/selank/?attribute_size=11mg",
+      "note": "sale price (regular $52.99); overfilled size"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 62.99,
+      "url": "https://ezpeps.com/product/tesamorelin/?attribute_size=10mg",
+      "note": "sale price (regular $84.99)"
+    },
+    {
+      "product": "Tesamorelin",
+      "mg": "25",
+      "vendor": "ezPeps",
+      "price": 99.99,
+      "url": "https://ezpeps.com/product/tesamorelin/?attribute_size=25mg",
+      "note": "sale price (regular $129.99)"
+    },
+    {
+      "product": "DSIP",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 49.99,
+      "url": "https://ezpeps.com/product/dsip/?attribute_size=10mg",
+      "note": "sale price (regular $64.99)"
+    },
+    {
+      "product": "IGF-1 LR3",
+      "mg": "1",
+      "vendor": "ezPeps",
+      "price": 65.99,
+      "url": "https://ezpeps.com/product/igf-1-lr3/?attribute_size=1mg",
+      "note": "sale price (regular $94.99)"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "5+5",
+      "vendor": "ezPeps",
+      "price": 50.99,
+      "url": "https://ezpeps.com/product/cjc-1295-ipamorelin/?attribute_size=5mg+%2B+5mg",
+      "note": "sale price (regular $64.99)"
+    },
+    {
+      "product": "CJC-1295+Ipamorelin",
+      "mg": "10+10",
+      "vendor": "ezPeps",
+      "price": 94.99,
+      "url": "https://ezpeps.com/product/cjc-1295-ipamorelin/?attribute_size=10mg+%2B+10mg",
+      "note": "sale price (regular $119.99)"
+    },
+    {
+      "product": "Cartalax",
+      "mg": "20",
+      "vendor": "ezPeps",
+      "price": 59.99,
+      "url": "https://ezpeps.com/product/cartalax/?attribute_size=20mg",
+      "note": "sale price (regular $74.99)"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 69.99,
+      "url": "https://ezpeps.com/product/glp-3-rt/?attribute_size=10mg",
+      "note": "sale price (regular $99.99); house name GLP-3-RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "24",
+      "vendor": "ezPeps",
+      "price": 119.99,
+      "url": "https://ezpeps.com/product/glp-3-rt/?attribute_size=24mg",
+      "note": "sale price (regular $159.99); house name GLP-3-RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "30",
+      "vendor": "ezPeps",
+      "price": 159.99,
+      "url": "https://ezpeps.com/product/glp-3-rt/?attribute_size=30mg",
+      "note": "sale price (regular $209.99); house name GLP-3-RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "45",
+      "vendor": "ezPeps",
+      "price": 199.99,
+      "url": "https://ezpeps.com/product/glp-3-rt/?attribute_size=45mg",
+      "note": "sale price (regular $259.99); house name GLP-3-RT"
+    },
+    {
+      "product": "Retatrutide",
+      "mg": "65",
+      "vendor": "ezPeps",
+      "price": 259.99,
+      "url": "https://ezpeps.com/product/glp-3-rt/?attribute_size=65mg",
+      "note": "sale price (regular $329.99); house name GLP-3-RT"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "12",
+      "vendor": "ezPeps",
+      "price": 69.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=12mg",
+      "note": "sale price (regular $89.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "20",
+      "vendor": "ezPeps",
+      "price": 89.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=20mg",
+      "note": "sale price (regular $119.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "33",
+      "vendor": "ezPeps",
+      "price": 109.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=33mg",
+      "note": "sale price (regular $139.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "50",
+      "vendor": "ezPeps",
+      "price": 149.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=50mg",
+      "note": "sale price (regular $199.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "65",
+      "vendor": "ezPeps",
+      "price": 189.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=65mg",
+      "note": "sale price (regular $239.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "Tirzepatide",
+      "mg": "115",
+      "vendor": "ezPeps",
+      "price": 299.99,
+      "url": "https://ezpeps.com/product/glp-2-tz/?attribute_size=115mg",
+      "note": "sale price (regular $374.99); house name GLP-2-TZ"
+    },
+    {
+      "product": "KPV",
+      "mg": "11",
+      "vendor": "ezPeps",
+      "price": 38.99,
+      "url": "https://ezpeps.com/product/kpv/?attribute_size=11mg",
+      "note": "sale price (regular $48.99); overfilled size"
+    },
+    {
+      "product": "Cagrilintide",
+      "mg": "11",
+      "vendor": "ezPeps",
+      "price": 94.99,
+      "url": "https://ezpeps.com/product/cagrilinitide/?attribute_size=11mg",
+      "note": "sale price (regular $119.99); overfilled size"
+    },
+    {
+      "product": "Oxytocin",
+      "mg": "5",
+      "vendor": "ezPeps",
+      "price": 33.99,
+      "url": "https://ezpeps.com/product/oxytocin-acetate/?attribute_size=5mg",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "Sermorelin",
+      "mg": "5",
+      "vendor": "ezPeps",
+      "price": 45.99,
+      "url": "https://ezpeps.com/product/sermorelin/?attribute_size=5mg",
+      "note": "sale price (regular $59.99)"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "6+6",
+      "vendor": "ezPeps",
+      "price": 50.99,
+      "url": "https://ezpeps.com/product/bpc-157-tb-500-blend/?attribute_size=12mg+%286mg+%2B+6mg%29",
+      "note": "sale price (regular $64.99); overfilled size"
+    },
+    {
+      "product": "BPC-157+TB-500",
+      "mg": "10+10",
+      "vendor": "ezPeps",
+      "price": 92.99,
+      "url": "https://ezpeps.com/product/bpc-157-tb-500-blend/?attribute_size=20mg+%2810mg%2B10mg%29",
+      "note": "sale price (regular $119.99)"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "13",
+      "vendor": "ezPeps",
+      "price": 51.99,
+      "url": "https://ezpeps.com/product/5-amino-1mq/?attribute_size=13mg",
+      "note": "sale price (regular $64.99); overfilled size"
+    },
+    {
+      "product": "5-Amino-1MQ",
+      "mg": "57",
+      "vendor": "ezPeps",
+      "price": 74.99,
+      "url": "https://ezpeps.com/product/5-amino-1mq/?attribute_size=57mg",
+      "note": "sale price (regular $94.99); overfilled size"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 42.99,
+      "url": "https://ezpeps.com/product/mots-c/?attribute_size=10mg",
+      "note": "sale price (regular $54.99)"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "22",
+      "vendor": "ezPeps",
+      "price": 75.99,
+      "url": "https://ezpeps.com/product/mots-c/?attribute_size=22mg",
+      "note": "sale price (regular $94.99); overfilled size"
+    },
+    {
+      "product": "MOTS-c",
+      "mg": "45",
+      "vendor": "ezPeps",
+      "price": 109.99,
+      "url": "https://ezpeps.com/product/mots-c/?attribute_size=45mg",
+      "note": "sale price (regular $139.99); overfilled size"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "50",
+      "vendor": "ezPeps",
+      "price": 33.99,
+      "url": "https://ezpeps.com/product/ghk-cu/?attribute_size=50mg",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "GHK-Cu",
+      "mg": "100",
+      "vendor": "ezPeps",
+      "price": 49.99,
+      "url": "https://ezpeps.com/product/ghk-cu/?attribute_size=100mg",
+      "note": "sale price (regular $64.99)"
+    },
+    {
+      "product": "Ipamorelin",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 49.99,
+      "url": "https://ezpeps.com/product/ipamorelin/?attribute_size=10mg",
+      "note": "sale price (regular $64.99)"
+    },
+    {
+      "product": "Kisspeptin-10",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 42.99,
+      "url": "https://ezpeps.com/product/kisspeptin/?attribute_size=10mg",
+      "note": "sale price (regular $54.99)"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 34.99,
+      "url": "https://ezpeps.com/product/epithalon/?attribute_size=10mg",
+      "note": "sale price (regular $42.99)"
+    },
+    {
+      "product": "Epitalon",
+      "mg": "50",
+      "vendor": "ezPeps",
+      "price": 89.99,
+      "url": "https://ezpeps.com/product/epithalon/?attribute_size=50mg",
+      "note": "sale price (regular $114.99)"
+    },
+    {
+      "product": "Adamax",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 59.99,
+      "url": "https://ezpeps.com/product/adamax/?attribute_size=10mg+%28984da%29",
+      "note": "sale price (regular $74.99); 984 Da variant"
+    },
+    {
+      "product": "Adamax",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 95.99,
+      "url": "https://ezpeps.com/product/adamax/?attribute_size=10mg+%281032da%29",
+      "note": "sale price (regular $139.99); 1032 Da variant (second price for same size)"
+    },
+    {
+      "product": "VIP",
+      "mg": "11",
+      "vendor": "ezPeps",
+      "price": 59.99,
+      "url": "https://ezpeps.com/product/vip/?attribute_size=11mg",
+      "note": "sale price (regular $79.99); overfilled size"
+    },
+    {
+      "product": "NAD+",
+      "mg": "500",
+      "vendor": "ezPeps",
+      "price": 59.99,
+      "url": "https://ezpeps.com/product/nad/?attribute_size=500mg",
+      "note": "sale price (regular $74.99)"
+    },
+    {
+      "product": "NAD+",
+      "mg": "1000",
+      "vendor": "ezPeps",
+      "price": 95.99,
+      "url": "https://ezpeps.com/product/nad/?attribute_size=1000mg",
+      "note": "sale price (regular $119.99)"
+    },
+    {
+      "product": "PT-141",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 35.99,
+      "url": "https://ezpeps.com/product/pt-141/?attribute_size=10mg",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "BPC-157",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 44.99,
+      "url": "https://ezpeps.com/product/bpc-157/?attribute_size=10mg",
+      "note": "sale price (regular $59.99)"
+    },
+    {
+      "product": "CJC-1295 no DAC",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 74.99,
+      "url": "https://ezpeps.com/product/cjc-1295-no-dac/?attribute_size=10mg",
+      "note": "sale price (regular $94.99)"
+    },
+    {
+      "product": "Snap-8",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 34.99,
+      "url": "https://ezpeps.com/product/snap-8/?attribute_size=10mg",
+      "note": "sale price (regular $49.99)"
+    },
+    {
+      "product": "TB-500",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 54.99,
+      "url": "https://ezpeps.com/product/tb-500/?attribute_size=10mg",
+      "note": "sale price (regular $69.99)"
+    },
+    {
+      "product": "Semax",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 39.99,
+      "url": "https://ezpeps.com/product/semax/?attribute_size=10mg",
+      "note": "sale price (regular $49.99)"
+    },
+    {
+      "product": "Melanotan II",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 33.99,
+      "url": "https://ezpeps.com/product/melanotan-2/?attribute_size=10mg",
+      "note": "sale price (regular $44.99)"
+    },
+    {
+      "product": "Melanotan I",
+      "mg": "10",
+      "vendor": "ezPeps",
+      "price": 30.99,
+      "url": "https://ezpeps.com/product/melanotan-i/?attribute_size=10mg",
+      "note": "sale price (regular $39.99)"
+    },
+    {
+      "product": "Vesugen",
+      "mg": "20",
+      "vendor": "ezPeps",
+      "price": 89.99,
+      "url": "https://ezpeps.com/product/vesugen/?attribute_size=20mg",
+      "note": "sale price (regular $114.99)"
+    },
+    {
+      "product": "Lipo-C",
+      "mg": "without B12",
+      "vendor": "ezPeps",
+      "price": 49.99,
+      "url": "https://ezpeps.com/product/lipo-c-120/?attribute_size=10ml",
+      "note": "sale price (regular $64.99); 10ml vial"
+    },
+    {
+      "product": "Lipo-C",
+      "mg": "with B12",
+      "vendor": "ezPeps",
+      "price": 64.99,
+      "url": "https://ezpeps.com/product/268/?attribute_size=10ml",
+      "note": "sale price (regular $84.99); 10ml vial; listed as MIC-B12 (Lipo-C / Lipo-Pure)"
+    }
+  ]
+}

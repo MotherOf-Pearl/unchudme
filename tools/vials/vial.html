@@ -1,0 +1,145 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>html,body{margin:0;overflow:hidden;background:#eef0ef}canvas{display:block}</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js",
+               "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head><body>
+<script type="module">
+// Studio product shot of a 10 ml-style injection vial with an Unchud Me label.
+// window.renderVial({ name, option, lot }) draws the label and renders one frame.
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const W = innerWidth, H = innerHeight;
+const TEAL = '#1f5c4d', TEAL_LIGHT = '#6fc2a7', INK = '#14181f';
+const FACE = window.FACE_PATHS; // injected by render.mjs from the site logo
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.98;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+// studio environment: neutral grey room with two tall softboxes → vertical highlight streaks on the glass
+const studio = new THREE.Scene();
+studio.add(new THREE.Mesh(new THREE.BoxGeometry(40, 40, 40), new THREE.MeshBasicMaterial({ color: 0x8a8f8c, side: THREE.BackSide })));
+const softbox = (x, z, w, h, k) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(k, k, k), side: THREE.DoubleSide })); m.position.set(x, 2, z); m.lookAt(0, 2, 0); studio.add(m); };
+softbox(-9, 6, 3, 22, 6); softbox(9, 6, 2, 22, 4); softbox(0, -12, 14, 22, 1.6);
+const top = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.5, 2.5, 2.5) })); top.position.y = 18; top.rotation.x = Math.PI / 2; studio.add(top);
+scene.environment = pmrem.fromScene(studio, 0.02).texture;
+
+// soft studio backdrop: vertical gradient
+const bg = document.createElement('canvas'); bg.width = 4; bg.height = 512;
+const bgx = bg.getContext('2d'); const g = bgx.createLinearGradient(0, 0, 0, 512);
+g.addColorStop(0, '#f4f5f4'); g.addColorStop(0.62, '#e4e7e5'); g.addColorStop(1, '#d9dcda');
+bgx.fillStyle = g; bgx.fillRect(0, 0, 4, 512);
+scene.background = new THREE.CanvasTexture(bg); scene.background.colorSpace = THREE.SRGBColorSpace;
+
+const camera = new THREE.PerspectiveCamera(24, W / H, 0.1, 100);
+camera.position.set(0, 2.9, 13.6); camera.lookAt(0, 2.12, 0);
+
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-3, 6, 5);
+key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 8;
+Object.assign(key.shadow.camera, { left: -4, right: 4, top: 6, bottom: -4 });
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.8); fill.position.set(4, 2, 4); scene.add(fill);
+
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.16 }));
+floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+// ---- vial geometry (units ≈ cm/10) ----
+const R = 1, BODY = 3.15;
+const glassProfile = [
+  [0, 0], [0.92, 0], [R, 0.07], [R, BODY], [0.96, BODY + 0.18], [0.78, BODY + 0.36], [0.62, BODY + 0.44],
+  [0.62, BODY + 0.66], [0.7, BODY + 0.7], [0.7, BODY + 0.84], [0, BODY + 0.84],
+].map(([x, y]) => new THREE.Vector2(x, y));
+const glass = new THREE.Mesh(new THREE.LatheGeometry(glassProfile, 96), new THREE.MeshPhysicalMaterial({
+  color: 0xffffff, metalness: 0, roughness: 0, transmission: 1, thickness: 0.35, ior: 1.52,
+  attenuationColor: new THREE.Color(0xd5e2dd), attenuationDistance: 2.5, specularIntensity: 1,
+  envMapIntensity: 1, side: THREE.DoubleSide,
+}));
+glass.castShadow = true; scene.add(glass);
+
+// lyophilized cake at the bottom
+const cake = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.34, 72), new THREE.MeshStandardMaterial({ color: 0xf7f7f4, roughness: 0.95 }));
+cake.position.y = 0.2; scene.add(cake);
+
+// aluminium crimp seal + flip-off cap
+const crimp = new THREE.Mesh(new THREE.CylinderGeometry(0.74, 0.74, 0.5, 96), new THREE.MeshStandardMaterial({ color: 0xd7d9da, metalness: 1, roughness: 0.28 }));
+crimp.position.y = BODY + 0.66; crimp.castShadow = true; scene.add(crimp);
+const lip = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.03, 12, 96), crimp.material);
+lip.rotation.x = Math.PI / 2; lip.position.y = BODY + 0.41; scene.add(lip);
+const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.76, 0.77, 0.32, 96), new THREE.MeshPhysicalMaterial({ color: 0xf2f3f2, roughness: 0.42, clearcoat: 0.3 }));
+cap.position.y = BODY + 1.07; cap.castShadow = true; scene.add(cap);
+const capEdge = new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.035, 12, 96), cap.material);
+capEdge.rotation.x = Math.PI / 2; capEdge.position.y = BODY + 1.23; scene.add(capEdge);
+
+// ---- label: canvas texture wrapped round the body, front centre facing camera ----
+const LH = 2.15, LR = R + 0.006, CW = 4096, CH = Math.round(CW * LH / (2 * Math.PI * LR));
+const lc = document.createElement('canvas'); lc.width = CW; lc.height = CH;
+const ctx = lc.getContext('2d');
+const tex = new THREE.CanvasTexture(lc); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+const label = new THREE.Mesh(new THREE.CylinderGeometry(LR, LR, LH, 160, 1, true, -Math.PI, Math.PI * 2),
+  new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.55, clearcoat: 0.15 }));
+label.position.y = 0.46 + LH / 2; scene.add(label);
+
+function drawFace(x, y, h) {
+  const s = h / 48;
+  ctx.save(); ctx.translate(x - 20 * s, y); ctx.scale(s, s);
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (const p of FACE) {
+    const path = new Path2D(p.d);
+    if (p.fill) { ctx.fillStyle = TEAL; ctx.fill(path); continue; }
+    ctx.strokeStyle = p.bg ? '#ffffff' : TEAL; ctx.globalAlpha = p.opacity ?? 1;
+    ctx.lineWidth = p.bg ? 1 : 2.1; ctx.stroke(path); ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+}
+
+function fitText(text, font, maxW, startPx) {
+  let px = startPx;
+  do { ctx.font = font.replace('{px}', px); px -= 2; } while (ctx.measureText(text).width > maxW && px > 20);
+}
+
+function drawLabel({ name, option, lot }) {
+  const cx = CW / 2, panel = 1500;          // visible front panel width in px
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, CW, CH);
+  ctx.fillStyle = TEAL; ctx.fillRect(0, 0, CW, 46); ctx.fillRect(0, CH - 46, CW, 46);
+  ctx.fillStyle = TEAL_LIGHT; ctx.fillRect(0, 46, CW, 9); ctx.fillRect(0, CH - 55, CW, 9);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+
+  drawFace(cx, 150, 230);
+  ctx.fillStyle = INK; ctx.font = '800 104px Inter'; ctx.letterSpacing = '10px';
+  ctx.fillText('UNCHUD ME', cx, 492);
+  ctx.fillStyle = TEAL; ctx.font = '600 40px Inter'; ctx.letterSpacing = '24px';
+  ctx.fillText('PEPTIDES', cx, 556);
+
+  // compound name in a solid pill
+  const pillH = 158, pillY = 612;
+  ctx.letterSpacing = '4px'; fitText(name.toUpperCase(), '800 {px}px Inter', panel - 200, 108);
+  const tw = ctx.measureText(name.toUpperCase()).width, pw = Math.min(panel - 80, tw + 110);
+  ctx.fillStyle = TEAL; ctx.beginPath(); ctx.roundRect(cx - pw / 2, pillY, pw, pillH, 20); ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.fillText(name.toUpperCase(), cx, pillY + pillH / 2 + parseInt(ctx.font.match(/(\d+)px/)[1]) * 0.36);
+
+  if (option) {
+    ctx.fillStyle = INK; ctx.letterSpacing = '1px';
+    fitText(option, '500 {px}px Inter', panel - 240, 100);
+    ctx.fillText(option, cx, 905);
+  }
+  ctx.fillStyle = TEAL; ctx.font = '700 50px Inter'; ctx.letterSpacing = '6px';
+  ctx.fillText('FOR RESEARCH USE ONLY', cx, 1040);
+  ctx.fillStyle = '#3f4651'; ctx.font = '600 34px Inter'; ctx.letterSpacing = '3px';
+  ctx.fillText(`LOT ${lot}  ·  STORE AT −20 °C  ·  NOT FOR HUMAN USE`, cx, 1110);
+  tex.needsUpdate = true;
+}
+
+window.renderVial = (spec) => { drawLabel(spec); renderer.render(scene, camera); };
+await Promise.all(['800 104px Inter', '500 100px Inter', '600 40px Inter', '700 50px Inter'].map((f) => document.fonts.load(f)));
+window.READY = true;
+</script>
+</body></html>
