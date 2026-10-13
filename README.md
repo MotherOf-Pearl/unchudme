@@ -1,5 +1,7 @@
 # Based Chems — storefront prototype
 
+Company vision, positioning and roadmap: [VISION.md](VISION.md).
+
 Static site (no build step). Open `index.html` in a browser.
 
 - `data.js` — catalog: one listing per compound, sizes/blends as options. Sample lot/COA data is placeholder.
