@@ -12,3 +12,6 @@ Static site (no build step). Open `index.html` in a browser.
 - Vial photos: `cd tools/vials && npm i three puppeteer-core && node render.mjs all`
 
 Prototype only: checkout is not connected, and all certificate data is sample data.
+
+## Deploy (Vercel)
+Import the GitHub repo in Vercel → Framework preset **Other**, no build command, output directory = repo root. `vercel.json` turns on clean URLs (`/shop`, `/product?id=bpc-157`) and long-term caching for `media/`; `.vercelignore` keeps `tools/` and `research/` off the deployed site.

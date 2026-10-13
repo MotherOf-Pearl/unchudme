@@ -1,0 +1,4 @@
+# build tooling and research data — not part of the deployed site
+tools/
+research/
+README.md
