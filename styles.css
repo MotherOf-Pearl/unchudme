@@ -118,6 +118,17 @@ a.float-badge:hover { border-color: var(--accent); }
 .card .price { margin-top: auto; padding-top: 10px; font-weight: 650; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
 .card .go { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); color: var(--muted); font-size: .95rem; transition: background .25s, color .25s, border-color .25s; }
 .card:hover .go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+/* phones: two compact cards per row so you can scan the catalog while scrolling */
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { border-radius: 14px; }
+  .card-body { gap: 3px; padding: 11px 12px 13px; }
+  .card .tag { font-size: .6rem; letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .name { font-size: .95rem; line-height: 1.25; }
+  .card .meta { font-size: .68rem; }
+  .card .price { font-size: .9rem; padding-top: 6px; }
+  .card .go { width: 26px; height: 26px; font-size: .8rem; }
+}
 
 /* shop toolbar */
 .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; align-items: center; }
