@@ -21,7 +21,7 @@ const RUO_LONG = `All products sold by ${BRAND.name} are intended solely for in 
 // Rendered product shots from tools/vials (one per product option)
 const optSlug = (label) => label.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
 // media/ is served with a 1-year immutable cache — bump MEDIA_V whenever the vial renders change
-const MEDIA_V = 4;
+const MEDIA_V = 5;
 const vialImg = (p, s) => `media/vials/${p.id}--${optSlug(s.label)}.webp?v=${MEDIA_V}`;
 
 // Logo: featureless face outline — swept hair, clean hairline, high cheekbones, hollow cheeks, sharp jaw.
@@ -139,6 +139,13 @@ function productCard(p) {
 const pages = {
   home() {
     $("#featured").innerHTML = PRODUCTS.slice(0, 8).map(productCard).join("");
+    const l = LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
+    $("#mini-coa").innerHTML = `
+      <div class="mini-coa-head"><b>${esc(p.name)}</b><span class="sample-badge">Sample</span></div>
+      <div class="row"><span>Batch</span><span class="mono">${l.lot}</span></div>
+      <div class="row"><span>Purity (HPLC)</span><span class="mono pass">${l.purity}%</span></div>
+      <div class="row"><span>Identity (LC-MS)</span><span class="mono pass">Conforms</span></div>
+      <div class="row"><span>Endotoxin</span><span class="mono">${l.endotoxin}</span></div>`;
   },
 
   shop() {

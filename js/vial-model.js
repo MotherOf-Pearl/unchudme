@@ -1,8 +1,10 @@
 // Shared vial model: 10 ml-style injection vial with a Based Chems label.
 // Used by the catalog photo renderer (tools/vials) and the live home-page hero (js/hero3d.js).
-// makeVial(face, { sleek }) → { group, drawLabel({ name, option, lot }) }. Group origin sits on the floor, label faces +z.
+// makeVial(face, { sleek, glass }) → { group, drawLabel({ name, option, lot }) }. Group origin sits on the floor, label faces +z.
 //   face: the site logo's FACE_PATHS svg string (from app.js).
-//   sleek: dark-site look — clear glass that blends with the page, teal anodised crimp, graphite cap, dark label.
+//   sleek: teal anodised crimp, graphite cap, dark label.
+//   glass: 'transmission' (needs an opaque backdrop — catalog photos) or 'additive' (over a transparent canvas — live hero).
+//          Defaults to additive when sleek.
 import * as THREE from 'three';
 
 const TEAL = '#1f5c4d', TEAL_LIGHT = '#6fc2a7', INK = '#14181f';
@@ -19,13 +21,13 @@ const glassProfile = [
 ].map(([x, y]) => new THREE.Vector2(x, y));
 const LH = 2.15, LR = R + 0.006, CW = 4096, CH = Math.round(CW * LH / (2 * Math.PI * LR));
 
-export function makeVial(face, { sleek = false } = {}) {
+export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'additive' : 'transmission' } = {}) {
   const FACE = parseFace(face);
   const group = new THREE.Group();
   // Transmission glass needs an opaque scene behind it; over a transparent canvas it renders flat grey.
   // The sleek look instead adds only the glass's reflections (black base + additive blend), so the page shows
   // through clean and the softbox streaks and fresnel edges sit on top.
-  const glassMat = sleek
+  const glassMat = glassMode === 'additive'
     ? new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0.08, ior: 1.52, specularIntensity: 0.6,
       clearcoat: 0.3, clearcoatRoughness: 0.1, envMapIntensity: 1.1, side: THREE.DoubleSide,
       transparent: true, depthWrite: false, blending: THREE.CustomBlending, // colour adds, canvas alpha untouched
@@ -36,7 +38,7 @@ export function makeVial(face, { sleek = false } = {}) {
       envMapIntensity: 1, side: THREE.DoubleSide,
     });
   const glass = new THREE.Mesh(new THREE.LatheGeometry(glassProfile, 128), glassMat);
-  glass.castShadow = !sleek; glass.renderOrder = 2; group.add(glass);
+  glass.castShadow = glassMode !== 'additive'; glass.renderOrder = 2; group.add(glass);
 
   // lyophilized cake at the bottom
   const cake = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.34, 72), new THREE.MeshStandardMaterial({ color: sleek ? 0x9ea6a3 : 0xf7f7f4, roughness: 0.95 }));

@@ -1,7 +1,7 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
-<style>html,body{margin:0;overflow:hidden;background:#0e1417}canvas{display:block}</style>
+<style>html,body{margin:0;overflow:hidden;background:#e9eeec}canvas{display:block}</style>
 <script type="importmap">
 { "imports": { "three": "./node_modules/three/build/three.module.js",
                "three/addons/": "./node_modules/three/examples/jsm/" } }
@@ -17,17 +17,17 @@ const W = innerWidth, H = innerHeight;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1); renderer.setSize(W, H);
-renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.environment = studioEnvironment(renderer, 0x1d2224, 0.3);
+scene.environment = studioEnvironment(renderer, 0x8a8f8c, 0.7);
 
-// dark backdrop with a soft teal glow behind the vial, fading to the card colour at the edges
+// light studio backdrop: soft pale-mint glow behind the vial, fading to the card colour at the edges
 const bg = document.createElement('canvas'); bg.width = bg.height = 1024;
 const bgx = bg.getContext('2d'); const g = bgx.createRadialGradient(512, 470, 0, 512, 470, 640);
-g.addColorStop(0, '#1d3134'); g.addColorStop(0.45, '#142024'); g.addColorStop(1, '#0e1417');
+g.addColorStop(0, '#f9fbfa'); g.addColorStop(0.5, '#eff3f1'); g.addColorStop(1, '#e9eeec');
 bgx.fillStyle = g; bgx.fillRect(0, 0, 1024, 1024);
 scene.background = new THREE.CanvasTexture(bg); scene.background.colorSpace = THREE.SRGBColorSpace;
 
@@ -43,10 +43,10 @@ const rimL = new THREE.DirectionalLight(0x6fc2a7, 3); rimL.position.set(-6, 4, -
 const rimR = new THREE.DirectionalLight(0x6fc2a7, 2.2); rimR.position.set(6, 3, -6); scene.add(rimR);
 const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(4, 2, 5); scene.add(fill);
 
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.5 }));
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.22 }));
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 
-const vial = makeVial(window.FACE_PATHS, { sleek: true }); // FACE_PATHS svg injected by render.mjs from the site logo
+const vial = makeVial(window.FACE_PATHS, { sleek: true, glass: 'transmission' }); // FACE_PATHS svg injected by render.mjs from the site logo
 scene.add(vial.group);
 
 window.renderVial = (spec) => { vial.drawLabel(spec); renderer.render(scene, camera); };
