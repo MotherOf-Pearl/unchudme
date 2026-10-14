@@ -101,6 +101,15 @@ nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 .float-badge svg { color: var(--accent); }
 a.float-badge:hover { border-color: var(--accent); }
 @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
+/* phones: the brand name above the copy, and the headline on one line */
+.hero-brand { display: none; }
+@media (max-width: 860px) {
+  .hero-brand { display: flex; margin-bottom: 28px; }
+  .hero-brand b { font-size: 2rem; }
+  .hero-brand small { font-size: .8rem; margin-top: 8px; }
+  .hero h1 { white-space: nowrap; font-size: clamp(1.6rem, 8.6vw, 2.6rem); }
+  .hero h1 br { display: none; }
+}
 
 /* "why us" tiles: softly tinted panels, one wide tile carrying a sample certificate */
 .tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 28px; }
