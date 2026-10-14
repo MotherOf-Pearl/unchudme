@@ -24,12 +24,35 @@ document.body.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 scene.environment = studioEnvironment(renderer, 0x1e2226, 1.6);
 
-// light studio backdrop: soft pale-blue glow behind the vial, fading to the card colour at the edges
-const bg = document.createElement('canvas'); bg.width = bg.height = 1024;
-const bgx = bg.getContext('2d'); const g = bgx.createRadialGradient(512, 470, 0, 512, 470, 640);
-g.addColorStop(0, '#f9fbfc'); g.addColorStop(0.5, '#eff2f6'); g.addColorStop(1, '#e9edf1');
-bgx.fillStyle = g; bgx.fillRect(0, 0, 1024, 1024);
-scene.background = new THREE.CanvasTexture(bg); scene.background.colorSpace = THREE.SRGBColorSpace;
+// ---- the set: a glossy pale tabletop running back to a grey wall. The table edge sits just above the vial's
+// foot, which is what reads as depth; the wall is darker than the table, lit from the upper left.
+const canvasTex = (w, h, paint) => {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; paint(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+};
+const linear = (x, y0, y1, stops) => { const g = x.createLinearGradient(0, y0, 0, y1); stops.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+const TABLE_BACK = -4, TABLE_FRONT = 10;
+scene.background = new THREE.Color(0xf1f3f5); // what the semi-transparent tabletop sits over where there's no reflection
+// tabletop, back edge at the top of the texture: bright in front, greying toward the edge
+const tableTex = canvasTex(8, 1024, (x, w, h) => {
+  x.fillStyle = linear(x, 0, h, [[0, '#cfd4d9'], [0.04, '#dde1e5'], [0.3, '#e9ecef'], [1, '#f3f5f7']]); x.fillRect(0, 0, w, h);
+});
+// the table is partly see-through so the vial's mirror image shows in the gloss, strongest at its foot
+const reflectTex = canvasTex(8, 1024, (x, w, h) => {
+  x.fillStyle = linear(x, 0, h, [[0, '#8c8c8c'], [0.3, '#8c8c8c'], [0.45, '#b4b4b4'], [0.62, '#e6e6e6'], [0.72, '#ffffff']]); x.fillRect(0, 0, w, h);
+});
+reflectTex.colorSpace = THREE.NoColorSpace;
+const table = new THREE.Mesh(new THREE.PlaneGeometry(30, TABLE_FRONT - TABLE_BACK),
+  new THREE.MeshBasicMaterial({ map: tableTex, alphaMap: reflectTex, transparent: true, depthWrite: false, toneMapped: false }));
+table.rotation.x = -Math.PI / 2; table.position.set(0, 0, (TABLE_FRONT + TABLE_BACK) / 2); table.renderOrder = 1; scene.add(table);
+// wall: darker at the table line, lifting toward a soft light pool upper left
+const wallTex = canvasTex(1024, 1024, (x, w, h) => {
+  x.fillStyle = linear(x, h, 0, [[0, '#b9bfc5'], [0.06, '#c8cdd2'], [0.5, '#d3d7db'], [1, '#d9dce0']]); x.fillRect(0, 0, w, h);
+  const r = x.createRadialGradient(w * 0.32, h * 0.25, 0, w * 0.32, h * 0.25, w * 0.6);
+  r.addColorStop(0, 'rgba(255,255,255,.35)'); r.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = r; x.fillRect(0, 0, w, h);
+});
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(30, 16), new THREE.MeshBasicMaterial({ map: wallTex, toneMapped: false }));
+wall.position.set(0, 8, TABLE_BACK); scene.add(wall);
 
 const camera = new THREE.PerspectiveCamera(24, W / H, 0.1, 100);
 camera.position.set(0, 3.2, 15.5); camera.lookAt(0, 2.15, 0);
@@ -44,18 +67,22 @@ const rimL = new THREE.DirectionalLight(0x7cc4ff, 3); rimL.position.set(-6, 4, -
 const rimR = new THREE.DirectionalLight(0x7cc4ff, 2.2); rimR.position.set(6, 3, -6); scene.add(rimR);
 const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(4, 2, 5); scene.add(fill);
 
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.16 }));
-floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, TABLE_FRONT - TABLE_BACK), new THREE.ShadowMaterial({ opacity: 0.16 }));
+floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0.001, (TABLE_FRONT + TABLE_BACK) / 2); floor.receiveShadow = true; floor.renderOrder = 2; scene.add(floor);
 // soft contact shadow where the glass meets the set
 const cs = document.createElement('canvas'); cs.width = cs.height = 256;
 const csx = cs.getContext('2d'); const cg = csx.createRadialGradient(128, 128, 0, 128, 128, 128);
 cg.addColorStop(0, 'rgba(20,28,38,.55)'); cg.addColorStop(0.45, 'rgba(20,28,38,.22)'); cg.addColorStop(1, 'rgba(20,28,38,0)');
 csx.fillStyle = cg; csx.fillRect(0, 0, 256, 256);
 const contact = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 1.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cs), transparent: true, depthWrite: false }));
-contact.rotation.x = -Math.PI / 2; contact.position.y = 0.003; scene.add(contact);
+contact.rotation.x = -Math.PI / 2; contact.position.y = 0.003; contact.renderOrder = 3; scene.add(contact);
 
 const vial = makeVial(window.MARK_PARTS, { sleek: true, glass: 'transmission' }); // MARK_PARTS injected by render.mjs from the site logo
 scene.add(vial.group);
+// mirror image under the table, seen through its gloss (shares the label texture, so it updates with drawLabel)
+const mirror = vial.group.clone(); mirror.scale.y = -1;
+mirror.traverse((o) => { o.castShadow = false; });
+scene.add(mirror);
 
 window.renderVial = (spec) => { vial.drawLabel(spec); renderer.render(scene, camera); };
 await Promise.all(FONTS.map((f) => document.fonts.load(f)));
