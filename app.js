@@ -86,9 +86,10 @@ function renderChrome() {
     <div class="ruo-strip">${RUO_SHORT}</div>
     <header class="site dark-band"><div class="wrap">
       ${logoHTML()}
-      <button class="menu-btn" aria-label="Menu" aria-expanded="false">Menu</button>
+      <button class="menu-btn" aria-label="Menu" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <nav class="main">${nav.map(([k, h, l]) => `<a href="${h}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-      <button class="cart-btn" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+      <button class="account-btn" aria-label="Account"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></button>
+      <button class="cart-btn" aria-label="Open cart"><svg class="cart-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg><span class="cart-word">Cart (</span><span id="cart-count">0</span><span class="cart-word">)</span></button>
     </div></header>`);
 
   document.body.insertAdjacentHTML("beforeend", `
@@ -144,7 +145,9 @@ function addToCart(id, label, qty = 1) {
 }
 function renderCart() {
   const c = cart().filter((i) => byId(i.id)?.sizes.some((s) => s.label === i.label && s.price != null));
-  $("#cart-count").textContent = c.reduce((n, i) => n + i.qty, 0);
+  const count = c.reduce((n, i) => n + i.qty, 0);
+  $("#cart-count").textContent = count;
+  $(".cart-btn").classList.toggle("empty", !count); // phones hide the badge on an empty cart
   let sub = 0;
   $(".drawer .items").innerHTML = c.length ? c.map((i, idx) => {
     const p = byId(i.id), s = p.sizes.find((x) => x.label === i.label), price = s.price; sub += price * i.qty;

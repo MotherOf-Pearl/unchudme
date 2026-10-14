@@ -61,12 +61,20 @@ nav.main { display: flex; gap: 22px; margin-left: auto; }
 nav.main a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: .95rem; }
 nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 .cart-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 14px; font: 600 .9rem var(--sans); color: var(--ink); cursor: pointer; }
-.menu-btn { display: none; }
+.menu-btn, .account-btn, .cart-ico { display: none; }
 @media (max-width: 760px) {
+  header.site .wrap { gap: 6px; }
   nav.main { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--surface); flex-direction: column; padding: 16px; border-bottom: 1px solid var(--line); gap: 14px; }
   nav.main.open { display: flex; }
-  .menu-btn { display: inline-block; margin-left: auto; background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--ink); }
-  .cart-btn { margin-left: 0; }
+  /* phones: account, cart and menu as icons, in that order */
+  .menu-btn, .account-btn, .cart-btn { display: grid; place-items: center; position: relative; width: 42px; height: 42px; padding: 0; background: none; border: 0; border-radius: 10px; color: var(--ink); cursor: pointer; }
+  .account-btn { order: 1; margin-left: auto; }
+  .cart-btn { order: 2; }
+  .menu-btn { order: 3; }
+  .cart-ico { display: block; }
+  .cart-word { display: none; }
+  .cart-btn.empty #cart-count { display: none; }
+  #cart-count { position: absolute; top: 3px; right: 1px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: var(--accent); color: #06121c; font: 700 .68rem/17px var(--sans); text-align: center; }
 }
 
 /* hero */
@@ -101,14 +109,17 @@ nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 .float-badge svg { color: var(--accent); }
 a.float-badge:hover { border-color: var(--accent); }
 @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
-/* phones: the brand name above the copy, and the headline on one line */
+/* phones: the brand name moves from the header into the hero; headline on one line; the copy spaced out */
 .hero-brand { display: none; }
 @media (max-width: 860px) {
-  .hero-brand { display: flex; margin-bottom: 28px; }
+  header.site .wordmark { display: none; }
+  .hero-brand { display: flex; margin-bottom: 56px; }
   .hero-brand b { font-size: 2rem; }
   .hero-brand small { font-size: .8rem; margin-top: 8px; }
-  .hero h1 { white-space: nowrap; font-size: clamp(1.6rem, 8.6vw, 2.6rem); }
+  .hero .eyebrow { margin-bottom: 22px; }
+  .hero h1 { white-space: nowrap; font-size: clamp(1.6rem, 8.6vw, 2.6rem); margin-bottom: 32px; }
   .hero h1 br { display: none; }
+  .hero .actions { margin-top: 44px; }
 }
 
 /* "why us" tiles: softly tinted panels, one wide tile carrying a sample certificate */
