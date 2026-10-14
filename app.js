@@ -29,7 +29,7 @@ const RUO_LONG = `All products sold by ${BRAND.name} are intended solely for in 
 // Rendered product shots from tools/vials (one per product option)
 const optSlug = (label) => label.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
 // media/ is served with a 1-year immutable cache — bump MEDIA_V whenever the vial renders change
-const MEDIA_V = 10;
+const MEDIA_V = 12;
 const vialImg = (p, s) => `media/vials/${p.id}--${optSlug(s.label)}.webp?v=${MEDIA_V}`;
 
 // Logo: a dark crossbarless "A" rising over a planet horizon — lit blade edges, a beam off the apex, a star in the counter.

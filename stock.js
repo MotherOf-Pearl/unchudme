@@ -4,8 +4,8 @@
 //   not listed  → "Ships in ~7 days" (ordered from the wholesaler on demand)
 // One wholesaler kit = 10 vials.
 const STOCK = {
-  "retatrutide": { "10 mg": 10 },
-  "tirzepatide": { "10 mg": 10 },
+  "glp1-r": { "10 mg": 10 },
+  "glp1-t": { "10 mg": 10 },
   "bpc-157": { "10 mg": 10 },
   "tb-500": { "10 mg": 10 },
   "bpc-tb": { "BPC 10 mg + TB 10 mg": 10 },

@@ -30,7 +30,7 @@ const [mode, arg] = process.argv.slice(2);
 const HERO = ['ghk-cu', 'bpc-157', 'tb-500']; // left, centre, right
 const HERO_W = 1200, HERO_H = 1100, OG_W = 1200, OG_H = 630;
 // og card: GLP in the middle, flanked by the two best sellers
-const OG = [['bpc-157'], ['retatrutide', 'GLP-3 RT', '10 mg'], ['tb-500']];
+const OG = [['bpc-157'], ['glp1-r', null, '10 mg'], ['tb-500']];
 
 const browser = await puppeteer.launch({
   executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new',

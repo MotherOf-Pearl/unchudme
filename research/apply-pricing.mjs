@@ -17,9 +17,9 @@ const COSTS = fs.existsSync(costFile) ? JSON.parse(fs.readFileSync(costFile, "ut
 
 // competitor product name → our product id
 const NAME_TO_ID = {
-  "retatrutide": "retatrutide", "tirzepatide": "tirzepatide", "cagrilintide": "cagrilintide", "eloralintide": "eloralintide",
+  "retatrutide": "glp1-r", "tirzepatide": "glp1-t", "cagrilintide": "cagrilintide", "eloralintide": "eloralintide",
   "mots-c": "mots-c", "selank": "selank", "semax": "semax", "vip": "vip", "snap-8": "snap-8",
-  "ipamorelin": "ipamorelin", "sermorelin": "sermorelin", "bpc-157": "bpc-157", "tb-500": "tb-500",
+  "ipamorelin": "ipamorelin", "sermorelin": "glp1-s", "bpc-157": "bpc-157", "tb-500": "tb-500",
   "bpc-157+tb-500": "bpc-tb", "klow": "klow", "glow": "glow", "slu-pp-332": "slu-pp-332", "ghrp-2": "ghrp-2",
   "epitalon": "epitalon", "kpv": "kpv", "melanotan ii": "melanotan-2", "mt2": "melanotan-2", "melanotan i": "melanotan-1", "mt1": "melanotan-1",
   "adamax": "adamax", "ss-31": "ss-31", "igf-1 lr3": "igf-1-lr3", "gonadorelin": "gonadorelin", "nad+": "nad",

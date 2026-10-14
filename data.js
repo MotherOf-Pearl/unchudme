@@ -22,15 +22,15 @@ const mg = (...sizes) => sizes.map((n) => o(`${n} mg`));
 
 const PRODUCTS = [
   // ---- peptides ----
-  { id: "retatrutide", name: "Retatrutide", cat: "peptide", aka: "reta", formula: "C221H342N46O68", mw: 4731.3, cas: "2381089-83-2",
+  { id: "glp1-r", name: "GLP1-R", cat: "peptide", aka: "glp1r glp-1 r", code: "GLPR", formula: "C221H342N46O68", mw: 4731.3, cas: "2381089-83-2",
     sizes: mg(5, 10, 20, 30, 40, 60) },
-  { id: "tirzepatide", name: "Tirzepatide", cat: "peptide", aka: "tirz", formula: "C225H348N48O68", mw: 4813.5, cas: "2023788-19-2",
+  { id: "glp1-t", name: "GLP1-T", cat: "peptide", aka: "glp1t glp-1 t", code: "GLPT", formula: "C225H348N48O68", mw: 4813.5, cas: "2023788-19-2",
     sizes: mg(10, 15, 20, 30, 40, 60) },
   { id: "cagrilintide", name: "Cagrilintide", cat: "peptide", aka: "cagri",
     sizes: mg(5) },
   { id: "tesamorelin", name: "Tesamorelin", cat: "peptide", aka: "tesa", formula: "C221H366N72O67S", mw: 5135.9, cas: "218949-48-5",
     sizes: mg(5, 10, 20) },
-  { id: "sermorelin", name: "Sermorelin", cat: "peptide", formula: "C149H246N44O42S", mw: 3357.9, cas: "86168-78-7",
+  { id: "glp1-s", name: "GLP1-S", cat: "peptide", aka: "glp1s glp-1 s", code: "GLPS", formula: "C149H246N44O42S", mw: 3357.9, cas: "86168-78-7",
     sizes: mg(5, 10) },
   { id: "ipamorelin", name: "Ipamorelin", cat: "peptide", seq: "Aib-H-D-2Nal-D-F-K-NH2", formula: "C38H49N9O5", mw: 711.9, cas: "170851-70-4",
     sizes: mg(5, 10) },
@@ -120,7 +120,7 @@ const SPEC = {
 // SAMPLE lots — deterministic fake data so the COA UI can be designed. Not real results.
 const LOTS = PRODUCTS.flatMap((p, i) =>
   [0, 1].map((k) => ({
-    lot: `AP-${p.id.replace(/[^a-z0-9]/g, "").slice(0, 4).toUpperCase()}-26${String(3 + k * 4 + (i % 3)).padStart(2, "0")}`,
+    lot: `AP-${p.code ?? p.id.replace(/[^a-z0-9]/g, "").slice(0, 4).toUpperCase()}-26${String(3 + k * 4 + (i % 3)).padStart(2, "0")}`,
     productId: p.id,
     date: `2026-${String(3 + k * 4 + (i % 3)).padStart(2, "0")}-1${i % 9}`,
     purity: (98.6 + ((i * 7 + k * 3) % 13) / 10).toFixed(2),
