@@ -29,9 +29,9 @@ export function makeVial(mark, { sleek = false, glass: glassMode = sleek ? 'addi
       transparent: true, depthWrite: false, blending: THREE.CustomBlending, // colour adds, alpha composites "over"
       blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor, blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneMinusSrcAlphaFactor })
     : new THREE.MeshPhysicalMaterial({
-      color: 0xffffff, metalness: 0, roughness: 0, transmission: 1, thickness: 0.35, ior: 1.52,
-      attenuationColor: new THREE.Color(0xd5e2dd), attenuationDistance: 2.5, specularIntensity: 1,
-      envMapIntensity: 1, side: THREE.DoubleSide,
+      color: 0xffffff, metalness: 0, roughness: 0, transmission: 1, thickness: 1.2, ior: 1.5,
+      attenuationColor: new THREE.Color(0xdde6ea), attenuationDistance: 2.2, specularIntensity: 1, clearcoat: 1, clearcoatRoughness: 0.03,
+      envMapIntensity: 2.2, side: THREE.DoubleSide,
     });
   // Additive glass also writes its brightness as alpha. The premultiplied canvas then composites to the same
   // rgb + (1 − a)·page as pure addition, and a transparent screenshot (the hero fallback still) keeps the glass
@@ -41,11 +41,11 @@ export function makeVial(mark, { sleek = false, glass: glassMode = sleek ? 'addi
       '#include <dithering_fragment>\n\tgl_FragColor.a = clamp(max(max(gl_FragColor.r, gl_FragColor.g), gl_FragColor.b), 0.0, 1.0);');
   };
   const glass = new THREE.Mesh(new THREE.LatheGeometry(glassProfile, 128), glassMat);
-  glass.castShadow = glassMode !== 'additive'; glass.renderOrder = 2; group.add(glass);
+  glass.renderOrder = 2; group.add(glass);
 
   // lyophilized cake at the bottom
-  const cake = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.34, 72), new THREE.MeshStandardMaterial({ color: sleek ? 0x9ea6a3 : 0xf7f7f4, roughness: 0.95 }));
-  cake.position.y = 0.2; group.add(cake);
+  const cake = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.34, 72), new THREE.MeshStandardMaterial({ color: glassMode === 'additive' ? 0x9ea6a3 : 0xf4f4f1, roughness: 0.95 }));
+  cake.position.y = 0.2; cake.castShadow = true; group.add(cake);
 
   // aluminium crimp seal + flip-off cap
   const crimp = new THREE.Mesh(new THREE.CylinderGeometry(0.74, 0.74, 0.5, 96), sleek
@@ -67,7 +67,7 @@ export function makeVial(mark, { sleek = false, glass: glassMode = sleek ? 'addi
   const tex = new THREE.CanvasTexture(lc); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
   const label = new THREE.Mesh(new THREE.CylinderGeometry(LR, LR, LH, 160, 1, true, -Math.PI, Math.PI * 2),
     new THREE.MeshPhysicalMaterial({ map: tex, roughness: sleek ? 0.6 : 0.55, clearcoat: sleek ? 0.1 : 0.15, clearcoatRoughness: 0.2 }));
-  label.position.y = 0.46 + LH / 2; group.add(label);
+  label.position.y = 0.46 + LH / 2; label.castShadow = true; group.add(label);
 
   // label palette: white stock for catalog photos, dark stock for the sleek look
   const L = sleek
