@@ -28,8 +28,6 @@ const PRODUCTS = [
     sizes: mg(10, 15, 20, 30, 40, 60) },
   { id: "cagrilintide", name: "Cagrilintide", cat: "peptide", aka: "cagri",
     sizes: mg(5) },
-  { id: "eloralintide", name: "Eloralintide", cat: "peptide", aka: "EL5 EL10",
-    sizes: mg(5, 10) },
   { id: "tesamorelin", name: "Tesamorelin", cat: "peptide", aka: "tesa", formula: "C221H366N72O67S", mw: 5135.9, cas: "218949-48-5",
     sizes: mg(5, 10, 20) },
   { id: "sermorelin", name: "Sermorelin", cat: "peptide", formula: "C149H246N44O42S", mw: 3357.9, cas: "86168-78-7",
