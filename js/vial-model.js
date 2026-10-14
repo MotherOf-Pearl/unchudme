@@ -1,17 +1,13 @@
-// Shared vial model: 10 ml-style injection vial with a Based Chems label.
+// Shared vial model: 10 ml-style injection vial with an Aura Pharma label.
 // Used by the catalog photo renderer (tools/vials) and the live home-page hero (js/hero3d.js).
-// makeVial(face, { sleek, glass }) → { group, drawLabel({ name, option, lot }) }. Group origin sits on the floor, label faces +z.
-//   face: the site logo's FACE_PATHS svg string (from app.js).
-//   sleek: teal anodised crimp, graphite cap, dark label.
+// makeVial(mark, { sleek, glass }) → { group, drawLabel({ name, option, lot }) }. Group origin sits on the floor, label faces +z.
+//   mark: the site logo's MARK_PARTS path data (from app.js).
+//   sleek: ice-blue anodised crimp, graphite cap, dark label.
 //   glass: 'transmission' (needs an opaque backdrop — catalog photos) or 'additive' (over a transparent canvas — live hero).
 //          Defaults to additive when sleek.
 import * as THREE from 'three';
 
-const TEAL = '#1f5c4d', TEAL_LIGHT = '#6fc2a7', INK = '#14181f';
-
-const parseFace = (svg) => [...svg.matchAll(/<path d="([^"]+)"([^>]*)\/>/g)].map(([, d, attrs]) => ({
-  d, fill: /fill="currentColor"/.test(attrs), bg: /var\(--bg/.test(attrs), opacity: +(attrs.match(/opacity="([\d.]+)"/)?.[1] ?? 1),
-}));
+const BLUE = '#1f4f78', BLUE_LIGHT = '#8cc8f0', INK = '#14181f';
 
 // ---- vial geometry (units ≈ cm/10) ----
 const R = 1, BODY = 3.15;
@@ -21,8 +17,8 @@ const glassProfile = [
 ].map(([x, y]) => new THREE.Vector2(x, y));
 const LH = 2.15, LR = R + 0.006, CW = 4096, CH = Math.round(CW * LH / (2 * Math.PI * LR));
 
-export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'additive' : 'transmission' } = {}) {
-  const FACE = parseFace(face);
+export function makeVial(mark, { sleek = false, glass: glassMode = sleek ? 'additive' : 'transmission' } = {}) {
+  const MARK = Object.fromEntries(Object.entries(mark).map(([k, d]) => [k, new Path2D(d)]));
   const group = new THREE.Group();
   // Transmission glass needs an opaque scene behind it; over a transparent canvas it renders flat grey.
   // The sleek look instead adds only the glass's reflections (black base + additive blend), so the page shows
@@ -30,13 +26,20 @@ export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'addi
   const glassMat = glassMode === 'additive'
     ? new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0.08, ior: 1.52, specularIntensity: 0.6,
       clearcoat: 0.3, clearcoatRoughness: 0.1, envMapIntensity: 1.1, side: THREE.DoubleSide,
-      transparent: true, depthWrite: false, blending: THREE.CustomBlending, // colour adds, canvas alpha untouched
-      blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor, blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.OneFactor })
+      transparent: true, depthWrite: false, blending: THREE.CustomBlending, // colour adds, alpha composites "over"
+      blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor, blendSrcAlpha: THREE.OneFactor, blendDstAlpha: THREE.OneMinusSrcAlphaFactor })
     : new THREE.MeshPhysicalMaterial({
       color: 0xffffff, metalness: 0, roughness: 0, transmission: 1, thickness: 0.35, ior: 1.52,
       attenuationColor: new THREE.Color(0xd5e2dd), attenuationDistance: 2.5, specularIntensity: 1,
       envMapIntensity: 1, side: THREE.DoubleSide,
     });
+  // Additive glass also writes its brightness as alpha. The premultiplied canvas then composites to the same
+  // rgb + (1 − a)·page as pure addition, and a transparent screenshot (the hero fallback still) keeps the glass
+  // instead of dropping every pixel whose alpha was 0.
+  if (glassMode === 'additive') glassMat.onBeforeCompile = (s) => {
+    s.fragmentShader = s.fragmentShader.replace('#include <dithering_fragment>',
+      '#include <dithering_fragment>\n\tgl_FragColor.a = clamp(max(max(gl_FragColor.r, gl_FragColor.g), gl_FragColor.b), 0.0, 1.0);');
+  };
   const glass = new THREE.Mesh(new THREE.LatheGeometry(glassProfile, 128), glassMat);
   glass.castShadow = glassMode !== 'additive'; glass.renderOrder = 2; group.add(glass);
 
@@ -46,7 +49,7 @@ export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'addi
 
   // aluminium crimp seal + flip-off cap
   const crimp = new THREE.Mesh(new THREE.CylinderGeometry(0.74, 0.74, 0.5, 96), sleek
-    ? new THREE.MeshPhysicalMaterial({ color: 0x4fae90, metalness: 1, roughness: 0.32, clearcoat: 0.2, clearcoatRoughness: 0.2 })
+    ? new THREE.MeshPhysicalMaterial({ color: 0x5f9fd4, metalness: 1, roughness: 0.32, clearcoat: 0.2, clearcoatRoughness: 0.2 })
     : new THREE.MeshStandardMaterial({ color: 0xd7d9da, metalness: 1, roughness: 0.28 }));
   crimp.position.y = BODY + 0.66; crimp.castShadow = true; group.add(crimp);
   const lip = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.03, 12, 96), crimp.material);
@@ -68,19 +71,32 @@ export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'addi
 
   // label palette: white stock for catalog photos, dark stock for the sleek look
   const L = sleek
-    ? { paper: '#222b31', band: TEAL_LIGHT, band2: TEAL, ink: '#f4f6f4', sub: TEAL_LIGHT, pill: TEAL_LIGHT, pillInk: '#0f1215', fine: '#a7b0ba', faceBg: '#222b31', face: TEAL_LIGHT }
-    : { paper: '#ffffff', band: TEAL, band2: TEAL_LIGHT, ink: INK, sub: TEAL, pill: TEAL, pillInk: '#ffffff', fine: '#3f4651', faceBg: '#ffffff', face: TEAL };
+    ? { paper: '#222b31', band: BLUE_LIGHT, band2: BLUE, ink: '#f4f6f4', sub: BLUE_LIGHT, pill: BLUE_LIGHT, pillInk: '#0f1215', fine: '#a7b0ba' }
+    : { paper: '#ffffff', band: BLUE, band2: BLUE_LIGHT, ink: INK, sub: BLUE, pill: BLUE, pillInk: '#ffffff', fine: '#3f4651' };
 
-  function drawFace(x, y, h) {
+  // the site logo (app.js markSVG) without its tile: the label paper is the night sky and hides the legs below the horizon
+  function drawMark(x, y, h) {
     const s = h / 48;
-    ctx.save(); ctx.translate(x - 20 * s, y); ctx.scale(s, s);
-    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    for (const p of FACE) {
-      const path = new Path2D(p.d);
-      if (p.fill) { ctx.fillStyle = L.face; ctx.fill(path); continue; }
-      ctx.strokeStyle = p.bg ? L.faceBg : L.face; ctx.globalAlpha = p.opacity ?? 1;
-      ctx.lineWidth = p.bg ? 1 : 2.1; ctx.stroke(path); ctx.globalAlpha = 1;
-    }
+    const grad = (g, stops) => { stops.forEach(([o, c]) => g.addColorStop(o, c)); return g; };
+    const lin = (x0, y0, x1, y1, stops) => grad(ctx.createLinearGradient(x0, y0, x1, y1), stops);
+    const glow = (draw) => { ctx.save(); ctx.filter = `blur(${1.1 * s}px)`; draw(); ctx.restore(); };
+    const stroke = (path, style, w, blurW) => {
+      ctx.strokeStyle = style;
+      if (blurW) glow(() => { ctx.lineWidth = blurW; ctx.stroke(path); });
+      ctx.lineWidth = w; ctx.stroke(path);
+    };
+    ctx.save(); ctx.translate(x - 24 * s, y); ctx.scale(s, s); ctx.lineJoin = 'miter';
+    ctx.fillStyle = grad(ctx.createRadialGradient(24, 31, 0, 24, 31, 22), [[0, 'rgba(124,196,255,.35)'], [1, 'rgba(124,196,255,0)']]);
+    ctx.fillRect(-8, -4, 64, 60);
+    stroke(MARK.beam, lin(0, -2, 0, 7, [[0, 'rgba(169,220,255,0)'], [1, '#fff']]), 0.7, 2.2);
+    ctx.fillStyle = lin(0, 6, 0, 40, [[0, '#2b3947'], [1, '#06090d']]); ctx.fill(MARK.a);
+    stroke(MARK.edge, lin(0, 5, 0, 36, [[0, '#fff'], [0.55, '#a9dcff'], [1, 'rgba(90,169,230,.25)']]), 0.75, 1.8);
+    stroke(MARK.inner, 'rgba(159,212,255,.35)', 0.5);
+    ctx.fillStyle = L.paper; ctx.fill(MARK.planet);
+    stroke(MARK.rim, lin(-8, 0, 56, 0, [[0, 'rgba(90,169,230,0)'], [0.5, '#e6f5ff'], [1, 'rgba(90,169,230,0)']]), 0.7, 2.4);
+    glow(() => { ctx.fillStyle = 'rgba(191,230,255,.55)'; ctx.beginPath(); ctx.arc(24, 30.3, 2.6, 0, Math.PI * 2); ctx.fill(); });
+    stroke(MARK.flare, 'rgba(207,234,255,.7)', 0.35);
+    ctx.fillStyle = '#fff'; ctx.fill(MARK.star);
     ctx.restore();
   }
 
@@ -96,11 +112,7 @@ export function makeVial(face, { sleek = false, glass: glassMode = sleek ? 'addi
     ctx.fillStyle = L.band2; ctx.fillRect(0, 46, CW, 9); ctx.fillRect(0, CH - 55, CW, 9);
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
 
-    drawFace(cx, 150, 230);
-    ctx.fillStyle = L.ink; ctx.font = '800 104px Inter'; ctx.letterSpacing = '10px';
-    ctx.fillText('BASED CHEMS', cx, 492);
-    ctx.fillStyle = L.sub; ctx.font = '600 40px Inter'; ctx.letterSpacing = '24px';
-    ctx.fillText('PEPTIDES', cx, 556);
+    drawMark(cx, 150, 460);
 
     // compound name in a solid pill
     const pillH = 158, pillY = 612;

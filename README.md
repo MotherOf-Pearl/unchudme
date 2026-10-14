@@ -1,4 +1,4 @@
-# Based Chems — storefront prototype
+# Aura Pharma (aurapharma.us) — storefront prototype
 
 Static site (no build step). Open `index.html` in a browser.
 

@@ -1,12 +1,12 @@
 // Live home-page hero: three sleek vials floating over the page with idle motion and a little pointer parallax.
-// mountHero(container, { face, specs: [left, centre, right], animate }) → Promise<canvas>. Throws if WebGL is unavailable.
+// mountHero(container, { mark, specs: [left, centre, right], animate }) → Promise<canvas>. Throws if WebGL is unavailable.
 import * as THREE from 'three';
 import { makeVial, studioEnvironment, FONTS } from './vial-model.js';
 
 // centre vial forward and larger, the flanking pair set back
 const SLOTS = [{ x: -2.15, z: -1.1, s: 0.86 }, { x: 0, z: 0.7, s: 1.08 }, { x: 2.15, z: -1.1, s: 0.86 }];
 
-export async function mountHero(container, { face, specs, animate = true }) {
+export async function mountHero(container, { mark, specs, animate = true }) {
   await Promise.all(FONTS.map((f) => document.fonts.load(f)));
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: !animate });
@@ -24,9 +24,9 @@ export async function mountHero(container, { face, specs, animate = true }) {
   key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.radius = 12;
   Object.assign(key.shadow.camera, { left: -5, right: 5, top: 7, bottom: -4 });
   scene.add(key);
-  // teal rim lights from behind pick out the glass and crimp edges against the dark page
-  const rimL = new THREE.DirectionalLight(0x6fc2a7, 3); rimL.position.set(-6, 4, -6); scene.add(rimL);
-  const rimR = new THREE.DirectionalLight(0x6fc2a7, 2.2); rimR.position.set(6, 3, -6); scene.add(rimR);
+  // ice-blue rim lights from behind pick out the glass and crimp edges against the dark page
+  const rimL = new THREE.DirectionalLight(0x7cc4ff, 3); rimL.position.set(-6, 4, -6); scene.add(rimL);
+  const rimR = new THREE.DirectionalLight(0x7cc4ff, 2.2); rimR.position.set(6, 3, -6); scene.add(rimR);
   const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(4, 2, 5); scene.add(fill);
 
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.38 }));
@@ -34,7 +34,7 @@ export async function mountHero(container, { face, specs, animate = true }) {
 
   const rig = new THREE.Group(); scene.add(rig);
   const vials = SLOTS.map(({ x, z, s }, i) => {
-    const v = makeVial(face, { sleek: true });
+    const v = makeVial(mark, { sleek: true });
     v.drawLabel(specs[i]);
     v.group.position.set(x, 0, z); v.group.scale.setScalar(s);
     v.baseYaw = Math.atan2(camera.position.x - x, camera.position.z - z);

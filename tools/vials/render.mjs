@@ -12,7 +12,7 @@ const SIZE = 1000;
 // catalog + logo straight from the site so labels never drift from it
 const ctx = {}; vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(path.join(SITE, 'data.js'), 'utf8') + ';this.PRODUCTS = PRODUCTS; this.LOTS = LOTS;', ctx);
-const FACE = fs.readFileSync(path.join(SITE, 'app.js'), 'utf8').match(/const FACE_PATHS = `([\s\S]*?)`;/)[1];
+const MARK = JSON.parse(fs.readFileSync(path.join(SITE, 'app.js'), 'utf8').match(/const MARK_PARTS = (\{[\s\S]*?\});/)[1]);
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9.]+/g, '-').replace(/^-|-$/g, '');
 const vialText = (o) => (o === 'Standard vial' ? '' : o.replace(/^(\w+) ([\d.]+ mg) \+ (\w+) ([\d.]+ mg)$/, '$1 $2  +  $3 $4'));
@@ -35,7 +35,7 @@ const browser = await puppeteer.launch({
 const page = await browser.newPage();
 await page.setViewport(mode === 'hero' ? { width: HERO_W, height: HERO_H, deviceScaleFactor: 1 } : { width: SIZE, height: SIZE, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => console.log('[err]', e.message));
-await page.evaluateOnNewDocument((f) => { window.FACE_PATHS = f; }, FACE);
+await page.evaluateOnNewDocument((m) => { window.MARK_PARTS = m; }, MARK);
 await page.goto(`http://127.0.0.1:8767/${mode === 'hero' ? 'hero' : 'vial'}.html`);
 await page.waitForFunction('window.READY === true', { timeout: 60000 });
 

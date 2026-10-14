@@ -10,7 +10,7 @@
 // Still of the live home-page hero (js/hero3d.js) — the fallback image shown when WebGL isn't available.
 // window.renderHero([left, centre, right]) — each { name, option, lot }.
 import { mountHero } from './js/hero3d.js';
-window.renderHero = (specs) => mountHero(document.getElementById('box'), { face: window.FACE_PATHS, specs, animate: false });
+window.renderHero = (specs) => mountHero(document.getElementById('box'), { mark: window.MARK_PARTS, specs, animate: false });
 window.READY = true;
 </script>
 </body></html>

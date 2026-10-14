@@ -29,15 +29,50 @@ const RUO_LONG = `All products sold by ${BRAND.name} are intended solely for in 
 // Rendered product shots from tools/vials (one per product option)
 const optSlug = (label) => label.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
 // media/ is served with a 1-year immutable cache — bump MEDIA_V whenever the vial renders change
-const MEDIA_V = 5;
+const MEDIA_V = 8;
 const vialImg = (p, s) => `media/vials/${p.id}--${optSlug(s.label)}.webp?v=${MEDIA_V}`;
 
-// Logo: featureless face outline — swept hair, clean hairline, high cheekbones, hollow cheeks, sharp jaw.
-const FACE_PATHS = `<path d="M10.3 13.4L12.4 10.3C14 9.7 16.5 9.5 20 9.5S26 9.7 27.6 10.3L29.7 13.4C31.2 11.3 31.7 8.6 31.1 6.4C30.4 4 28.3 2.2 25.4 1.5C22 .7 17.6 1 14.6 2.4C11.8 3.7 9.7 6 9.3 8.8C9.1 10.5 9.5 12.1 10.3 13.4Z" fill="currentColor" stroke="none"/><path d="M13.6 9.4C15.6 6.4 19.6 4.3 25.4 4.4M17.4 9.1C19.6 7.2 23.4 6.2 28.6 6.9" stroke="var(--bg,#0f1215)" stroke-width="1"/><path d="M20 9.5C23.5 9.5 26 9.7 27.6 10.3L29.7 13.4C30.6 15.6 31 18.2 30.8 20.6C30.6 23 29 24.4 28.7 26.6C28.5 28.4 29.4 29.9 29.3 31.4L23.4 38.6C22.4 39.3 21.2 39.5 20 39.5S17.6 39.3 16.6 38.6L10.7 31.4C10.6 29.9 11.5 28.4 11.3 26.6C11 24.4 9.4 23 9.2 20.6C9 18.2 9.4 15.6 10.3 13.4L12.4 10.3C14 9.7 16.5 9.5 20 9.5Z"/><path d="M13.4 34.9L13.9 46M26.6 34.9L26.1 46" opacity=".55"/>`;
-const logoSVG = (h = 34) => `<svg class="logo-face" width="${h * 40 / 48}" height="${h}" viewBox="0 0 40 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${FACE_PATHS}</svg>`;
+// Logo: a dark crossbarless "A" rising over a planet horizon — lit blade edges, a beam off the apex, a star in the counter.
+// The wordmark spells AURA with Λ for the bare A. MARK_PARTS is the shared geometry (48×48 box): the vial labels
+// (js/vial-model.js, via tools/vials/render.mjs) draw the same parts on canvas, so keep it valid JSON.
+const MARK_PARTS = {
+  "beam": "M24 -2V7",
+  "a": "M24 4.5L37.5 40H30.5L24 21.5L17.5 40H10.5Z",
+  "edge": "M10.5 40L24 4.5L37.5 40",
+  "inner": "M17.5 40L24 21.5L30.5 40",
+  "planet": "M-8 41Q24 23 56 41V56H-8Z",
+  "rim": "M-8 41Q24 23 56 41",
+  "star": "M24 27.2L24.45 29.85L27.1 30.3L24.45 30.75L24 33.4L23.55 30.75L20.9 30.3L23.55 29.85Z",
+  "flare": "M19.5 30.3H28.5"
+};
+let markIds = 0; // gradient/filter ids must be unique per inline SVG
+// tile: the dark rounded square (favicon). Without it the mark sits straight on a dark band.
+function markSVG(size, attrs = "", { tile = true } = {}) {
+  const k = `mk${markIds++}`, P = MARK_PARTS;
+  return `<svg ${attrs} width="${size}" height="${size}" viewBox="0 0 48 48" fill="none" aria-hidden="true"><defs>
+    <clipPath id="${k}c"><rect width="48" height="48" rx="11"/></clipPath>
+    <mask id="${k}m" maskUnits="userSpaceOnUse" x="-8" y="-8" width="64" height="64"><rect x="-8" y="-8" width="64" height="64" fill="#fff"/><path d="${P.planet}" fill="#000"/></mask>
+    <linearGradient id="${k}a" x1="0" y1="6" x2="0" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2b3947"/><stop offset="1" stop-color="#06090d"/></linearGradient>
+    <linearGradient id="${k}e" x1="0" y1="5" x2="0" y2="36" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#a9dcff"/><stop offset="1" stop-color="#5aa9e6" stop-opacity=".25"/></linearGradient>
+    <linearGradient id="${k}r" x1="-8" y1="0" x2="56" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5aa9e6" stop-opacity="0"/><stop offset=".5" stop-color="#e6f5ff"/><stop offset="1" stop-color="#5aa9e6" stop-opacity="0"/></linearGradient>
+    <linearGradient id="${k}b" x1="0" y1="-2" x2="0" y2="7" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#a9dcff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    <radialGradient id="${k}h" cx="24" cy="31" r="22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7cc4ff" stop-opacity=".35"/><stop offset="1" stop-color="#7cc4ff" stop-opacity="0"/></radialGradient>
+    <filter id="${k}g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.1"/></filter></defs>
+    <g${tile ? ` clip-path="url(#${k}c)"><rect width="48" height="48" fill="#04070b"/` : ""}><g mask="url(#${k}m)"><rect x="-8" y="-8" width="64" height="64" fill="url(#${k}h)"/>
+      <path d="${P.beam}" stroke="url(#${k}b)" stroke-width="2.2" filter="url(#${k}g)"/><path d="${P.beam}" stroke="url(#${k}b)" stroke-width=".7"/>
+      <path d="${P.a}" fill="url(#${k}a)"/>
+      <path d="${P.edge}" stroke="url(#${k}e)" stroke-width="1.8" filter="url(#${k}g)"/><path d="${P.edge}" stroke="url(#${k}e)" stroke-width=".75"/>
+      <path d="${P.inner}" stroke="#9fd4ff" stroke-opacity=".35" stroke-width=".5"/></g>
+      <path d="${P.rim}" stroke="url(#${k}r)" stroke-width="2.4" filter="url(#${k}g)"/><path d="${P.rim}" stroke="url(#${k}r)" stroke-width=".7"/>
+      <circle cx="24" cy="30.3" r="2.6" fill="#bfe6ff" opacity=".55" filter="url(#${k}g)"/>
+      <path d="${P.flare}" stroke="#cfeaff" stroke-width=".35" opacity=".7"/><path d="${P.star}" fill="#fff"/></g></svg>`;
+}
+// The name only appears in the header; everywhere else the mark stands alone.
+const logoHTML = () => `<a class="logo" href="index.html" aria-label="${esc(BRAND.name)} home">${markSVG(42, 'class="logo-mark"', { tile: false })}<span class="wordmark" aria-hidden="true"><b>ΛURΛ</b><small>PHARMA</small></span></a>`;
+const markLink = (size) => `<a class="logo" href="index.html" aria-label="${esc(BRAND.name)} home">${markSVG(size, 'class="logo-mark"', { tile: false })}</a>`;
 
 function setFavicon() {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" fill="none" stroke="#6fc2a7" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" color="#6fc2a7" style="--bg:#0f1215">${FACE_PATHS}</svg>`;
+  const svg = markSVG(48, 'xmlns="http://www.w3.org/2000/svg"');
   document.head.insertAdjacentHTML("beforeend", `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(svg)}">`);
 }
 
@@ -49,22 +84,22 @@ function renderChrome() {
   document.body.insertAdjacentHTML("afterbegin", `
     <div class="bg" aria-hidden="true"></div>
     <div class="ruo-strip">${RUO_SHORT}</div>
-    <header class="site"><div class="wrap">
-      <a class="logo" href="index.html">${logoSVG()}${esc(BRAND.name)}</a>
+    <header class="site dark-band"><div class="wrap">
+      ${logoHTML()}
       <button class="menu-btn" aria-label="Menu" aria-expanded="false">Menu</button>
       <nav class="main">${nav.map(([k, h, l]) => `<a href="${h}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
       <button class="cart-btn" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
     </div></header>`);
 
   document.body.insertAdjacentHTML("beforeend", `
-    <footer class="site"><div class="wrap">
+    <footer class="site dark-band"><div class="wrap">
       <div class="cols">
-        <div><a class="logo" href="index.html" style="color:var(--ink)">${logoSVG()}${esc(BRAND.name)}</a>
+        <div>${markLink(64)}
           <p class="muted">${esc(BRAND.tagline)}</p></div>
         <div><b>Catalog</b>${CATEGORIES.map((c) => `<a href="shop.html?cat=${c.id}">${c.label}</a>`).join("")}</div>
         <div><b>Company</b><a href="coa.html">Certificates</a><a href="quality.html">Quality</a><a href="faq.html">FAQ</a><a href="#">Terms of sale</a><a href="#">Privacy</a></div>
       </div>
-      <div class="legal">${RUO_LONG}<br><br>© ${new Date().getFullYear()} ${esc(BRAND.name)}. Prototype — not a live store.</div>
+      <div class="legal">${RUO_LONG}<br><br>© ${new Date().getFullYear()} ${esc(BRAND.name)} · ${esc(BRAND.domain)}. Prototype — not a live store.</div>
     </div></footer>
     <div class="drawer-bg"></div>
     <aside class="drawer" aria-label="Cart"><header><h3 style="margin:0">Cart</h3><button class="link-btn" data-close>Close</button></header>
@@ -90,13 +125,11 @@ function gate() {
       <h2 id="gate-t" style="font-size:1.5rem">Research use only</h2>
       <p class="muted" style="font-size:.92rem">${esc(BRAND.name)} supplies research compounds to laboratories and qualified researchers. Please confirm:</p>
       <label><input type="checkbox" id="g1"> I am 21 years of age or older.</label>
-      <label><input type="checkbox" id="g2"> I am purchasing for in vitro laboratory research and understand these products are not for human or animal use.</label>
       <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
         <button class="btn primary" id="g-enter" disabled>Enter site</button>
         <a class="btn" href="https://www.google.com">Leave</a>
       </div></div></div>`);
-  const update = () => ($("#g-enter").disabled = !($("#g1").checked && $("#g2").checked));
-  $("#g1").onchange = update; $("#g2").onchange = update;
+  $("#g1").onchange = (e) => ($("#g-enter").disabled = !e.target.checked);
   $("#g-enter").onclick = () => { store.set("ruo-ack", true); $(".gate").remove(); };
 }
 
