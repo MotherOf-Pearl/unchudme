@@ -125,11 +125,13 @@ function gate() {
       <h2 id="gate-t" style="font-size:1.5rem">Research use only</h2>
       <p class="muted" style="font-size:.92rem">${esc(BRAND.name)} supplies research compounds to laboratories and qualified researchers. Please confirm:</p>
       <label><input type="checkbox" id="g1"> I am 21 years of age or older.</label>
+      <label><input type="checkbox" id="g2"> I am a qualified researcher purchasing for in vitro or laboratory research only — not for human or veterinary use.</label>
       <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
         <button class="btn primary" id="g-enter" disabled>Enter site</button>
         <a class="btn" href="https://www.google.com">Leave</a>
       </div></div></div>`);
-  $("#g1").onchange = (e) => ($("#g-enter").disabled = !e.target.checked);
+  const update = () => ($("#g-enter").disabled = !($("#g1").checked && $("#g2").checked));
+  $("#g1").onchange = update; $("#g2").onchange = update;
   $("#g-enter").onclick = () => { store.set("ruo-ack", true); $(".gate").remove(); };
 }
 
