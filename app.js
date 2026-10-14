@@ -99,14 +99,14 @@ function renderChrome() {
         <div><b>Catalog</b>${CATEGORIES.map((c) => `<a href="shop.html?cat=${c.id}">${c.label}</a>`).join("")}</div>
         <div><b>Company</b><a href="coa.html">Certificates</a><a href="quality.html">Quality</a><a href="faq.html">FAQ</a><a href="#">Terms of sale</a><a href="#">Privacy</a></div>
       </div>
-      <div class="legal">${RUO_LONG}<br><br>© ${new Date().getFullYear()} ${esc(BRAND.name)} · ${esc(BRAND.domain)}. Prototype — not a live store.</div>
+      <div class="legal">${RUO_LONG}<br><br>© ${new Date().getFullYear()} ${esc(BRAND.name)} · ${esc(BRAND.domain)}.</div>
     </div></footer>
     <div class="drawer-bg"></div>
     <aside class="drawer" aria-label="Cart"><header><h3 style="margin:0">Cart</h3><button class="link-btn" data-close>Close</button></header>
       <div class="items"></div>
       <footer><div style="display:flex;justify-content:space-between"><span>Subtotal</span><b id="cart-sub">$0.00</b></div>
         <p class="notice" style="margin:0">Checkout requires account verification of research affiliation. ${RUO_SHORT}</p>
-        <button class="btn primary" disabled title="Payment not connected in prototype">Checkout (not connected)</button></footer>
+        <button class="btn primary" disabled>Checkout</button></footer>
     </aside>`);
 
   $(".menu-btn").onclick = (e) => { const n = $("nav.main"); n.classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", n.classList.contains("open")); };
