@@ -44,6 +44,9 @@ export async function mountHero(container, { mark, specs, animate = true }) {
 
   const canvas = renderer.domElement;
   container.appendChild(canvas);
+  // if the browser drops the WebGL context (GPU reset, too many 3D tabs) the canvas goes blank — show the still instead
+  canvas.addEventListener('webglcontextlost', () => container.classList.remove('live'));
+  canvas.addEventListener('webglcontextrestored', () => container.classList.add('live'));
   const resize = () => {
     const w = container.clientWidth, h = container.clientHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();

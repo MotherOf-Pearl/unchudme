@@ -70,13 +70,17 @@ nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 }
 
 /* hero */
-.hero { padding: 64px 0 72px; }
+.hero { padding: 64px 0 72px; overflow: hidden; min-height: min(82vh, 820px); display: flex; align-items: center; }
+.hero > .wrap { width: 100%; }
+/* starfield + planet horizon (js/space.js), clipped to the band; it replaces the grid texture here */
+.hero-space { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.hero.dark-band::before { display: none; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; }
 .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 36ch; }
 .hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
 .pass { color: var(--accent); font-weight: 600; }
 .hero-visual { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
-.hero-3d { position: absolute; inset: -4% -6%; display: grid; place-items: center; }
+.hero-3d { position: absolute; inset: -4% -6%; display: grid; place-items: center; transform: scale(.78); }
 .hero-3d img { width: 92%; height: auto; filter: drop-shadow(0 30px 40px rgba(0,0,0,.45)); }
 .hero-3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .8s; }
 .hero-3d.live img { visibility: hidden; }
@@ -96,7 +100,7 @@ nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 .float-badge b { color: var(--ink); font-weight: 650; }
 .float-badge svg { color: var(--accent); }
 a.float-badge:hover { border-color: var(--accent); }
-@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { max-width: 520px; margin: 0 auto; width: 100%; } }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .hero-visual { display: none; } }
 
 /* "why us" tiles: softly tinted panels, one wide tile carrying a sample certificate */
 .tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 28px; }
