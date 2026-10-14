@@ -129,7 +129,18 @@ a.float-badge:hover { border-color: var(--accent); }
   transition: border-color .25s, transform .25s, box-shadow .25s; }
 .card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); transform: translateY(-4px);
   box-shadow: 0 22px 40px -24px rgba(17, 40, 34, .35); }
-.card .vial { aspect-ratio: 1; overflow: hidden; background: #e9eeec; }
+.card .vial { position: relative; aspect-ratio: 1; overflow: hidden; background: #e9eeec; }
+/* availability: In stock / Backordered / Ships in ~7 days (from stock.js) */
+.stock-pill { display: inline-flex; align-items: center; gap: 6px; font: 600 .7rem var(--sans); letter-spacing: .01em; white-space: nowrap;
+  padding: 4px 10px 4px 9px; border-radius: 999px; background: rgba(255,255,255,.88); color: var(--muted); border: 1px solid var(--line); }
+.stock-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.stock-pill.in { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.stock-pill.back { color: #9a5b12; }
+.card .stock-pill { position: absolute; top: 10px; left: 10px; backdrop-filter: blur(6px); }
+.avail { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0 4px; font-size: .88rem; }
+.size.has-stock::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 7px; vertical-align: 2px; border-radius: 50%; background: var(--accent); }
+.size.has-stock[aria-pressed="true"]::after { background: currentColor; }
+.cart-note { font-size: .78rem; color: #9a5b12; }
 .card .vial img { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
 .card:hover .vial img { transform: scale(1.05); }
 .card .vial img, .pdp .vial-lg img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -150,6 +161,7 @@ a.float-badge:hover { border-color: var(--accent); }
   .card .meta { font-size: .68rem; }
   .card .price { font-size: .9rem; padding-top: 6px; }
   .card .go { width: 26px; height: 26px; font-size: .8rem; }
+  .card .stock-pill { top: 7px; left: 7px; font-size: .6rem; padding: 3px 7px 3px 6px; gap: 4px; }
 }
 
 /* shop toolbar */

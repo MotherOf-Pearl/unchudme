@@ -44,8 +44,6 @@ const PRODUCTS = [
     sizes: [o("0.1 mg"), o("1 mg")] },
   { id: "mots-c", name: "MOTS-c", cat: "peptide", seq: "MRWQEMGYIFYPRKLR", formula: "C101H152N28O22S2", mw: 2174.6, cas: "1627580-64-6",
     sizes: mg(10, 20, 40) },
-  { id: "ss-31", name: "SS-31", cat: "peptide", aka: "elamipretide", seq: "D-Arg-Dmt-Lys-Phe-NH2", formula: "C32H49N9O5", mw: 639.8, cas: "736992-21-5",
-    sizes: mg(10) },
   { id: "bpc-157", name: "BPC-157", cat: "peptide", seq: "GEPPPGKPADDAGLV", formula: "C62H98N16O22", mw: 1419.5, cas: "137525-51-0",
     sizes: mg(10) },
   { id: "tb-500", name: "TB-500", cat: "peptide", aka: "thymosin beta 4", formula: "C212H350N56O78S", mw: 4963.4, cas: "77591-33-4",

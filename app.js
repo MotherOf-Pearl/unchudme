@@ -8,6 +8,14 @@ const catLabel = (id) => CATEGORIES.find((c) => c.id === id)?.label ?? id;
 const priced = (p) => p.sizes.filter((s) => s.price != null);
 const minPrice = (p) => (priced(p).length ? Math.min(...priced(p).map((s) => s.price)) : Infinity);
 const priceTag = (p) => (priced(p).length ? money(minPrice(p)) : "Price on request");
+// Availability from stock.js: on hand, sold out and on reorder, or ordered from the wholesaler on demand
+const onHand = (p, s) => STOCK[p.id]?.[s.label];
+const availability = (n) => (n > 0 ? { cls: "in", text: "In stock" }
+  : n === 0 ? { cls: "back", text: `Backordered · ships in ${LEAD_TIME}` } : { cls: "order", text: `Ships in ${LEAD_TIME}` });
+const inStock = (p) => p.sizes.some((s) => onHand(p, s) > 0);
+const productAvailability = (p) => (inStock(p) ? availability(1)
+  : p.sizes.some((s) => onHand(p, s) === 0) ? availability(0) : availability());
+const stockPill = ({ cls, text }) => `<span class="stock-pill ${cls}">${text}</span>`;
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 const store = {
@@ -104,8 +112,10 @@ function renderCart() {
   $("#cart-count").textContent = c.reduce((n, i) => n + i.qty, 0);
   let sub = 0;
   $(".drawer .items").innerHTML = c.length ? c.map((i, idx) => {
-    const p = byId(i.id); const price = p.sizes.find((s) => s.label === i.label).price; sub += price * i.qty;
+    const p = byId(i.id), s = p.sizes.find((x) => x.label === i.label), price = s.price; sub += price * i.qty;
+    const n = onHand(p, s) ?? 0, note = n >= i.qty ? "" : n > 0 ? `${n} in stock, ${i.qty - n} ships in ${LEAD_TIME}` : `Ships in ${LEAD_TIME}`;
     return `<div class="item"><div><b>${esc(p.name)}</b> <span class="muted mono">${esc(i.label)} × ${i.qty}</span><br>
+      ${note ? `<span class="cart-note">${note}</span><br>` : ""}
       <button class="link-btn" data-rm="${idx}">Remove</button></div><div class="mono">${money(price * i.qty)}</div></div>`;
   }).join("") : `<p class="muted" style="padding:20px 0">Your cart is empty.</p>`;
   $("#cart-sub").textContent = money(sub);
@@ -123,9 +133,10 @@ function optionSummary(p) {
   if (n === 1) return esc(p.sizes[0].label);
   return mgs.every(Boolean) ? `${n} sizes · ${mgs[0]}–${mgs.at(-1)} mg` : `${n} options`;
 }
+const shownSize = (p) => p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0]; // picture the size on the shelf
 function productCard(p) {
   return `<a class="card" href="product.html?id=${p.id}">
-    <div class="vial"><img src="${vialImg(p, p.sizes[0])}" alt="${esc(p.name)} vial" loading="lazy" width="1000" height="1000"></div>
+    <div class="vial"><img src="${vialImg(p, shownSize(p))}" alt="${esc(p.name)} vial" loading="lazy" width="1000" height="1000">${stockPill(productAvailability(p))}</div>
     <div class="card-body">
       <span class="tag">${catLabel(p.cat)}</span>
       <span class="name">${esc(p.name)}</span>
@@ -138,7 +149,8 @@ function productCard(p) {
 /* ---------- pages ---------- */
 const pages = {
   home() {
-    $("#featured").innerHTML = PRODUCTS.slice(0, 8).map(productCard).join("");
+    const onShelf = Object.keys(STOCK).map(byId).filter((p) => p && inStock(p));
+    $("#featured").innerHTML = [...onShelf, ...PRODUCTS.filter((p) => !onShelf.includes(p))].slice(0, 8).map(productCard).join("");
     const l = LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
     $("#mini-coa").innerHTML = `
       <div class="mini-coa-head"><b>${esc(p.name)}</b><span class="sample-badge">Sample</span></div>
@@ -151,12 +163,13 @@ const pages = {
   shop() {
     const params = new URLSearchParams(location.search);
     let cat = params.get("cat") || "all", q = "", sort = "name";
-    $("#chips").innerHTML = [{ id: "all", label: "All" }, ...CATEGORIES].map((c) =>
+    $("#chips").innerHTML = [{ id: "all", label: "All" }, { id: "instock", label: "In stock" }, ...CATEGORIES].map((c) =>
       `<button class="chip" data-cat="${c.id}" aria-pressed="${c.id === cat}">${c.label}</button>`).join("");
     const draw = () => {
-      let list = PRODUCTS.filter((p) => (cat === "all" || p.cat === cat) &&
+      let list = PRODUCTS.filter((p) => (cat === "all" || p.cat === cat || (cat === "instock" && inStock(p))) &&
         [p.name, p.aka, p.seq, p.cas].join(" ").toLowerCase().includes(q));
       list.sort(sort === "price" ? (a, b) => minPrice(a) - minPrice(b) : sort === "mw" ? (a, b) => (a.mw ?? 1e9) - (b.mw ?? 1e9) : (a, b) => a.name.localeCompare(b.name));
+      list = [...list.filter(inStock), ...list.filter((p) => !inStock(p))];
       $("#results").innerHTML = list.length ? list.map(productCard).join("") : `<p class="muted">No compounds match “${esc(q)}”.</p>`;
       $("#count").textContent = `${list.length} compound${list.length === 1 ? "" : "s"}`;
     };
@@ -172,7 +185,7 @@ const pages = {
   product() {
     const p = byId(new URLSearchParams(location.search).get("id")) || PRODUCTS[0];
     document.title = `${p.name} · ${BRAND.name}`;
-    let size = p.sizes[0];
+    let size = p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0];
     const lots = LOTS.filter((l) => l.productId === p.id);
     $("#pdp").innerHTML = `
       <div class="vial-lg"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000"></div>
@@ -180,8 +193,9 @@ const pages = {
         <a class="muted" href="shop.html?cat=${p.cat}" style="font-size:.9rem">← ${catLabel(p.cat)}</a>
         <h1 style="font-size:2.4rem;margin-top:10px">${esc(p.name)}</h1>
         <div class="price" style="font-size:1.4rem;font-weight:650" id="price"></div>
+        <div class="avail" id="avail"></div>
         <div class="sizes" role="group" aria-label="Option">${p.sizes.map((s, i) =>
-          `<button class="size" data-i="${i}" aria-pressed="${i === 0}">${esc(s.label)}</button>`).join("")}</div>
+          `<button class="size${onHand(p, s) > 0 ? " has-stock" : ""}" data-i="${i}" aria-pressed="${s === size}">${esc(s.label)}</button>`).join("")}</div>
         <div class="qty"><label for="qty" class="muted">Qty</label><input id="qty" class="field" type="number" min="1" max="50" value="1"></div>
         <button class="btn primary" id="add">Add to cart</button>
         <p class="notice" style="margin-top:18px">${RUO_SHORT} No usage, dosing or administration guidance is provided.</p>
@@ -201,7 +215,13 @@ const pages = {
             <td><a href="coa.html?batch=${l.lot}">View</a> <span class="sample-badge">Sample</span></td></tr>`).join("")}
         </table></div>
       </div>`;
-    const setPrice = () => { $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
+    const setAvail = () => {
+      const n = onHand(p, size), qty = Math.max(1, +$("#qty").value || 1);
+      $("#avail").innerHTML = stockPill(availability(n)) +
+        (n > 0 && qty > n ? `<span class="muted">Only ${n} on hand. ${qty - n} backordered, ships in ${LEAD_TIME}.</span>` : "");
+    };
+    $("#qty").oninput = setAvail;
+    const setPrice = () => { setAvail(); $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
     setPrice();
     document.querySelectorAll(".size").forEach((b) => (b.onclick = () => {
       size = p.sizes[+b.dataset.i];
