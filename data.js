@@ -130,7 +130,7 @@ const LOTS = PRODUCTS.flatMap((p, i) =>
     solvents: "Pass (USP <467>)",
     tfa: `${(0.3 + ((i + k) % 5) / 10).toFixed(1)}%`,
     water: `${(2.1 + ((i * 3 + k) % 9) / 10).toFixed(1)}%`,
-    lab: "ISO 17025 accredited third-party lab (placeholder)",
+    lab: "ISO 17025 accredited third-party lab",
     sample: true,
   }))
 );

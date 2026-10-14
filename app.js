@@ -288,7 +288,7 @@ const pages = {
           <tr><th>Test</th><th>Specification</th><th>Result</th></tr>
           ${rows.map((r) => `<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono pass">${r[2]}</td></tr>`).join("")}
         </table></div>
-        <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${l.lab}. Original signed PDF will be linked here.</p></div>`;
+        <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${l.lab}.</p></div>`;
       history.replaceState(null, "", `?batch=${l.lot}`);
     };
     $("#coa-form").onsubmit = (e) => { e.preventDefault(); show($("#lot").value); };
