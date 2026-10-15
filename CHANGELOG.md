@@ -9,6 +9,7 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 - **Home hero**: the stars drift slowly in one direction (leftward, nearer stars a little faster). Nothing follows the mouse any more: the starfield, planet and 3D vials all ignore the pointer.
 - **Product page**: Specifications back under the buy box (the beside-the-title layout was reverted); the gallery stays.
 - **Quality page**: the "Current reports" and "Check it yourself" sections removed; certificates live on the product pages.
+- **Nav**: Quality removed from the header (the page still exists, linked from the footer). Header nav is now Shop, FAQ, Affiliates.
 
 ## 2026-10-15 — Fuller certificates, product gallery, affiliate portal
 

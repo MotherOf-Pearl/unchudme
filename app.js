@@ -80,7 +80,7 @@ function setFavicon() {
 function renderChrome() {
   setFavicon();
   const page = document.body.dataset.page;
-  const nav = [["shop", "shop.html", "Shop"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"], ["affiliate", "affiliate.html", "Affiliates"]];
+  const nav = [["shop", "shop.html", "Shop"], ["faq", "faq.html", "FAQ"], ["affiliate", "affiliate.html", "Affiliates"]];
   document.body.insertAdjacentHTML("afterbegin", `
     <div class="bg" aria-hidden="true"></div>
     <div class="ruo-strip">${RUO_SHORT}</div>
