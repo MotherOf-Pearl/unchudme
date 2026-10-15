@@ -107,6 +107,7 @@ A lab report is registered once (unique on lab + task number), so publishing it 
 `REPORTS_URL` is the public bucket's address. Blends have no `purity`; their `content` lists each ingredient (e.g. "BPC-157 4.95 mg · TB-500 4.82 mg").
 
 What the site shows:
+- **Product page gallery:** thumbnails of the vial and, when the selected size has a certificate, the certificate picture. Choosing the certificate shows it in the main window with a "Download PDF" button; clicking it opens the picture full size.
 - **Product page:** the lab report panel follows the **selected size**: "Batch AP-0007 · 10 mg · Tested …", the results, and a "Download certificate AP-0007 (PDF)" button. A size without its own report says its report is coming soon (it never shows another size's certificate). Products with no real report at all still show sample data marked "Sample".
 - **Lab reports page (`coa.html`):** one row per real report (product and size), then the products still on sample data. Since 2026-10-15 this page is **not in the header nav**; it is still linked from the footer and the home page. A card-style redesign (search, purity, labelled vs measured, view certificate) is planned.
 - **Home page:** the "Independent lab reports" tile shows BPC-157's real report.
@@ -125,13 +126,15 @@ What the site shows:
 |---|---|
 | Header | Aura Pharma logo (`logo.png`), "CERTIFICATE OF ANALYSIS" |
 | Top row | **Batch ID** · Testing ordered · Sample received (dates shown only when the lab gives them) |
-| Fields | Product (e.g. "GLP1-R 10 mg") · Sample code (print copy only) |
+| Product table | product name, CAS, molecular formula, molecular weight, sequence (from the catalog in `data.js`, rows hidden when unknown), quantity, form, storage; sample code on the print copy only |
 | Sample description | optional, hidden when empty |
 | Tests requested | what the lab ran |
-| Results | two columns, test and result, at least three rows |
+| Results | test table: Test item · Specification · Method (only when the lab states methods) · Result. Specifications are Aura Pharma's: purity NLT 98.0%, content against the labelled amount, blend ingredients against their labelled amounts. Identity is added from the report when no result row states it. A conclusion line appears only when purity meets NLT 98.0%. Never lists tests the lab didn't run. |
 | Comments | extra detail (e.g. mass-spec ions, specification), the lab's caveats, then: print copy → "Verify this result on the laboratory's own website … with key …"; public copy → "Testing details for this batch are printed on the copy that ships with your order, and available on request quoting the batch ID." |
 | Bottom | Analysis conducted (date) · Signature (`signature.png`) over "Reviewed by Aura Pharma QA" |
 | Footer | research-use-only line; "Analysis performed by an independent third-party laboratory. Aura Pharma issued this certificate from that laboratory's report, which is kept on file." |
+
+The page is fixed at one US Letter page; the generator stops if a certificate would be taller (shorten the notes or tests requested). Each public copy is also saved as a picture, `aura-reports/AP-xxxx.webp` (1224 × 1584), used by the product page gallery.
 
 Not on the certificate, by decision: the lab's name, the lab task number, the manufacturer/supplier, the supplier batch, the contact lines that were in the template's header, sample photos, QR codes, chromatograms.
 

@@ -80,7 +80,7 @@ function setFavicon() {
 function renderChrome() {
   setFavicon();
   const page = document.body.dataset.page;
-  const nav = [["shop", "shop.html", "Shop"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"]];
+  const nav = [["shop", "shop.html", "Shop"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"], ["affiliate", "affiliate.html", "Affiliates"]];
   document.body.insertAdjacentHTML("afterbegin", `
     <div class="bg" aria-hidden="true"></div>
     <div class="ruo-strip">${RUO_SHORT}</div>
@@ -254,8 +254,12 @@ const pages = {
     let size = p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0];
     const lots = LOTS.filter((l) => l.productId === p.id);
     $("#pdp").innerHTML = `
-      <div class="vial-lg"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000"></div>
-      <div>
+      <div class="pdp-media">
+        <div class="vial-lg" id="pdp-main"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000"></div>
+        <div class="thumbs" id="pdp-thumbs" role="group" aria-label="Pictures"></div>
+      </div>
+      <div class="pdp-info">
+        <div class="buy">
         <a class="muted" href="shop.html?cat=${p.cat}" style="font-size:.9rem">← ${catLabel(p.cat)}</a>
         <h1 style="font-size:2.4rem;margin-top:10px">${esc(p.name)}</h1>
         <div class="price" style="font-size:1.4rem;font-weight:650" id="price"></div>
@@ -264,8 +268,10 @@ const pages = {
           `<button class="size${onHand(p, s) > 0 ? " has-stock" : ""}" data-i="${i}" aria-pressed="${s === size}">${esc(s.label)}</button>`).join("")}</div>
         <div class="qty"><label for="qty" class="muted">Qty</label><input id="qty" class="field" type="number" min="1" max="50" value="1"></div>
         <button class="btn primary" id="add">Add to cart</button>
-        <p class="notice" style="margin-top:18px">${RUO_SHORT} No usage, dosing or administration guidance is provided.</p>
-        <h3 style="margin-top:28px">Specifications</h3>
+        </div>
+        <p class="notice">${RUO_SHORT} No usage, dosing or administration guidance is provided.</p>
+        <div class="specs">
+        <h3>Specifications</h3>
         <table class="spec">
           ${p.seq ? `<tr><th>Sequence</th><td>${esc(p.seq)}</td></tr>` : ""}
           ${p.formula ? `<tr><th>Molecular formula</th><td>${esc(p.formula)}</td></tr>` : ""}
@@ -275,6 +281,7 @@ const pages = {
           <tr><th>Purity</th><td>${SPEC.purity}</td></tr>
           <tr><th>Storage</th><td>${SPEC.storage}</td></tr>
         </table>
+        </div>
         <div id="coa-slot"></div>
       </div>`;
     const setAvail = () => {
@@ -284,7 +291,23 @@ const pages = {
     };
     $("#qty").oninput = setAvail;
     const setReport = () => { if (!lots.length) return; const l = reportFor(p, size); $("#coa-slot").innerHTML = l ? coaPanel(l) : noReport(size); };
-    const setPrice = () => { setAvail(); setReport(); $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
+    // gallery: the vial, plus the certificate when this size has one; the certificate opens full size when clicked
+    let view = "vial";
+    const setGallery = () => {
+      const l = lots.length ? reportFor(p, size) : null, cert = l?.img ? l : null;
+      if (!cert) view = "vial";
+      const main = $("#pdp-main");
+      main.classList.toggle("cert", view === "cert");
+      main.innerHTML = view === "cert"
+        ? `<a href="${cert.img}" target="_blank" rel="noopener" title="Open full size"><img id="pdp-img" src="${cert.img}" alt="Certificate of analysis ${esc(cert.certNo)}, ${esc(p.name)} ${esc(size.label)}"></a>
+           <a class="cert-dl" href="${cert.pdf}" download target="_blank" rel="noopener">Download PDF</a>`
+        : `<img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000">`;
+      $("#pdp-thumbs").innerHTML = cert ? [
+        `<button class="thumb" data-v="vial" aria-pressed="${view === "vial"}" aria-label="Vial"><img src="${vialImg(p, size)}" alt=""></button>`,
+        `<button class="thumb cert" data-v="cert" aria-pressed="${view === "cert"}" aria-label="Certificate of analysis ${esc(cert.certNo)}"><img src="${cert.img}" alt=""></button>`].join("") : "";
+      document.querySelectorAll("#pdp-thumbs .thumb").forEach((b) => (b.onclick = () => { view = b.dataset.v; setGallery(); }));
+    };
+    const setPrice = () => { setAvail(); setReport(); setGallery(); $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; };
     setPrice();
     document.querySelectorAll(".size").forEach((b) => (b.onclick = () => {
       size = p.sizes[+b.dataset.i];
@@ -293,6 +316,24 @@ const pages = {
     $("#add").onclick = () => addToCart(p.id, size.label, Math.max(1, Math.min(50, +$("#qty").value || 1)));
     $("#related").innerHTML = PRODUCTS.filter((x) => x.cat === p.cat && x.id !== p.id).slice(0, 4).map(productCard).join("")
       || PRODUCTS.filter((x) => x.id !== p.id).slice(0, 4).map(productCard).join("");
+  },
+
+  // Sign-in form only: there is no account system behind it yet, so it says so instead of pretending to log in.
+  affiliate() {
+    const msg = (text, err = false) => { $("#portal-msg").textContent = text; $("#portal-msg").classList.toggle("err", err); };
+    const toggle = $(".pw-toggle"), pass = $("#pf-pass");
+    toggle.onclick = () => {
+      const show = pass.type === "password";
+      pass.type = show ? "text" : "password";
+      toggle.setAttribute("aria-pressed", show); toggle.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    };
+    $("#portal-form").onsubmit = (e) => {
+      e.preventDefault();
+      if (!$("#pf-user").value.trim() || !pass.value) return msg("Enter your username or email and your password.", true);
+      msg("Affiliate sign-in isn't open yet. We'll email approved affiliates when the portal goes live.");
+    };
+    $("#pf-lost").onclick = (e) => { e.preventDefault(); msg("Password reset opens with the affiliate portal."); };
+    $("#pf-join").onclick = (e) => { e.preventDefault(); msg("Affiliate applications open soon."); };
   },
 
   coa() {

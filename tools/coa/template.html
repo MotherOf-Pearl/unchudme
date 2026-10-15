@@ -9,7 +9,11 @@
   The lab's task number, the lab's name and the supplier's batch are never printed: they're kept in the register
   against the batch ID. ({{lab}} and {{batch}} are still available if a design needs them.)
     {{onRequest}}                set on the public (website) copy only
-    {{{resultsRows}}}            the results table rows (<tr>…</tr>), already escaped
+    {{{productRows}}}            product table rows: name, CAS, formula, MW, sequence, quantity, form, storage (catalog
+                                 data from data.js) and, on the print copy, the sample code
+    {{{testTable}}}              the test table: Test item | Specification | Method (only if the lab gave methods) | Result
+    {{conclusion}}               set only when every specified result meets its specification
+    {{{resultsRows}}}            the plain two-column result rows (older layout; still available)
     {{#name}} … {{/name}}        section kept only when name has a value
   Relative paths resolve from this folder.
 -->
@@ -24,34 +28,39 @@
   body { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; color: #1a1f2b; font-size: 10.1pt; display: flex; flex-direction: column; }
   .navy { color: #16457a; font-weight: 700; }
 
-  header { height: 82.5pt; background: #06090e; border-bottom: 2.3pt solid #2b6cb0; position: relative; }
+  header { flex: none; height: 82.5pt; background: #06090e; border-bottom: 2.3pt solid #2b6cb0; position: relative; }
   header img { position: absolute; left: 63pt; top: 16.5pt; width: 120.5pt; height: 49.5pt; }
   header h1 { position: absolute; right: 63pt; top: 17pt; margin: 0; color: #fff; font-size: 15.8pt; letter-spacing: .07em; }
 
   /* main runs from below the header to the footer; the signature row sits at its foot, or below the content when it's long */
   main { margin: 18.5pt 63pt 0; flex: 1 0 auto; display: flex; flex-direction: column; }
-  .top { display: flex; justify-content: space-between; align-items: flex-start; height: 48pt; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; height: 40pt; }
   .task { display: flex; align-items: center; gap: 14pt; }
   .task .navy { font-size: 11.2pt; }
   .task .val { background: #f1f4f8; border: .75pt solid #e3e8ef; width: 156pt; height: 23.8pt; padding: 0 14pt; display: flex; align-items: center; font-size: 10.5pt; }
   .dates { display: grid; grid-template-columns: auto 71pt; gap: 4.8pt 7pt; font-size: 9.4pt; text-align: right; align-items: center; }
   .dates span:nth-child(even) { background: #f1f4f8; text-align: center; padding: 1.5pt 0; font-weight: 400; color: #1a1f2b; }
 
-  .fields { display: grid; grid-template-columns: 112.5pt 1fr; row-gap: 4.5pt; margin-top: 6pt; }
-  .fields .navy { font-size: 9.8pt; align-self: center; }
-  .fields .val { background: #f1f4f8; height: 24.8pt; padding: 0 12.5pt; display: flex; align-items: center; }
+  /* product and test tables, in the style of a manufacturer's COA */
+  table.kv td, table.tests td, table.tests th { border: .8pt solid #b9c7d8; height: 17pt; padding: 1.5pt 9pt; font-size: 9.2pt; }
+  table.kv td:first-child { width: 150pt; color: #16457a; font-weight: 700; background: #f4f7fb; }
+  table.tests th { background: #16457a; color: #fff; text-align: left; font-size: 8.6pt; letter-spacing: .02em; height: 18pt; }
+  table.tests td:first-child { width: auto; }
+  table.tests td.res { font-weight: 700; }
+  .abbr { font-size: 7.4pt; color: #6b7280; margin: 4pt 0 0; }
+  .conclusion { margin: 8pt 0 0; padding: 7pt 10pt; background: #eef6ee; border-left: 2.3pt solid #2f7d32; font-size: 9.4pt; }
 
-  h2 { display: flex; align-items: center; gap: 7pt; margin: 18pt 0 6pt; font-size: 10.5pt; color: #16457a; }
+  h2 { display: flex; align-items: center; gap: 7pt; margin: 11pt 0 4pt; font-size: 10.5pt; color: #16457a; }
   h2::after { content: ""; flex: 1; height: .8pt; background: #e5e7eb; }
-  .box { background: #f1f4f8; border-left: 2.3pt solid #16457a; min-height: 37.5pt; padding: 11pt 14pt; font-size: 9.8pt; line-height: 1.45; }
-  .box.comments { min-height: 49.5pt; }
+  .box { background: #f1f4f8; border-left: 2.3pt solid #16457a; padding: 8pt 12pt; font-size: 9.4pt; line-height: 1.45; }
+  .box.comments { min-height: 30pt; }
   .box p { margin: 0 0 5pt; } .box p:last-child { margin: 0; }
 
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   td { border: 1.1pt solid #2b6cb0; height: 27.5pt; padding: 0 12.5pt; }
   td:first-child { width: 218.8pt; }
 
-  .bottom { margin-top: auto; padding-top: 24pt; display: flex; justify-content: space-between; align-items: flex-end; }
+  .bottom { margin-top: auto; padding-top: 14pt; display: flex; justify-content: space-between; align-items: flex-end; }
   .sign { width: 157.5pt; text-align: center; }
   .sign .navy { font-size: 9.8pt; }
   .sign img { display: block; height: 44pt; margin: 2pt auto -4pt; }
@@ -60,7 +69,7 @@
   .conducted .navy { font-size: 9.8pt; }
   .conducted .val { background: #f1f4f8; padding: 3pt 13pt; }
 
-  footer { margin: 12pt 63pt 50pt; border-top: 1.5pt solid #16457a; padding-top: 10pt; font-size: 7.1pt; line-height: 12pt; color: #6b7280; }
+  footer { flex: none; margin: 10pt 63pt 34pt; border-top: 1.5pt solid #16457a; padding-top: 10pt; font-size: 7.1pt; line-height: 12pt; color: #6b7280; }
   footer strong { color: #b02a37; display: block; }
 </style>
 </head>
@@ -78,10 +87,8 @@
     </div>
   </div>
 
-  <div class="fields">
-    <span class="navy">Product</span><span class="val">{{product}} {{size}}</span>
-    {{#sampleId}}<span class="navy">Sample</span><span class="val">{{sampleId}}</span>{{/sampleId}}
-  </div>
+  <h2>Product</h2>
+  <table class="kv"><tbody>{{{productRows}}}{{#sampleId}}<tr><td>Sample code</td><td>{{sampleId}}</td></tr>{{/sampleId}}</tbody></table>
 
   {{#sampleDescription}}<h2>Sample description</h2>
   <div class="box">{{sampleDescription}}</div>{{/sampleDescription}}
@@ -90,7 +97,9 @@
   <div class="box">{{testsRequested}}</div>
 
   <h2>Results</h2>
-  <table><tbody>{{{resultsRows}}}</tbody></table>
+  {{{testTable}}}
+  <p class="abbr">NLT = not less than. Specifications are Aura Pharma's; results are as reported by the laboratory.</p>
+  {{#conclusion}}<p class="conclusion"><b>Conclusion:</b> {{conclusion}}</p>{{/conclusion}}
 
   <h2>Comments</h2>
   <div class="box comments">

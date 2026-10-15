@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Portal · Aura Pharma</title>
+<meta name="description" content="Research peptides, independently lab-tested for purity (HPLC), identity (mass spec) and content. Every order ships with a printed copy of the lab report.">
+<!-- link previews (iMessage, Slack, socials): 1200×630 card rendered by tools/vials `node render.mjs og` -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aura Pharma">
+<meta property="og:title" content="Aura Pharma Peptides">
+<meta property="og:description" content="Research peptides, independently lab-tested for purity (HPLC), identity (mass spec) and content. Every order ships with a printed copy of the lab report.">
+<meta property="og:image" content="https://unchudme.vercel.app/media/og-image.jpg?v=5">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://unchudme.vercel.app/media/og-image.jpg?v=5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="affiliate">
+<main class="portal dark-band"><div class="wrap">
+  <h1>Affiliate Portal</h1>
+  <form class="portal-card" id="portal-form" novalidate>
+    <label for="pf-user">Username / Email <span aria-hidden="true">*</span></label>
+    <input id="pf-user" name="user" class="field" type="text" autocomplete="username" required>
+    <label for="pf-pass">Password <span aria-hidden="true">*</span></label>
+    <div class="pw">
+      <input id="pf-pass" name="password" class="field" type="password" autocomplete="current-password" required>
+      <button type="button" class="pw-toggle" aria-label="Show password" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
+    <button class="btn portal-login" type="submit">Login</button>
+    <p class="portal-msg" id="portal-msg" role="status"></p>
+    <div class="portal-links"><a href="#" id="pf-lost">Lost your password?</a><a href="#" id="pf-join">Become an affiliate →</a></div>
+  </form>
+</div></main>
+<script src="data.js"></script>
+<script src="prices.js"></script>
+<script src="stock.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

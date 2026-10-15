@@ -18,6 +18,7 @@
 // Report files hold those numbers, so keep them out of this public repo: research/coa/*.json (git-ignored).
 // example.json shows the fields. Prints the matching REPORTS entry for data.js so the site and the certificate agree.
 import fs from 'node:fs'; import path from 'node:path'; import crypto from 'node:crypto'; import { execFileSync } from 'node:child_process';
+import vm from 'node:vm';
 import puppeteer from 'puppeteer-core';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A-Z]:)/, '$1');
@@ -75,6 +76,7 @@ const keys = {
   print: `${no}/print.pdf`,
   original: `${no}/lab-original-${String(r.labReportNo).replace(/[^A-Za-z0-9-]+/g, '')}.pdf`,
   record: `${no}/record.json`,
+  image: `${no}.webp`,   // picture of the public copy, for the product page gallery
 };
 
 // ---- values the template can use: {{name}} is escaped text, {{{name}}} is raw HTML,
@@ -82,8 +84,40 @@ const keys = {
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const longDate = (d) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' })
   .toUpperCase().replace('SEPT', 'SEP');
+// ---- product table from the site's catalog (data.js), test table from the results
+const cat = (() => {
+  const ctx = {}; vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(HERE, '../../data.js'), 'utf8') + ';this.PRODUCTS = PRODUCTS; this.SPEC = SPEC;', ctx);
+  return { p: ctx.PRODUCTS.find((x) => x.id === r.productId) ?? {}, spec: ctx.SPEC };
+})();
+const formula = (f) => esc(f).replace(/(\d+)/g, '<sub>$1</sub>');
+const productRows = [
+  ['Product name', esc(r.product)], ['CAS No.', cat.p.cas && esc(cat.p.cas)], ['Molecular formula', cat.p.formula && formula(cat.p.formula)],
+  ['Molecular weight', cat.p.mw && `${cat.p.mw} g/mol`], ['Sequence', cat.p.seq && esc(cat.p.seq)], ['Quantity', esc(r.size)],
+  ['Form', esc(cat.spec.form)], ['Storage', esc(cat.spec.storage)],
+].filter(([, v]) => v).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+// specifications are ours: purity NLT 98.0%; content is reported against the label; blend ingredients against their labelled amount
+const PURITY_MIN = 98;
+const labelled = (test) => r.size.split('+').map((s) => s.trim()).find((s) => s.slice(0, 2).toLowerCase() === test.slice(0, 2).toLowerCase());
+const testRows = r.results.map((x) => {
+  const spec = x.spec ?? (x.kind === 'purity' ? `NLT ${PURITY_MIN.toFixed(1)}%` : x.kind === 'content' ? `${r.size} labelled`
+    : x.kind === 'appearance' ? 'White to off-white powder' : x.kind === 'identity' ? (cat.p.mw ? `MW ${cat.p.mw}` : 'Matches reference')
+    : labelled(x.test) ? `${labelled(x.test).replace(/^\D+/, '')} labelled` : '');
+  return { test: x.kind === 'purity' ? 'Peptide purity' : x.kind === 'content' ? `Peptide content (${x.test})` : x.test, spec, method: x.method ?? '', result: x.result };
+});
+// identity from the report when no result row states it (e.g. a blind test or a single-compound assay)
+if (!r.results.some((x) => x.kind === 'identity') && r.identity && !/components/i.test(r.identity))
+  testRows.unshift({ test: 'Identity', spec: r.product, method: '', result: r.identity });
+const withMethod = testRows.some((t) => t.method);
+const testTable = `<table class="tests"><thead><tr><th>Test item</th><th>Specification</th>${withMethod ? '<th>Method</th>' : ''}<th>Result</th></tr></thead><tbody>`
+  + testRows.map((t) => `<tr><td>${esc(t.test)}</td><td>${esc(t.spec)}</td>${withMethod ? `<td>${esc(t.method)}</td>` : ''}<td class="res">${esc(t.result)}</td></tr>`).join('')
+  + '</tbody></table>';
+const purity = parseFloat(find('purity') ?? '');
+const conclusion = purity >= PURITY_MIN ? `Purity meets the NLT ${PURITY_MIN.toFixed(1)}% specification.` : '';
+
 const vals = {
   certNo: id ?? 'AP-DRAFT',
+  productRows, testTable, conclusion,
   product: r.product,
   size: r.size,
   lab: r.lab,
@@ -103,7 +137,7 @@ const vals = {
   resultsRows: [...r.results, ...Array(Math.max(0, 3 - r.results.length)).fill({ test: '', result: '' })]
     .map((x) => `<tr><td>${esc(x.test)}</td><td>${esc(x.result)}</td></tr>`).join(''),
 };
-const RAW = new Set(['resultsRows']);
+const RAW = new Set(['resultsRows', 'productRows', 'testTable']);
 const template = fs.readFileSync(path.join(HERE, 'template.html'), 'utf8');
 const fill = (v) => template
   .replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, k, body) => (v[k] ? body : ''))
@@ -133,8 +167,19 @@ try {
     fs.writeFileSync(tmp, html);
     await page.goto(`file:///${tmp.split(path.sep).join('/')}`, { waitUntil: 'networkidle0' });
     pdfs[suffix] = path.join(OUT, `${name}${suffix}.pdf`);
+    // one page only: the template has a fixed page height, so anything taller would be cut off
+    const over = await page.evaluate(() => document.documentElement.scrollHeight - Math.round(792 * 4 / 3)); // 792pt page in px
+    if (over > 1) throw new Error(`${suffix ? 'print' : 'public'} copy is ${over}px taller than one page; shorten the notes or tests requested`);
     await page.pdf({ path: pdfs[suffix], printBackground: true, preferCSSPageSize: true });
     console.log(`PDF   ${path.relative(process.cwd(), pdfs[suffix])}`);
+    if (!suffix) {
+      // the same page as an image (public copy only), 1.5x for a sharp zoom
+      await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 1.5 });
+      pdfs.image = path.join(OUT, `${name}.webp`);
+      await page.screenshot({ path: pdfs.image, type: 'webp', quality: 88 });
+      await page.setViewport({ width: 800, height: 600, deviceScaleFactor: 1 });
+      console.log(`IMG   ${path.relative(process.cwd(), pdfs.image)}`);
+    }
   }
 } finally { await browser.close(); fs.rmSync(tmp, { force: true }); }
 
@@ -153,6 +198,7 @@ if (publish) {
   const original_key = original ? keys.original : existing.original_key;
   const public_etag = put(`${BUCKET}/${keys.public}`, pdfs[''], 'application/pdf', `attachment; filename="${download}"`);
   const print_etag = put(`${ARCHIVE}/${keys.print}`, pdfs['-print']);
+  put(`${BUCKET}/${keys.image}`, pdfs.image, 'image/webp');
   const row = {
     id, seq, product_id: r.productId, product: r.product, size: r.size, status: 'current',
     lab: r.lab, lab_task_no: r.labReportNo, sample_id: r.sampleId, batch: r.batch, verify_key: r.verifyKey, verify_url: r.verifyUrl,
@@ -172,7 +218,7 @@ if (publish) {
         WHERE product_id = ${sql(r.productId)} AND size = ${sql(r.size)} AND id <> ${sql(id)} AND status = 'current';`);
   console.log(`D1    ${DB}: ${id} recorded${existing ? ' (updated)' : ''}`);
   for (const old of replaced) {
-    if (old.public_key) { wr('delete', `${BUCKET}/${old.public_key}`); console.log(`R2    ${BUCKET}/${old.public_key} removed (${old.id} archived)`); }
+    if (old.public_key) { wr('delete', `${BUCKET}/${old.public_key}`); wr('delete', `${BUCKET}/${old.id}.webp`); console.log(`R2    ${BUCKET}/${old.public_key} removed (${old.id} archived)`); }
   }
 }
 

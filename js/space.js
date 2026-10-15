@@ -1,5 +1,6 @@
 // Home hero backdrop: a starfield over the curve of a planet, drawn on a 2D canvas behind the copy and vials.
-// The only motion is parallax: stars (in three depth layers) and the planet drift slightly with the pointer.
+// Motion: each star floats in its own slow, small loop (a few px over tens of seconds, nearer stars a little more),
+// and stars and planet shift slightly with the pointer (parallax). Reduced-motion users get a still sky.
 // The canvas is sized to the hero, so nothing reaches past the dark band.
 (function () {
   const canvas = document.querySelector(".hero-space");
@@ -20,7 +21,9 @@
     seed = 7;
     stars = Array.from({ length: Math.round((w * h) / 2600) }, () => {
       const depth = rand();                      // 0 far … 1 near: nearer stars are bigger, brighter and move more
-      return { x: rand() * w, y: rand() * h, r: 0.35 + depth * depth * 1.1, a: 0.25 + depth * 0.6, depth };
+      // float: an ellipse of 1.5–6 px, one lap every ~40–120 s, each star at its own phase
+      return { x: rand() * w, y: rand() * h, r: 0.35 + depth * depth * 1.1, a: 0.25 + depth * 0.6, depth,
+        fa: 1.5 + depth * 4.5, fb: 1 + rand() * (1 + depth * 3), fs: (0.05 + rand() * 0.11) * (rand() < 0.5 ? -1 : 1), fp: rand() * Math.PI * 2 };
     });
   };
 
@@ -28,13 +31,15 @@
   const target = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
   if (!still) addEventListener("pointermove", (e) => { target.x = e.clientX / innerWidth * 2 - 1; target.y = e.clientY / innerHeight * 2 - 1; });
 
+  const t0 = performance.now();
   const draw = () => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
+    const t = still ? 0 : (performance.now() - t0) / 1000;
 
     for (const s of stars) {
-      const k = 6 + s.depth * 22;
-      let x = (s.x - cur.x * k) % w, y = (s.y - cur.y * k * 0.6) % h;
+      const k = 6 + s.depth * 22, ph = s.fp + t * s.fs;
+      let x = (s.x + Math.cos(ph) * s.fa - cur.x * k) % w, y = (s.y + Math.sin(ph) * s.fb - cur.y * k * 0.6) % h;
       if (x < 0) x += w; if (y < 0) y += h;
       ctx.globalAlpha = s.a; ctx.fillStyle = "#cfe9ff";
       ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
@@ -67,12 +72,13 @@
   const tick = () => {
     cur.x += (target.x - cur.x) * 0.06; cur.y += (target.y - cur.y) * 0.06;
     draw();
-    // keep going only while the hero is on screen and the parallax is still settling
-    raf = visible && (Math.abs(target.x - cur.x) > 0.0005 || Math.abs(target.y - cur.y) > 0.0005) ? requestAnimationFrame(tick) : 0;
+    // keep going while the hero is on screen (the stars are always floating); a still sky stops once parallax settles
+    raf = visible && !document.hidden && (!still || Math.abs(target.x - cur.x) > 0.0005 || Math.abs(target.y - cur.y) > 0.0005) ? requestAnimationFrame(tick) : 0;
   };
   const wake = () => { if (!raf && visible) raf = requestAnimationFrame(tick); };
   addEventListener("pointermove", wake);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; wake(); }).observe(canvas);
+  document.addEventListener("visibilitychange", wake);
   new ResizeObserver(() => { layout(); draw(); }).observe(canvas);
-  layout(); draw();
+  layout(); draw(); wake();
 })();

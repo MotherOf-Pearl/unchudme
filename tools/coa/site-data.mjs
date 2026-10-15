@@ -15,7 +15,7 @@ const q = (v) => JSON.stringify(v);
 const entry = (r) => '  { ' + [
   `productId: ${q(r.product_id)}`, `certNo: ${q(r.id)}`, `size: ${q(r.size)}`, `date: ${q(r.test_date)}`, `lab: ${q(r.lab)}`,
   r.purity && `purity: ${q(r.purity)}`, r.identity && `identity: ${q(r.identity)}`, r.content && `content: ${q(r.content)}`,
-  r.appearance && `appearance: ${q(r.appearance)}`, r.verify_url && `verify: ${q(r.verify_url)}`, 'pdf: `${REPORTS_URL}/' + r.public_key + '`',
+  r.appearance && `appearance: ${q(r.appearance)}`, r.verify_url && `verify: ${q(r.verify_url)}`, 'pdf: `${REPORTS_URL}/' + r.public_key + '`', 'img: `${REPORTS_URL}/' + r.id + '.webp`',
 ].filter(Boolean).join(', ') + ' },';
 
 const src = fs.readFileSync(DATA, 'utf8');

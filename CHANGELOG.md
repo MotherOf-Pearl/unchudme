@@ -4,6 +4,15 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Fuller certificates, product gallery, affiliate portal
+
+- **Certificate layout** in the style of a manufacturer's COA: a product table (name, CAS, formula, molecular weight, sequence, quantity, form, storage, from the catalog) and a test table (test item, specification, result; method when the lab states one) with NLT specifications and a conclusion line when purity meets NLT 98.0%. Only tests the lab actually ran are listed. All 17 certificates re-issued.
+- **Certificate images**: each certificate is also published as a picture (`AP-xxxx.webp`).
+- **Product page gallery**: vial and certificate thumbnails under the main image; the certificate shows in the main window with a "Download PDF" button and opens full size when clicked. Follows the selected size.
+- **Specifications beside the title** on desktop (in the space right of the buy box); stacked as before on tablet and mobile. Spec values wrap by word instead of mid-word.
+- **Affiliate portal** (`affiliate.html`, "Affiliates" in the nav): username/email and password sign-in card with show-password. No account system yet: signing in says the portal isn't open yet.
+- **Home hero**: the stars float slowly in small loops (still for reduced-motion users).
+
 ## 2026-10-15 — Lab reports for 17 products and sizes
 
 - **15 new certificates published** (AP-0003 to AP-0017) from Janoshik reports: GLP1-R 20 and 30 mg; GLP1-T 15, 30 and 60 mg; BPC-157 10 mg; TB-500 10 mg; GHK-Cu 50 and 100 mg; MOTS-c 40 mg; BPC-157 + TB-500 (5 + 5 and 10 + 10); CJC-1295 + Ipamorelin (5 + 5); KLOW 80 mg; GLOW 70 mg. With GLP1-R 10 mg (AP-0001) and Tesamorelin 10 mg (AP-0002) that's 17 certified products and sizes.
