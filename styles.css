@@ -61,7 +61,10 @@ nav.main { display: flex; gap: 22px; margin-left: auto; }
 nav.main a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: .95rem; }
 nav.main a[aria-current="page"], nav.main a:hover { color: var(--ink); }
 .cart-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 14px; font: 600 .9rem var(--sans); color: var(--ink); cursor: pointer; }
-.menu-btn, .account-btn, .cart-ico { display: none; }
+.menu-btn, .cart-ico { display: none; }
+/* account (profile) icon: a placeholder for now, nothing behind it yet */
+.account-btn { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; margin-left: 6px; background: none; border: 0; border-radius: 10px; color: var(--muted); cursor: pointer; }
+.account-btn:hover { color: var(--ink); }
 @media (max-width: 760px) {
   header.site .wrap { gap: 6px; }
   nav.main { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--surface); flex-direction: column; padding: 16px; border-bottom: 1px solid var(--line); gap: 14px; }
