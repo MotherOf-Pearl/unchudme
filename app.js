@@ -179,14 +179,14 @@ function coaPanel(l) {
   return `<div class="coa-panel" id="lab-report">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div><div class="eyebrow">Lab report</div><h3 style="margin:0">${esc(p.name)}</h3>
-      <p class="muted mono" style="margin:6px 0 0">${l.sample ? "" : `${esc(l.size)} · `}Tested ${l.date}</p></div>
+      <p class="muted mono" style="margin:6px 0 0">${l.certNo ? `Batch ${esc(l.certNo)} · ` : ""}${l.sample ? "" : `${esc(l.size)} · `}Tested ${l.date}</p></div>
       ${l.sample ? `<div><span class="sample-badge">Sample data — not a real result</span></div>` : ""}</div>
     <div class="table-scroll" style="margin-top:18px"><table class="coa-table">
       <tr><th>Test</th><th>Specification</th><th>Result</th></tr>
       ${rows.map((r) => `<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono pass">${r[2]}</td></tr>`).join("")}
     </table></div>
     <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${esc(l.lab)}. A printed copy ships with every order.${l.verify ? ` Verify it at ${l.verify} with the key printed on the report.` : ""}</p>
-    ${l.pdf ? `<a class="btn" href="${l.pdf}" download target="_blank" rel="noopener" style="margin-top:6px">Download full report (PDF)</a>` : ""}</div>`;
+    ${l.pdf ? `<a class="btn" href="${l.pdf}" download target="_blank" rel="noopener" style="margin-top:6px">Download certificate ${esc(l.certNo ?? "")} (PDF)</a>` : ""}</div>`;
 }
 const latestLot = (id) => LOTS.filter((l) => l.productId === id).sort((a, b) => b.date.localeCompare(a.date))[0];
 
@@ -294,7 +294,7 @@ const pages = {
     $("#coa-list").innerHTML = ids.map((id) => { const l = latestLot(id), p = byId(id);
       return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}</a></td><td>${l.date}</td>
         <td class="mono">${l.purity}%</td><td class="mono">${l.content ?? "—"}</td>
-        <td>${l.pdf ? `<a href="${l.pdf}" download target="_blank" rel="noopener">PDF</a>` : `<span class="sample-badge">Sample</span>`}</td></tr>`; }).join("");
+        <td>${l.pdf ? `<a class="mono" href="${l.pdf}" download target="_blank" rel="noopener">${esc(l.certNo ?? "PDF")}</a>` : `<span class="sample-badge">Sample</span>`}</td></tr>`; }).join("");
   },
 };
 

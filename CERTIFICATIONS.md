@@ -1,113 +1,237 @@
 # Certifications — COA Platform
 
-How Aura Pharma handles lab reports (Certificates of Analysis): archiving the originals, publishing the current batch's report on the storefront, and, once it's built, generating an Aura Pharma certificate from the lab's values.
+How Aura Pharma turns a third-party lab report into an Aura Pharma certificate of analysis, publishes it on the storefront, and keeps every certificate traceable to the lab's untouched original.
 
-Each section is marked **Live** (set up and in use) or **Planned** (agreed, not built yet).
+> **This repo is public** and Vercel serves the site from it. Never put supplier names, supplier batch numbers, lab task numbers, verification keys or real report values files in this file or anywhere else in the repo. All examples below use made-up numbers.
 
-> This repo is public and Vercel serves its files. Never put supplier names, batch numbers, lab task numbers or verification keys in this file or anywhere else in the repo.
+## Contents
+1. [How it fits together](#how-it-fits-together)
+2. [Batch ID: the one number everything hangs off](#batch-id-the-one-number-everything-hangs-off)
+3. [Where everything is stored](#where-everything-is-stored)
+4. [The certificate](#the-certificate)
+5. [Mapping a lab report onto the certificate](#mapping-a-lab-report-onto-the-certificate)
+6. [Publishing a new report](#publishing-a-new-report)
+7. [Finding the original: "send me the lab work for AP-0001"](#finding-the-original-send-me-the-lab-work-for-ap-0001)
+8. [The generator in detail](#the-generator-in-detail)
+9. [Rules](#rules)
+10. [Access and accounts](#access-and-accounts)
+11. [Decisions and history](#decisions-and-history)
+12. [Open items](#open-items)
 
-## The core principle: two copies, always
-
-Every tested batch has two kinds of record, kept apart on purpose:
-
-1. **Original lab report (private).** The untouched PDF exactly as the lab issued it, plus the batch number, lab task number and verification key. Never modified. This is the permanent record and the source of truth.
-2. **Public report (on the site).** What customers see: headline results on the product page and a PDF download for the batch currently on sale.
-
-Past batches are not published and there is no public lookup. Batch and task numbers are given to a customer only on request.
-
-## Architecture
+## How it fits together
 
 ```
-incoming lab PDF
+lab report PDF (the original)
       │
-      ├─► R2  aura-archive   (private bucket)  ─ untouched original + private record
+      ▼
+research/coa/<product>-<size>-<date>.json      values copied from the original (git-ignored)
       │
-      ├─► values typed into data.js REPORTS    ─ purity, identity, content, date, lab
+      ▼
+tools/coa/generate.mjs --publish --original <lab report.pdf>
       │
-      ├─► R2  aura-reports   (public bucket)   ─ PDF for the batch on sale
-      │
-      └─► product page + Lab reports page show the results and link the PDF
+      ├─► D1  aura-coa                 register row, keyed by the batch ID (AP-0001 …)
+      ├─► R2  aura-archive/AP-0001/    the original, the print copy, record.json   (private)
+      ├─► R2  aura-reports/AP-0001.pdf the public copy                             (public)
+      └─► prints the data.js entry ──► product page + Lab reports page show "Batch AP-0001" and link the public copy
 ```
 
-### File storage — Cloudflare R2 (Live)
-Account: jackborman9@gmail.com. R2 charges no egress fees, which is the main cost for a public download site, and it's S3-compatible.
+Three things are kept apart on purpose:
 
-R2 makes a whole bucket public or private (there are no per-folder permissions), so there are **two buckets**:
+| | what | who sees it |
+|---|---|---|
+| **Original** | the lab's report exactly as issued, never modified | Aura Pharma only; sent to a customer on request |
+| **Print copy** | the Aura Pharma certificate with the sample code and the lab's verification key | ships in the box with every order |
+| **Public copy** | the Aura Pharma certificate without those | downloadable on the site |
+
+Only the batch currently on sale has a public copy. Past batches are archived (their folder stays) and there is no public lookup.
+
+## Batch ID: the one number everything hangs off
+
+Every published certificate gets an Aura Pharma **batch ID**: `AP-0001`, `AP-0002`, … assigned in order by the register when it is published. It is the only reference number printed on the certificate and shown on the site, and it replaces the lab's task number. Customers quote it; everything else is looked up from it.
+
+| | example (made up) | printed? | where it's kept |
+|---|---|---|---|
+| Batch ID | `AP-0007` | both copies + site | everywhere: register key, R2 folder and file names |
+| Lab task / report number | `123456` or `ABC10-20260101S0001` | never | register, `record.json`, the original's file name |
+| Lab verification key | `X1Y2Z3W4V5U6` | print copy only | register, `record.json` |
+| Sample code (the lab's abbreviation of the compound + size) | `XX10` | print copy only | register, `record.json` |
+| Supplier batch | `SUP000001` | never | register, `record.json` |
+| Lab name | `Example Analytical` | never on the certificate | register, `record.json`, `data.js` |
+
+**Why not derive the batch ID from the task number with a formula?** Considered and rejected: task numbers aren't always numeric (some labs use codes like `ABC10-20260101S0001`), two labs can issue the same number, and anyone who worked out the formula could reverse every certificate to the lab's number (and from there the supplier). The link is kept by storage instead (folder name, file name, `record.json`, register), which can't leak.
+
+**Why not use Cloudflare's file ID?** R2 has none: a file is identified only by its path (key) and its ETag, an MD5 fingerprint of its contents. The ETag can't be printed on the certificate (printing it changes the file, which changes the ETag) and it changes on every re-issue. So the batch ID is the reference, and the register stores each file's ETag to prove which exact file belongs to it.
+
+## Where everything is stored
+
+All on Cloudflare (R2 for files, D1 for the register). R2 charges no egress fees, which is the main cost for a public download site.
+
+### R2 buckets
+R2 makes a whole bucket public or private (no per-folder permissions), hence two buckets:
 
 | bucket | access | holds |
 |---|---|---|
-| `aura-reports` | public, `https://pub-9777663d84154689864064a7d51bc5e5.r2.dev` (move to `reports.aurapharma.us` once the domain is on Cloudflare) | the PDF for each product's current batch |
-| `aura-archive` | private, no public address | untouched originals of every batch, `lab-reports.json` (batch, task, key per report) |
+| `aura-reports` | public at `https://pub-9777663d84154689864064a7d51bc5e5.r2.dev` (move to `reports.aurapharma.us` once the domain is on Cloudflare) | the public copy of each product's current certificate |
+| `aura-archive` | private, no public address | one folder per batch ID |
 
-Object keys: `<product-id>/<size>/<test-date>.pdf`, e.g. `glp1-r/10mg/2026-07-30.pdf`. The same key is used in both buckets. Public PDFs are uploaded with `Content-Disposition: attachment; filename="Aura-Pharma-<Product>-<size>-<date>.pdf"` so they download instead of opening in a tab.
+```
+aura-reports/AP-0007.pdf                                public copy: the site's download (removed when archived)
 
-PDFs never go in git. The local private record is `research/lab-reports.json` (git-ignored); keep it in step with the copy in `aura-archive`.
-
-### Site data — `data.js` (Live)
-There is no database yet. Each published report is one entry in `REPORTS` in `data.js`:
-
-```js
-{ productId: "glp1-r", size: "10 mg", date: "2026-07-30", lab: "…", purity: "99.009",
-  identity: "…", content: "10.60 mg", verify: "…", pdf: `${REPORTS_URL}/glp1-r/10mg/2026-07-30.pdf` }
+aura-archive/AP-0007/lab-original-<task no>.pdf          the lab's untouched report; the task number is in the file name
+aura-archive/AP-0007/print.pdf                           print copy: the order insert
+aura-archive/AP-0007/record.json                         the register row: task number, key, sample, supplier batch,
+                                                         lab, dates, results, every file's key + ETag
 ```
 
-`REPORTS_URL` (top of the block) is the public bucket's address. A real report replaces that product's sample lot. Products without a real report still show sample data marked "Sample" and need real reports before launch.
+The folder name, the original's file name and `record.json` each tie the batch ID to the original on their own, without the database. Public copies are uploaded with `Content-Disposition: attachment; filename="Aura-Pharma-AP-0007-<Product>-<size>.pdf"` so they download rather than open in a tab.
 
-### Database (Planned)
-When the number of reports outgrows `data.js`, move the records to Cloudflare D1 (or Supabase). Suggested `certifications` table: report_id, product, size, batch, lab, analyte, content_mg, purity, test_date, original_key, public_key, created_at. Batch, report_id and verification key stay private (not exposed to the site).
+### D1 register `aura-coa`
+One row per certificate, keyed by batch ID (table `certificates`, schema in `tools/coa/schema.sql`):
 
-### Aura Pharma certificate generator (Live; template is a stand-in)
-`tools/coa/` fills an HTML template with one report's values and renders an Aura Pharma-branded PDF with Chrome (Puppeteer), the same way `tools/vials/` renders the vial images.
+- **identity:** `id` (AP-0007), `seq` (7), product id, product, size, `status` (`current` = on sale, `archived` = past batch)
+- **lab (private):** lab, lab task number, sample code, supplier batch, verification key and URL
+- **dates:** ordered, received, analysed, issued
+- **results:** identity, purity, content, appearance (what the site shows)
+- **files:** for the original, the public copy and the print copy, the R2 key and ETag
 
-| file | what it is |
+A lab report is registered once (unique on lab + task number), so publishing it again re-issues it under the same batch ID.
+
+### Site
+`data.js` → `REPORTS` holds one entry per published certificate (printed by the generator), e.g.:
+
+```js
+{ productId: "bpc-157", certNo: "AP-0007", size: "10 mg", date: "2026-01-12", lab: "…", purity: "99.12",
+  identity: "…", content: "10.41 mg", verify: "…", pdf: `${REPORTS_URL}/AP-0007.pdf` }
+```
+
+`REPORTS_URL` is the public bucket's address. The product page shows "Batch AP-0007 · 10 mg · Tested …" and a "Download certificate AP-0007 (PDF)" button; the Lab reports page (`coa.html`) lists every product with its batch ID as the download link. Products without a real report still show sample data marked "Sample".
+
+### Local only (git-ignored)
+- `research/coa/*.json`: the report values files (they hold task numbers and keys)
+- `tools/coa/out/`: rendered PDFs and lookups
+- `research/lab-reports.json`: the first private record, from before the register; the register is now the record
+
+## The certificate
+
+`tools/coa/template.html`, rebuilt from `docs/AuraPharma_COA_template.pdf` in the platform repo. US Letter, one page.
+
+| part | content |
 |---|---|
-| `template.html` | the certificate layout. **Stand-in design**, to be replaced; keep the placeholders. |
-| `generate.mjs` | reads a report file, checks it, fills the template, saves `out/<product>-<size>-<date>.pdf`, optionally uploads it, and prints the matching `data.js` entry |
-| `example.json` | the report-file format, with fake values |
+| Header | Aura Pharma logo (`logo.png`), "CERTIFICATE OF ANALYSIS" |
+| Top row | **Batch ID** · Testing ordered · Sample received (dates shown only when the lab gives them) |
+| Fields | Product (e.g. "GLP1-R 10 mg") · Sample code (print copy only) |
+| Sample description | optional, hidden when empty |
+| Tests requested | what the lab ran |
+| Results | two columns, test and result, at least three rows |
+| Comments | extra detail (e.g. mass-spec ions, specification), the lab's caveats, then: print copy → "Verify this result on the laboratory's own website … with key …"; public copy → "Testing details for this batch are printed on the copy that ships with your order, and available on request quoting the batch ID." |
+| Bottom | Analysis conducted (date) · Signature (`signature.png`) over "Reviewed by Aura Pharma QA" |
+| Footer | research-use-only line; "Analysis performed by an independent third-party laboratory. Aura Pharma issued this certificate from that laboratory's report, which is kept on file." |
 
-Report files hold lab report numbers and verification keys, so they live in `research/coa/<product>-<size>-<date>.json` (git-ignored), never in `tools/coa/`. Generated PDFs go to `tools/coa/out/` (git-ignored).
+Not on the certificate, by decision: the lab's name, the lab task number, the manufacturer/supplier, the supplier batch, the contact lines that were in the template's header, sample photos, QR codes, chromatograms.
 
-Placeholders: `{{name}}` is text (HTML-escaped), `{{{resultsRows}}}` is the results table rows, and `{{#name}}…{{/name}}` is a section kept only when `name` has a value. Available values: product, size, lab, labReportNo, testDate, receivedDate, issuedDate, method, verifyKey, verifyUrl, notes, resultsRows. A placeholder the generator doesn't know stops the run.
+## Mapping a lab report onto the certificate
 
-Checks before rendering (the run stops on any of them): required fields missing (productId, product, size, lab, labReportNo, testDate, results), a date not in YYYY-MM-DD, a result row without a test or result, or any supplier/manufacturer field.
+Each lab lays its report out differently. The values file is the mapping: copy each value from the original into the field it belongs to. Formats seen so far:
 
-Rules for the certificate:
-- copy the values exactly from the original;
-- credit the testing lab and its report number, and carry the lab's verification key where the lab offers one;
-- use Aura Pharma's own layout and branding, never the lab's;
-- don't list the supplier/manufacturer;
-- only call it "verifiable" via the lab's own verification, not an Aura Pharma page.
+| certificate / values-file field | Janoshik Analytical | tjqxgd.com (partner lab) |
+|---|---|---|
+| `labReportNo` (register only) | "Task #…" | report number at the top, e.g. `ABC10-…` |
+| `verifyKey` / `verifyUrl` | "Verification key" at the bottom, janoshik.com/verify | the report number itself, tjqxgd.com/coa-verify (the report's QR code links to it; "Authentication Code" is blank) |
+| `sampleId` | "Sample" | compound code before the slash in "Compound" (e.g. `XX10`) |
+| `batch` (register only) | "Batch" | none |
+| — (never mapped) | "Client" / "Manufacturer" | "Manufacturer" (N/A) |
+| `orderedDate` | "Testing ordered" | none |
+| `receivedDate` | "Sample received" | "Sample Received" |
+| `testDate` | "Analysis conducted" | "Analysis date" |
+| `testsRequested` | "Tests requested" (rename compounds to code names) | method from the HPLC-MS pages (wavelengths, ESI MS) |
+| `results` | the results table: compound + mg, purity | Result table: peptide weight, purity, mass spectrum, appearance |
+| `notes` | — | specifications, detected ions, and the report's Important Notice that neither it nor its partner lab holds CMA/CNAS accreditation |
+| `lab` (register + site) | Janoshik Analytical | Independent partner lab (report issued by tjqxgd.com) |
 
-## The process (Live): publishing a new batch's report
+A new lab format gets a column here the first time it's used. Values are copied by hand and checked by a person; automatic extraction (PDF text, or OCR for photographed reports like Janoshik's) is not built yet.
 
-1. Upload the untouched original to `aura-archive`:
-   `npx wrangler r2 object put aura-archive/<product>/<size>/<date>.pdf --file <pdf> --content-type application/pdf --remote`
-2. Add the batch number, lab task number and verification key to `research/lab-reports.json` and upload it to `aura-archive/lab-reports.json`.
-3. Write the report file `research/coa/<product>-<size>-<date>.json` (format: `tools/coa/example.json`), copying the values from the original.
-4. Generate and upload the certificate: `cd tools/coa && node generate.mjs ../../research/coa/<file>.json --upload`. It renders the PDF, uploads it to `aura-reports/<product>/<size>/<date>.pdf` with the download filename set, and prints the `data.js` entry.
-   To publish the lab's own PDF instead, upload it by hand:
-   `npx wrangler r2 object put aura-reports/<product>/<size>/<date>.pdf --file <pdf> --content-type application/pdf --content-disposition 'attachment; filename="Aura-Pharma-<Product>-<size>-<date>.pdf"' --remote`
-5. Delete the previous batch's PDF from `aura-reports` (its original is already in `aura-archive`).
-6. Paste the printed entry over that product's entry in `REPORTS` in `data.js`. Check the product page and `coa.html` locally, then push to `main`.
-7. Print the certificate for the order inserts.
+## Publishing a new report
 
-For an unfamiliar lab format, confirm the values with a person before publishing so a wrong number never goes live.
+From `tools/coa/` (first time: `npm install`):
 
-## Sending a past batch's report on request
+1. **Values file.** Copy the values from the original into `research/coa/<product>-<size>-<date>.json`, using `tools/coa/example.json` as the pattern and the mapping table above.
+2. **Preview.** `node generate.mjs ../../research/coa/<file>.json` → `out/draft-…pdf` and `out/draft-…-print.pdf` (batch ID shows as AP-DRAFT; an already-registered report previews under its own number). Check every value against the original.
+3. **Publish.** `node generate.mjs ../../research/coa/<file>.json --publish --original "<path to the lab's PDF>"`. In one go it:
+   - assigns the next batch ID (or reuses the existing one for a re-issue);
+   - renders both copies;
+   - uploads the original, the print copy and `record.json` to `aura-archive/AP-xxxx/`, and the public copy to `aura-reports/AP-xxxx.pdf`;
+   - writes the register row with every file's ETag;
+   - archives the product's previous certificate (same product and size) and removes its public copy.
 
-Look up the batch in `lab-reports.json`, then send the customer a presigned link to the original in `aura-archive` that expires after a few days. Presigned links need an R2 API token (Access Key ID + Secret, from **R2 → Manage API tokens**, Object Read on `aura-archive`); the wrangler browser login can't create them. **Token not created yet.**
+   `--original` is required for a new certificate. It refuses to publish a report older than the one on sale.
+4. **Site.** Paste the printed `data.js` entry over that product's entry in `REPORTS`. Check the product page and `coa.html` locally, then push to `main`.
+5. **Print.** Print `out/AP-xxxx-print.pdf` for the order inserts.
 
-## Access
+## Finding the original: "send me the lab work for AP-0001"
 
-- **Wrangler login** (OAuth) on Jack's Windows machine: full account access. Revoke with `npx wrangler logout`.
-- **Planned:** a scoped R2 token (Object Read & Write on the two buckets only) for automation and presigned links, stored outside the repo.
+```
+cd tools/coa
+node lookup.mjs AP-0001          (also accepts ap1, AP-1)
+```
 
-## Setup / TODO
-- [x] R2 buckets `aura-reports` (public) and `aura-archive` (private)
-- [x] Current reports (GLP1-R, Tesamorelin) uploaded and linked from `data.js`
-- [ ] Scoped R2 API token (for automation and presigned links)
-- [ ] Attach aurapharma.us to Cloudflare; serve `aura-reports` at `reports.aurapharma.us`, update `REPORTS_URL`
+Prints everything the public certificate withholds (lab, task number, verification key and where to verify, sample code, supplier batch, dates, results) and downloads the lab's original and the print copy into `out/lookup/AP-0001/`, checking each against the ETag recorded at publish ("matches the register").
+
+Or, without the tool: Cloudflare dashboard → R2 → `aura-archive` → folder `AP-0001` (the original is `lab-original-<task no>.pdf`; `record.json` has the rest).
+
+Before sending a customer the original, check what it shows: some labs print the client/manufacturer, which names the supplier. Often the task number and verification key are enough, since the customer can check the result on the lab's own site.
+
+Sending a file as an expiring link (presigned URL) needs an R2 API token; see Access.
+
+## The generator in detail
+
+| file | |
+|---|---|
+| `generate.mjs` | checks a values file, fills the template, renders the public and print copies, and with `--publish` files and registers them |
+| `lookup.mjs` | everything withheld for one batch ID, plus its files |
+| `template.html` | the certificate layout |
+| `logo.png`, `signature.png` | header logo (from the template PDF) and the QA signature |
+| `schema.sql` | the register's table |
+| `example.json` | values-file format, made-up values |
+| `package.json` | puppeteer-core (rendering) and wrangler (R2 + D1), run locally so nothing depends on the shell |
+
+**Template placeholders.** `{{name}}` is escaped text, `{{{resultsRows}}}` is the results rows, `{{#name}}…{{/name}}` is kept only when `name` has a value. Values: `certNo` (batch ID), `product`, `size`, `testDate`, `receivedDate`, `orderedDate`, `issuedDate` (dates as `30 JUL 2026`), `sampleDescription`, `testsRequested`, `notes`; print copy only: `sampleId`, `verifyKey`, `verifyUrl`; public copy only: `onRequest`. `lab` and `batch` exist but aren't used by the current design. An unknown placeholder stops the run.
+
+**Values file.** Required: `productId`, `product`, `size`, `lab`, `labReportNo`, `testDate`, `results`. Optional: `sampleId`, `batch`, `orderedDate`, `receivedDate`, `issuedDate`, `sampleDescription`, `testsRequested`, `identity`, `notes`, `verifyKey`, `verifyUrl`. Each result is `{ test, result, kind }`; `kind` (`identity`, `purity`, `content`, `appearance`) picks which row feeds which field of the `data.js` entry.
+
+**Checks (the run stops on any).** A required field missing; a date not `YYYY-MM-DD`; a result without test or result; any supplier or manufacturer field; a full compound name where a code name is required (see Rules); the public copy containing the task number, sample code, supplier batch or key; the print copy containing the task number (unless the lab verifies by it, as tjqxgd does).
+
+## Rules
+
+- Copy values exactly from the original. Never alter the lab's PDF; it is archived untouched.
+- The certificate says the analysis was performed by an independent third-party laboratory and that Aura Pharma issued it from that lab's report. The lab's name and report number are held in the register and given on request.
+- Carry the lab's verification (on the print copy) wherever the lab offers it. Never call a result "verified" through an Aura Pharma page.
+- Keep the lab's own caveats about its results (e.g. accreditation status) in Comments.
+- No supplier or manufacturer on any certificate or page.
+- Code names only: GLP1-R, GLP1-T, GLP1-S, on the site, the certificates and in docs. GLP1-S is the catalog's own compound, not semaglutide; where a lab report names semaglutide, keep that name.
+- Aura Pharma's own layout and branding, never a lab's.
+
+## Access and accounts
+
+- **Cloudflare:** Jack's account. R2 buckets `aura-reports`, `aura-archive`; D1 database `aura-coa` (id `c67e9c9e-a163-47bc-9351-de5635fe8b12`).
+- **Login used by the tools:** the wrangler browser login on Jack's Windows machine (`npx wrangler login`; revoke with `npx wrangler logout`). It covers the whole account.
+- **Planned:** a scoped R2 API token (Object Read & Write on the two buckets only) for presigned links and automation elsewhere, stored outside the repo.
+
+## Decisions and history
+
+- **Storage:** Cloudflare R2 over S3 or Vercel Blob (no egress fees), D1 for the register to keep everything on one vendor.
+- **Two buckets** because R2 permissions are per bucket; a single bucket with a private folder would have made the originals public.
+- **Lab PDFs are never published raw.** The site first linked the lab PDFs from the repo, then from R2; both were replaced by the Aura Pharma certificate. The lab PDFs were removed from the repo (they remain in git history).
+- **Two copies** (public and print) so verification keys and sample codes aren't public while the customer still gets them in the box, as the Quality page promises.
+- **Batch ID replaces the lab task number** on certificates and site (first called "certificate number"); sequential `AP-0001` rather than a formula or Cloudflare ETag (see above).
+- **Everything filed under the batch ID** (`aura-archive/AP-xxxx/`), with the task number in the original's file name and a `record.json` copy of the register row, so the original can be found from the batch ID with or without the database.
+- **Template:** from the platform repo's PDF. Removed: lab name, manufacturer, supplier batch, header contact lines. Added: product, signature, lab caveats in Comments.
+- **tjqxgd verification** was first recorded as "no verification key". The report's QR code links to tjqxgd.com/coa-verify, which confirms the report by its report number, so that number is now carried as the verification key on the print copy and the site says the result can be verified there.
+- **Accreditation:** the tjqxgd report states neither it nor its partner lab holds CMA/CNAS accreditation; that line is carried in the certificate's Comments.
+
+## Open items
+
+- [ ] Scoped R2 API token, for presigned links to originals
+- [ ] Attach aurapharma.us to Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`
+- [ ] Footer domain: the certificate footer says aurapharma.co; the site uses aurapharma.us
 - [ ] Real reports for the other products (they show sample data)
-- [x] `tools/coa/` generator
-- [ ] Final certificate design in `tools/coa/template.html`
-- [ ] Database, when `data.js` gets unwieldy
+- [ ] Automatic value extraction from lab PDFs (text for tjqxgd, OCR for Janoshik), with human checking

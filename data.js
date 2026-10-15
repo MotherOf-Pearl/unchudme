@@ -97,15 +97,16 @@ const LOTS = PRODUCTS.flatMap((p, i) =>
   }))
 );
 
-// Real lab reports: headline results here, the full PDF in the Cloudflare R2 bucket aura-reports (current batch only;
-// past batches go to the private bucket aura-archive).
-// Batch, task numbers and verification keys stay off the site (research/lab-reports.json, given on request).
+// Real lab reports: headline results here; the full certificate is an Aura Pharma PDF in the Cloudflare R2 bucket
+// aura-reports, filed under its certificate number (current batch only). Entries are printed by tools/coa/generate.mjs;
+// the D1 register aura-coa links each number to the lab's original in aura-archive/<certNo>/ (see CERTIFICATIONS.md).
+// Batch, task numbers and verification keys stay off the site (in the register, given on request).
 const REPORTS_URL = "https://pub-9777663d84154689864064a7d51bc5e5.r2.dev"; // switch to https://reports.aurapharma.us once the domain is on Cloudflare
 const REPORTS = [
-  { productId: "glp1-r", size: "10 mg", date: "2026-07-30", lab: "Janoshik Analytical", purity: "99.009", identity: "Confirmed (blind test)",
-    content: "10.60 mg", verify: "janoshik.com/verify", pdf: `${REPORTS_URL}/glp1-r/10mg/2026-07-30.pdf` },
-  { productId: "tesamorelin", size: "10 mg", date: "2026-09-01", lab: "Independent partner lab (report by tjqxgd.com)", purity: "99.52", identity: "Conforms (LC-MS)",
-    content: "11.98 mg", appearance: "White powder", pdf: `${REPORTS_URL}/tesamorelin/10mg/2026-09-01.pdf` },
+  { productId: "glp1-r", certNo: "AP-0001", size: "10 mg", date: "2026-07-30", lab: "Janoshik Analytical", purity: "99.009", identity: "GLP1-R (blind test)",
+    content: "10.60 mg", verify: "janoshik.com/verify", pdf: `${REPORTS_URL}/AP-0001.pdf` },
+  { productId: "tesamorelin", certNo: "AP-0002", size: "10 mg", date: "2026-09-01", lab: "Independent partner lab (report issued by tjqxgd.com)", purity: "99.52", identity: "Conforms (LC-MS)",
+    content: "11.98 mg", appearance: "White powder", verify: "tjqxgd.com/coa-verify", pdf: `${REPORTS_URL}/AP-0002.pdf` },
 ];
 // a real report replaces that product's sample lots
 LOTS.splice(0, LOTS.length, ...REPORTS, ...LOTS.filter((l) => !REPORTS.some((r) => r.productId === l.productId)));

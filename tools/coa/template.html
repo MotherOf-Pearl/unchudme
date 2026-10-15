@@ -1,67 +1,113 @@
 <!doctype html>
 <!--
-  Aura Pharma certificate template. STAND-IN DESIGN: replace freely, keep the placeholders.
-  Filled by generate.mjs:
-    {{product}} {{size}} {{lab}} {{labReportNo}} {{testDate}} {{receivedDate}} {{issuedDate}}
-    {{method}} {{verifyKey}} {{verifyUrl}} {{notes}}
+  Aura Pharma certificate of analysis. Layout follows docs/AuraPharma_COA_template.pdf in the platform repo
+  (US Letter, measured in pt). Filled by generate.mjs:
+    {{certNo}}                   our batch ID from the register (AP-0001 …), on both copies
+    {{product}} {{size}} {{lab}} {{testDate}} {{receivedDate}} {{orderedDate}} {{issuedDate}}
+    {{sampleDescription}} {{testsRequested}} {{notes}}
+    {{sampleId}} {{verifyKey}} {{verifyUrl}}   print copy only (blank on the public copy)
+  The lab's task number, the lab's name and the supplier's batch are never printed: they're kept in the register
+  against the batch ID. ({{lab}} and {{batch}} are still available if a design needs them.)
+    {{onRequest}}                set on the public (website) copy only
     {{{resultsRows}}}            the results table rows (<tr>…</tr>), already escaped
     {{#name}} … {{/name}}        section kept only when name has a value
-  Relative paths resolve from this folder (the site's media is at ../../media/).
+  Relative paths resolve from this folder.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>Certificate of Analysis · {{product}} {{size}}</title>
 <style>
-  @page { size: A4; margin: 0; }
+  @page { size: 612pt 792pt; margin: 0; }
   * { box-sizing: border-box; }
-  body { margin: 0; font: 10.5pt/1.45 "Segoe UI", Inter, Arial, sans-serif; color: #10161c; }
-  header { background: #05080b; color: #e6f3ff; padding: 26px 40px; display: flex; justify-content: space-between; align-items: center; }
-  .wordmark b { font-size: 20pt; letter-spacing: .18em; font-weight: 700; }
-  .wordmark small { display: block; font-size: 8pt; letter-spacing: .5em; color: #7cc4ff; }
-  header .doc { text-align: right; font-size: 9pt; color: #9fb6c9; }
-  header .doc strong { display: block; font-size: 13pt; color: #e6f3ff; letter-spacing: .04em; }
-  main { padding: 30px 40px; }
-  h1 { font-size: 18pt; margin: 0 0 4px; }
-  .sub { color: #5b6b78; margin: 0 0 22px; }
-  dl { display: grid; grid-template-columns: 150px 1fr; gap: 6px 16px; margin: 0 0 26px; }
-  dt { color: #5b6b78; } dd { margin: 0; font-weight: 600; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
-  th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; color: #5b6b78; border-bottom: 1.5px solid #10161c; padding: 6px 8px; }
-  td { padding: 8px; border-bottom: 1px solid #dde4ea; }
-  td.result { font-weight: 700; }
-  .box { border: 1px solid #dde4ea; border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; }
-  footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 40px; font-size: 8pt; color: #5b6b78; border-top: 1px solid #dde4ea; }
+  html, body { margin: 0; width: 612pt; height: 792pt; }
+  body { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; color: #1a1f2b; font-size: 10.1pt; display: flex; flex-direction: column; }
+  .navy { color: #16457a; font-weight: 700; }
+
+  header { height: 82.5pt; background: #06090e; border-bottom: 2.3pt solid #2b6cb0; position: relative; }
+  header img { position: absolute; left: 63pt; top: 16.5pt; width: 120.5pt; height: 49.5pt; }
+  header h1 { position: absolute; right: 63pt; top: 17pt; margin: 0; color: #fff; font-size: 15.8pt; letter-spacing: .07em; }
+
+  /* main runs from below the header to the footer; the signature row sits at its foot, or below the content when it's long */
+  main { margin: 18.5pt 63pt 0; flex: 1 0 auto; display: flex; flex-direction: column; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; height: 48pt; }
+  .task { display: flex; align-items: center; gap: 14pt; }
+  .task .navy { font-size: 11.2pt; }
+  .task .val { background: #f1f4f8; border: .75pt solid #e3e8ef; width: 156pt; height: 23.8pt; padding: 0 14pt; display: flex; align-items: center; font-size: 10.5pt; }
+  .dates { display: grid; grid-template-columns: auto 71pt; gap: 4.8pt 7pt; font-size: 9.4pt; text-align: right; align-items: center; }
+  .dates span:nth-child(even) { background: #f1f4f8; text-align: center; padding: 1.5pt 0; font-weight: 400; color: #1a1f2b; }
+
+  .fields { display: grid; grid-template-columns: 112.5pt 1fr; row-gap: 4.5pt; margin-top: 6pt; }
+  .fields .navy { font-size: 9.8pt; align-self: center; }
+  .fields .val { background: #f1f4f8; height: 24.8pt; padding: 0 12.5pt; display: flex; align-items: center; }
+
+  h2 { display: flex; align-items: center; gap: 7pt; margin: 18pt 0 6pt; font-size: 10.5pt; color: #16457a; }
+  h2::after { content: ""; flex: 1; height: .8pt; background: #e5e7eb; }
+  .box { background: #f1f4f8; border-left: 2.3pt solid #16457a; min-height: 37.5pt; padding: 11pt 14pt; font-size: 9.8pt; line-height: 1.45; }
+  .box.comments { min-height: 49.5pt; }
+  .box p { margin: 0 0 5pt; } .box p:last-child { margin: 0; }
+
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  td { border: 1.1pt solid #2b6cb0; height: 27.5pt; padding: 0 12.5pt; }
+  td:first-child { width: 218.8pt; }
+
+  .bottom { margin-top: auto; padding-top: 24pt; display: flex; justify-content: space-between; align-items: flex-end; }
+  .sign { width: 157.5pt; text-align: center; }
+  .sign .navy { font-size: 9.8pt; }
+  .sign img { display: block; height: 44pt; margin: 2pt auto -4pt; }
+  .sign .line { border-top: .8pt solid #1a1f2b; padding-top: 4pt; color: #6b7280; font-size: 7.5pt; }
+  .conducted { display: flex; align-items: center; gap: 7pt; margin-bottom: 6pt; }
+  .conducted .navy { font-size: 9.8pt; }
+  .conducted .val { background: #f1f4f8; padding: 3pt 13pt; }
+
+  footer { margin: 12pt 63pt 50pt; border-top: 1.5pt solid #16457a; padding-top: 10pt; font-size: 7.1pt; line-height: 12pt; color: #6b7280; }
+  footer strong { color: #b02a37; display: block; }
 </style>
 </head>
 <body>
 <header>
-  <div class="wordmark"><b>ΛURΛ</b><small>PHARMA</small></div>
-  <div class="doc"><strong>CERTIFICATE OF ANALYSIS</strong>Issued {{issuedDate}}</div>
+  <img src="logo.png" alt="Aura Pharma">
+  <h1>CERTIFICATE OF ANALYSIS</h1>
 </header>
 <main>
-  <h1>{{product}} {{size}}</h1>
-  <p class="sub">Research use only. Not for human or veterinary use.</p>
+  <div class="top">
+    <div class="task"><span class="navy">Batch ID</span><span class="val">{{certNo}}</span></div>
+    <div class="dates">
+      {{#orderedDate}}<span class="navy">Testing ordered</span><span>{{orderedDate}}</span>{{/orderedDate}}
+      {{#receivedDate}}<span class="navy">Sample received</span><span>{{receivedDate}}</span>{{/receivedDate}}
+    </div>
+  </div>
 
-  <dl>
-    <dt>Testing laboratory</dt><dd>{{lab}}</dd>
-    <dt>Lab report no.</dt><dd>{{labReportNo}}</dd>
-    {{#receivedDate}}<dt>Sample received</dt><dd>{{receivedDate}}</dd>{{/receivedDate}}
-    <dt>Analysed</dt><dd>{{testDate}}</dd>
-    {{#method}}<dt>Method</dt><dd>{{method}}</dd>{{/method}}
-  </dl>
+  <div class="fields">
+    <span class="navy">Product</span><span class="val">{{product}} {{size}}</span>
+    {{#sampleId}}<span class="navy">Sample</span><span class="val">{{sampleId}}</span>{{/sampleId}}
+  </div>
 
-  <table>
-    <thead><tr><th>Test</th><th>Method</th><th>Specification</th><th>Result</th></tr></thead>
-    <tbody>{{{resultsRows}}}</tbody>
-  </table>
+  {{#sampleDescription}}<h2>Sample description</h2>
+  <div class="box">{{sampleDescription}}</div>{{/sampleDescription}}
 
-  {{#notes}}<div class="box">{{notes}}</div>{{/notes}}
-  {{#verifyKey}}<div class="box">Verify this result on the laboratory's own website, {{verifyUrl}}, with key <strong>{{verifyKey}}</strong>.</div>{{/verifyKey}}
+  <h2>Tests requested</h2>
+  <div class="box">{{testsRequested}}</div>
+
+  <h2>Results</h2>
+  <table><tbody>{{{resultsRows}}}</tbody></table>
+
+  <h2>Comments</h2>
+  <div class="box comments">
+    {{#notes}}<p>{{notes}}</p>{{/notes}}
+    {{#verifyKey}}<p>Verify this result on the laboratory's own website, {{verifyUrl}}, with key <b>{{verifyKey}}</b>.</p>{{/verifyKey}}
+    {{#onRequest}}<p>Testing details for this batch are printed on the copy that ships with your order, and available on request quoting the batch ID.</p>{{/onRequest}}
+  </div>
+
+  <div class="bottom">
+    <div class="conducted"><span class="navy">Analysis conducted</span><span class="val">{{testDate}}</span></div>
+    <div class="sign"><div class="navy">Signature</div><img src="signature.png" alt=""><div class="line">Reviewed by Aura Pharma QA</div></div>
+  </div>
 </main>
 <footer>
-  Analysis performed by {{lab}}, an independent third-party laboratory, report {{labReportNo}}. Results apply to the sample tested.
-  Aura Pharma issued this certificate from that report; the original is kept on file and available on request.
+  <strong>FOR LABORATORY AND RESEARCH USE ONLY. NOT FOR HUMAN OR VETERINARY CONSUMPTION.</strong>
+  Analysis performed by an independent third-party laboratory. Aura Pharma issued this certificate from that laboratory's report, which is kept on file.
+  This certificate reflects analysis of the specific sample tested. Reproduction except in full is prohibited. Aura Pharma · aurapharma.co
 </footer>
 </body>
 </html>

@@ -8,3 +8,4 @@ research/lab-reports.json
 .wrangler/
 tools/coa/out/
 research/coa/
+tools/coa/.render-*.html
