@@ -1,13 +1,15 @@
 // Home hero backdrop: a starfield over the curve of a planet, drawn on a 2D canvas behind the copy and vials.
 // Motion: the whole starfield drifts slowly in one direction (leftward), nearer stars a little faster, wrapping
 // around the edges. Nothing follows the pointer. Reduced-motion users get a still sky.
-// The canvas is sized to the hero, so nothing reaches past the dark band.
+// The canvas is sized to its dark band, so nothing reaches past it. <canvas data-planet="off"> draws the stars only
+// (used on the affiliate page).
 (function () {
   const canvas = document.querySelector(".hero-space");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ICE = "124,196,255";
+  const planet = canvas.dataset.planet !== "off";
 
   let w = 0, h = 0, dpr = 1, stars = [];
   // seeded so the sky is the same on every visit
@@ -38,6 +40,7 @@
       ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
     }
     ctx.globalAlpha = 1;
+    if (!planet) return;
 
     // planet: a huge circle low in the band, its crown under the vials
     const R = Math.max(w, h * 1.6) * 0.95, apexX = w * (w > 860 ? 0.76 : 0.5), apexY = h * (w > 860 ? 0.84 : 0.86);

@@ -6,6 +6,8 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 ## 2026-10-15 — Hero motion, specs placement, Quality page
 
+- **Home**: "Browse certificates" link removed from the lab reports tile; the research-use tile adds "Request full lab documentation from info@aurapharma.us".
+- **Affiliate page**: the same drifting starfield behind the sign-in card (stars only, no planet).
 - **Home hero**: the stars drift slowly in one direction (leftward, nearer stars a little faster). Nothing follows the mouse any more: the starfield, planet and 3D vials all ignore the pointer.
 - **Product page**: Specifications back under the buy box (the beside-the-title layout was reverted); the gallery stays.
 - **Quality page**: the "Current reports" and "Check it yourself" sections removed; certificates live on the product pages.
