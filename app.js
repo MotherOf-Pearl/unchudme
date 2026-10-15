@@ -80,7 +80,7 @@ function setFavicon() {
 function renderChrome() {
   setFavicon();
   const page = document.body.dataset.page;
-  const nav = [["shop", "shop.html", "Shop"], ["coa", "coa.html", "Certificates"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"]];
+  const nav = [["shop", "shop.html", "Shop"], ["quality", "quality.html", "Quality"], ["faq", "faq.html", "FAQ"]];
   document.body.insertAdjacentHTML("afterbegin", `
     <div class="bg" aria-hidden="true"></div>
     <div class="ruo-strip">${RUO_SHORT}</div>
@@ -174,8 +174,10 @@ function optionSummary(p) {
 // A batch's lab report: the panel the reports cover (purity, identity, measured content)
 function coaPanel(l) {
   const p = byId(l.productId);
-  const rows = [["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`], ["Identity", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
-    ...(l.content ? [["Content", `≥ ${l.size}`, l.content]] : []), ...(l.appearance ? [["Appearance", "White to off-white powder", l.appearance]] : [])];
+  // blends report each ingredient's amount and no purity
+  const rows = [...(l.purity ? [["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`]] : []),
+    ["Identity", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
+    ...(l.content ? [["Content", `${l.size} on the label`, l.content]] : []), ...(l.appearance ? [["Appearance", "White to off-white powder", l.appearance]] : [])];
   return `<div class="coa-panel" id="lab-report">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div><div class="eyebrow">Lab report</div><h3 style="margin:0">${esc(p.name)}</h3>
@@ -189,6 +191,13 @@ function coaPanel(l) {
     ${l.pdf ? `<a class="btn" href="${l.pdf}" download target="_blank" rel="noopener" style="margin-top:6px">Download certificate ${esc(l.certNo ?? "")} (PDF)</a>` : ""}</div>`;
 }
 const latestLot = (id) => LOTS.filter((l) => l.productId === id).sort((a, b) => b.date.localeCompare(a.date))[0];
+// the report shown for one size: its own real report; sample data only for products with no real report at all
+const reportFor = (p, size) => {
+  const real = LOTS.filter((l) => l.productId === p.id && !l.sample);
+  return real.length ? real.find((l) => l.size === size.label) ?? null : latestLot(p.id);
+};
+const noReport = (size) => `<div class="coa-panel" id="lab-report"><div class="eyebrow">Lab report</div>
+  <p class="muted" style="margin:8px 0 0">The lab report for ${esc(size.label)} is coming soon. Other sizes of this product have reports; choose one above to see it.</p></div>`;
 
 const shownSize = (p) => p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0]; // picture the size on the shelf
 function productCard(p) {
@@ -208,12 +217,12 @@ const pages = {
   home() {
     const onShelf = Object.keys(STOCK).map(byId).filter((p) => p && inStock(p));
     $("#featured").innerHTML = [...onShelf, ...PRODUCTS.filter((p) => !onShelf.includes(p))].slice(0, 8).map(productCard).join("");
-    const l = LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
+    const l = LOTS.find((x) => x.productId === "bpc-157" && !x.sample) ?? LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
     $("#mini-coa").innerHTML = `
-      <div class="mini-coa-head"><b>${esc(p.name)}</b><span class="sample-badge">Sample</span></div>
-      <div class="row"><span>Batch</span><span class="mono">${l.lot}</span></div>
+      <div class="mini-coa-head"><b>${esc(p.name)}${l.sample ? "" : ` ${esc(l.size)}`}</b>${l.sample ? `<span class="sample-badge">Sample</span>` : ""}</div>
+      <div class="row"><span>Batch</span><span class="mono">${esc(l.certNo ?? l.lot)}</span></div>
       <div class="row"><span>Purity (HPLC)</span><span class="mono pass">${l.purity}%</span></div>
-      <div class="row"><span>Identity (MS)</span><span class="mono pass">Conforms</span></div>
+      <div class="row"><span>Identity</span><span class="mono pass">${l.sample ? "Conforms" : esc(l.identity)}</span></div>
       <div class="row"><span>Content</span><span class="mono">${l.content}</span></div>`;
   },
 
@@ -266,7 +275,7 @@ const pages = {
           <tr><th>Purity</th><td>${SPEC.purity}</td></tr>
           <tr><th>Storage</th><td>${SPEC.storage}</td></tr>
         </table>
-        ${lots.length ? coaPanel(latestLot(p.id)) : ""}
+        <div id="coa-slot"></div>
       </div>`;
     const setAvail = () => {
       const n = onHand(p, size), qty = Math.max(1, +$("#qty").value || 1);
@@ -274,7 +283,8 @@ const pages = {
         (n > 0 && qty > n ? `<span class="muted">Only ${n} on hand. ${qty - n} backordered, ships in ${LEAD_TIME}.</span>` : "");
     };
     $("#qty").oninput = setAvail;
-    const setPrice = () => { setAvail(); $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
+    const setReport = () => { if (!lots.length) return; const l = reportFor(p, size); $("#coa-slot").innerHTML = l ? coaPanel(l) : noReport(size); };
+    const setPrice = () => { setAvail(); setReport(); $("#price").textContent = size.price == null ? "Price on request" : money(size.price); $("#add").disabled = size.price == null; $("#pdp-img").src = vialImg(p, size); $("#pdp-img").alt = `${p.name} ${size.label} vial`; };
     setPrice();
     document.querySelectorAll(".size").forEach((b) => (b.onclick = () => {
       size = p.sizes[+b.dataset.i];
@@ -290,10 +300,12 @@ const pages = {
     const old = new URLSearchParams(location.search), code = old.get("batch") ?? old.get("lot");
     const hit = code && LOTS.find((x) => x.lot?.toLowerCase() === code.trim().toLowerCase());
     if (hit) return location.replace(`product.html?id=${hit.productId}#lab-report`);
-    const ids = [...new Set(LOTS.map((l) => l.productId))];
-    $("#coa-list").innerHTML = ids.map((id) => { const l = latestLot(id), p = byId(id);
-      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}</a></td><td>${l.date}</td>
-        <td class="mono">${l.purity}%</td><td class="mono">${l.content ?? "—"}</td>
+    // every real report (one per size), then sample data for products without one
+    const real = LOTS.filter((l) => !l.sample).sort((a, b) => byId(a.productId).name.localeCompare(byId(b.productId).name) || parseFloat(a.size.replace(/^\D+/, "")) - parseFloat(b.size.replace(/^\D+/, "")));
+    const rows = [...real, ...[...new Set(LOTS.filter((l) => l.sample).map((l) => l.productId))].map(latestLot)];
+    $("#coa-list").innerHTML = rows.map((l) => { const id = l.productId, p = byId(id);
+      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}${l.sample ? "" : ` ${esc(l.size)}`}</a></td><td>${l.date}</td>
+        <td class="mono">${l.purity ? `${l.purity}%` : "—"}</td><td class="mono">${l.content ?? "—"}</td>
         <td>${l.pdf ? `<a class="mono" href="${l.pdf}" download target="_blank" rel="noopener">${esc(l.certNo ?? "PDF")}</a>` : `<span class="sample-badge">Sample</span>`}</td></tr>`; }).join("");
   },
 };

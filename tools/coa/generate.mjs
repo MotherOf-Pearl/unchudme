@@ -49,7 +49,7 @@ if (named) fail(`write ${CODE[named[0].toLowerCase()]} instead of "${named[0]}"`
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9.]+/g, '');
 // each result row may carry kind: identity | purity | content | appearance, which is what the site shows
 const find = (kind) => r.results.find((x) => x.kind === kind)?.result;
-const site = { purity: find('purity')?.replace(/[^\d.]/g, ''), identity: r.identity ?? find('identity'), content: find('content'), appearance: find('appearance') };
+const site = { purity: find('purity')?.replace(/[^\d.]/g, ''), identity: r.identity ?? find('identity'), content: find('content') ?? r.contentSummary, appearance: find('appearance') };
 const today = new Date().toISOString().slice(0, 10);
 
 // ---- certificate number from the register: the lab report's existing number, else the next one (only when publishing)

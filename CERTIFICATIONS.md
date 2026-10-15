@@ -97,19 +97,25 @@ One row per certificate, keyed by batch ID (table `certificates`, schema in `too
 A lab report is registered once (unique on lab + task number), so publishing it again re-issues it under the same batch ID.
 
 ### Site
-`data.js` → `REPORTS` holds one entry per published certificate (printed by the generator), e.g.:
+`data.js` → `REPORTS` holds one entry per current certificate. It is written by `tools/coa/site-data.mjs` straight from the register (never edited by hand), e.g.:
 
 ```js
 { productId: "bpc-157", certNo: "AP-0007", size: "10 mg", date: "2026-01-12", lab: "…", purity: "99.12",
   identity: "…", content: "10.41 mg", verify: "…", pdf: `${REPORTS_URL}/AP-0007.pdf` }
 ```
 
-`REPORTS_URL` is the public bucket's address. The product page shows "Batch AP-0007 · 10 mg · Tested …" and a "Download certificate AP-0007 (PDF)" button; the Lab reports page (`coa.html`) lists every product with its batch ID as the download link. Products without a real report still show sample data marked "Sample".
+`REPORTS_URL` is the public bucket's address. Blends have no `purity`; their `content` lists each ingredient (e.g. "BPC-157 4.95 mg · TB-500 4.82 mg").
+
+What the site shows:
+- **Product page:** the lab report panel follows the **selected size**: "Batch AP-0007 · 10 mg · Tested …", the results, and a "Download certificate AP-0007 (PDF)" button. A size without its own report says its report is coming soon (it never shows another size's certificate). Products with no real report at all still show sample data marked "Sample".
+- **Lab reports page (`coa.html`):** one row per real report (product and size), then the products still on sample data. Since 2026-10-15 this page is **not in the header nav**; it is still linked from the footer and the home page. A card-style redesign (search, purity, labelled vs measured, view certificate) is planned.
+- **Home page:** the "Independent lab reports" tile shows BPC-157's real report.
 
 ### Local only (git-ignored)
 - `research/coa/*.json`: the report values files (they hold task numbers and keys)
 - `tools/coa/out/`: rendered PDFs and lookups
 - `research/lab-reports.json`: the first private record, from before the register; the register is now the record
+- `research/coa/janoshik-intake.json`: every Janoshik report received, as read from the images (task, sample, supplier batch, dates, results, key), with which product and size it maps to and any flags
 
 ## The certificate
 
@@ -150,6 +156,15 @@ Each lab lays its report out differently. The values file is the mapping: copy e
 
 A new lab format gets a column here the first time it's used. Values are copied by hand and checked by a person; automatic extraction (PDF text, or OCR for photographed reports like Janoshik's) is not built yet.
 
+### Janoshik specifics
+- **Links.** Janoshik test pages follow `janoshik.com/tests/<task>-<sample code>_<verification key>`, so a link alone gives the task, sample code and key (keep links private: they contain the key). Janoshik's firewall blocks automated access, so reports are downloaded by hand from those pages as `Test Report #<task>.png`.
+- **Originals are images.** Each PNG is converted to a one-page PDF (same pixels) and filed as the original with `--original`.
+- **Sample codes** are the compound abbreviation and size (RT = GLP1-R, TR / T = GLP1-T, BP = BPC-157, BB = BPC-157 + TB-500, CU / GHK = GHK-Cu, MOTS = MOTS-c, KLOW / GLOW = the blends). Older reports prefix the supplier's name (`ERP RT10`); that prefix is stripped before it goes on a certificate.
+- **Two generations.** 2025 reports (tasks 81xxx–89xxx) list "Assessment of a peptide vial or vials" and share one supplier batch number per shipment; 2026 reports (204xxx) list the specific test and a batch per product.
+- **Blends** report each ingredient's amount and no purity. Lab comments (e.g. KLOW's "KPV: 12.49", no unit given) are carried as "Laboratory comment: …".
+- **Reports commissioned by another seller** whose results Aura Pharma has bought (client shown as that seller, with their watermark) are used like any other; the client is recorded in the register only.
+- **Which report is current:** the newest test for each product and size. Older tests of the same product and size are kept in the intake file as history.
+
 ## Publishing a new report
 
 From `tools/coa/` (first time: `npm install`):
@@ -164,7 +179,7 @@ From `tools/coa/` (first time: `npm install`):
    - archives the product's previous certificate (same product and size) and removes its public copy.
 
    `--original` is required for a new certificate. It refuses to publish a report older than the one on sale.
-4. **Site.** Paste the printed `data.js` entry over that product's entry in `REPORTS`. Check the product page and `coa.html` locally, then push to `main`.
+4. **Site.** `node site-data.mjs` rewrites `REPORTS` in `data.js` from the register. Check the product page (each size) and `coa.html` locally, then push to `main`.
 5. **Print.** Print `out/AP-xxxx-print.pdf` for the order inserts.
 
 ## Finding the original: "send me the lab work for AP-0001"
@@ -188,6 +203,7 @@ Sending a file as an expiring link (presigned URL) needs an R2 API token; see Ac
 |---|---|
 | `generate.mjs` | checks a values file, fills the template, renders the public and print copies, and with `--publish` files and registers them |
 | `lookup.mjs` | everything withheld for one batch ID, plus its files |
+| `site-data.mjs` | rewrites `REPORTS` in `data.js` from the register's current certificates |
 | `template.html` | the certificate layout |
 | `logo.png`, `signature.png` | header logo (from the template PDF) and the QA signature |
 | `schema.sql` | the register's table |
@@ -196,7 +212,7 @@ Sending a file as an expiring link (presigned URL) needs an R2 API token; see Ac
 
 **Template placeholders.** `{{name}}` is escaped text, `{{{resultsRows}}}` is the results rows, `{{#name}}…{{/name}}` is kept only when `name` has a value. Values: `certNo` (batch ID), `product`, `size`, `testDate`, `receivedDate`, `orderedDate`, `issuedDate` (dates as `30 JUL 2026`), `sampleDescription`, `testsRequested`, `notes`; print copy only: `sampleId`, `verifyKey`, `verifyUrl`; public copy only: `onRequest`. `lab` and `batch` exist but aren't used by the current design. An unknown placeholder stops the run.
 
-**Values file.** Required: `productId`, `product`, `size`, `lab`, `labReportNo`, `testDate`, `results`. Optional: `sampleId`, `batch`, `orderedDate`, `receivedDate`, `issuedDate`, `sampleDescription`, `testsRequested`, `identity`, `notes`, `verifyKey`, `verifyUrl`. Each result is `{ test, result, kind }`; `kind` (`identity`, `purity`, `content`, `appearance`) picks which row feeds which field of the `data.js` entry.
+**Values file.** Required: `productId`, `product`, `size`, `lab`, `labReportNo`, `testDate`, `results`. Optional: `sampleId`, `batch`, `orderedDate`, `receivedDate`, `issuedDate`, `sampleDescription`, `testsRequested`, `identity`, `notes`, `verifyKey`, `verifyUrl`, `contentSummary` (blends: the site's content line, used when no result has `kind: "content"`). Each result is `{ test, result, kind }`; `kind` (`identity`, `purity`, `content`, `appearance`) picks which row feeds which field of the `data.js` entry.
 
 **Checks (the run stops on any).** A required field missing; a date not `YYYY-MM-DD`; a result without test or result; any supplier or manufacturer field; a full compound name where a code name is required (see Rules); the public copy containing the task number, sample code, supplier batch or key; the print copy containing the task number (unless the lab verifies by it, as tjqxgd does).
 
