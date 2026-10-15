@@ -4,6 +4,12 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Customer accounts (Supabase)
+
+- **Account page** (`account.html`, `js/account.js`): sign in, create account (name, email, password, institution, research area, research-use confirmation), forgot / reset password, and a profile view with a "Verification pending / Verified researcher" badge and editable details. The header profile icon now opens it.
+- **Supabase** project "Aura Pharma" for sign-in and the `profiles` table; schema in `supabase/migrations/`; browser library vendored as `vendor/supabase.js` (supabase-js 2.118.0). Customers can read and edit only their own profile and can't set their own verified flag (tested). Full detail in ACCOUNTS.md.
+- Still needed before customers can sign up for real: site URL / redirect URLs and a custom email sender in the Supabase dashboard (ACCOUNTS.md → Set-up still needed).
+
 ## 2026-10-15 — GLP1-R pricing ladder
 
 - **GLP1-R prices** set by hand as a per-mg ladder (`OVERRIDES` in `research/apply-pricing.mjs`): 5 mg $54.99 · 10 mg $72.99 · 20 mg $129.99 · 30 mg $164.99 · 40 mg $199.99 · 60 mg $269.99. Matches Mile High and Rebirth Labs at 5 mg and sits just under the market above that. Fixes two errors from averaging competitor prices: 5 mg had cost more than 10 mg ($74.99 vs $70.99), and 60 mg ($459.99) was copied from a single outlier.

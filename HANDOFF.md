@@ -4,6 +4,7 @@ Start here when picking the project up again. It says what the site is, how to r
 
 - [CERTIFICATIONS.md](CERTIFICATIONS.md) — the certificate (COA) system: lab reports, batch IDs, Cloudflare, generator, lookups.
 - [CHANGELOG.md](CHANGELOG.md) — every change, newest first, with the reasons.
+- [ACCOUNTS.md](ACCOUNTS.md) — customer accounts: the Supabase project, the profiles table and its rules, set-up still needed.
 
 > **This repo is public** and Vercel serves the site from it. Never commit supplier names, supplier batch numbers, lab task numbers, verification keys, costs or margins. The private material listed under "Where things live" stays out of git.
 
@@ -31,11 +32,12 @@ Aura Pharma: a static storefront for research-use-only peptides. No build step; 
 | Shop | `shop.html` | Shop | catalog grid with search, categories, sort |
 | Product | `product.html?id=…` | — | vial / certificate **gallery** (scrolls with the page, not sticky), price, stock, sizes, Specifications (under the buy box), lab report panel for the **selected size** with "Download certificate" |
 | FAQ | `faq.html` | FAQ | |
+| Account | `account.html` | profile icon | sign in / create account / reset password / profile with verification badge (Supabase; see ACCOUNTS.md) |
 | Affiliate portal | `affiliate.html` | Affiliates | sign-in card (username/email, password with show/hide) over a drifting starfield (no grid). **Not connected:** signing in says the portal isn't open yet |
 | Lab reports | `coa.html` | no (footer only) | one row per certified product and size, then products still on sample data |
 | Quality | `quality.html` | no (footer only) | what the labs test (purity, identity, content, appearance) |
 
-Header: logo · Shop · FAQ · Affiliates · **profile icon** (placeholder, does nothing yet) · cart. On phones: logo mark, profile, cart and menu icons. A research-use strip sits above the header and an entry gate asks visitors to confirm research use.
+Header: logo · Shop · FAQ · Affiliates · **profile icon** (opens the account page) · cart. On phones: logo mark, profile, cart and menu icons. A research-use strip sits above the header and an entry gate asks visitors to confirm research use.
 
 **Motion rules (Jack's call):** the stars drift slowly in one direction; nothing follows the mouse (stars, planet and vials all ignore the pointer). Reduced-motion users get a still sky.
 
@@ -95,6 +97,7 @@ Full system in CERTIFICATIONS.md. In short: each lab report becomes an Aura Phar
 | Certificate PDFs and pictures for the site | Cloudflare R2 bucket `aura-reports` (public address in `REPORTS_URL`, top of the reports block in `data.js`) | public |
 | Lab originals, print copies, records | Cloudflare R2 bucket `aura-archive`, one folder per batch ID | private |
 | Certificate register | Cloudflare D1 database `aura-coa` | private |
+| Customer accounts and profiles | Supabase project "Aura Pharma" (`guzqebqtxiwngutbdmkl`); schema in `supabase/migrations/` | private |
 | Report values files, Janoshik intake list, the first private record | `research/coa/*.json`, `research/coa/janoshik-intake.json`, `research/lab-reports.json` (git-ignored, local only) | private |
 | Supplier costs and margin report | `research/supplier-costs.json`, `research/pricing-report.md` (git-ignored) | private |
 | Janoshik report images as downloaded | `C:\Users\jackb\Downloads\Test Report #<task>.png` | local |
@@ -119,8 +122,9 @@ Back up the git-ignored `research/` files: they exist only on that machine (the 
 - [ ] **Repo visibility:** this repo is public. Making it private needs a Vercel plan that deploys private organisation repos, or moving the repo to the personal account.
 
 **Build when asked**
-- [ ] Affiliate portal backend (accounts, sign-in, applications, password reset). The page is a front end only.
-- [ ] Account / profile button backend. The icon is a placeholder.
+- [ ] Affiliate portal backend: reuse the Supabase accounts (`role = 'affiliate'`), add applications and tracking. The page is a front end only.
+- [x] Customer accounts: sign-in, sign-up, password reset, profiles (Supabase). **Before real customers:** set the site URL and a custom email sender in Supabase (ACCOUNTS.md).
+- [ ] Verify-customers admin screen, order history, checkout tied to accounts.
 - [ ] Certifications page as cards (search, purity, labelled vs measured, "View certificate"), designed in the style Jack shared; not started.
 - [ ] Automatic reading of values from lab PDFs (text for tjqxgd, OCR for Janoshik images).
 - [ ] Vial images still print old sample lot codes on their labels; re-render without them.

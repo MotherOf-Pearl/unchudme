@@ -11,6 +11,7 @@ Static site (no build step). Open `index.html` in a browser.
 ## Docs
 - [HANDOFF.md](HANDOFF.md) — **start here**: current state, how to run and ship, where everything lives, open items.
 - [CERTIFICATIONS.md](CERTIFICATIONS.md) — the certificate system: lab reports, batch IDs, Cloudflare storage, generator, publishing, lookups.
+- [ACCOUNTS.md](ACCOUNTS.md) — customer accounts (Supabase).
 - [CHANGELOG.md](CHANGELOG.md) — what changed and why.
 
 ## Regenerate
