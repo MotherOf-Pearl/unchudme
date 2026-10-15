@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Certificates · Aura Pharma</title>
-<meta name="description" content="Research peptides, documented to the batch. Every vial ships with an independent certificate of analysis.">
+<meta name="description" content="Research peptides, independently lab-tested for purity (HPLC), identity (mass spec) and content. Every order ships with a printed copy of the lab report.">
 <!-- link previews (iMessage, Slack, socials): 1200×630 card rendered by tools/vials `node render.mjs og` -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Aura Pharma">
 <meta property="og:title" content="Aura Pharma Peptides">
-<meta property="og:description" content="Research peptides, documented to the batch. Every vial ships with an independent certificate of analysis.">
+<meta property="og:description" content="Research peptides, independently lab-tested for purity (HPLC), identity (mass spec) and content. Every order ships with a printed copy of the lab report.">
 <meta property="og:image" content="https://unchudme.vercel.app/media/og-image.jpg?v=5">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -21,16 +21,11 @@
 </head>
 <body data-page="coa">
 <main><section><div class="wrap">
-  <div class="eyebrow">Certificates of analysis</div>
-  <h1 style="font-size:2.4rem">Look up your batch</h1>
-  <p class="muted">The batch number is printed on every vial label.</p>
-  <form id="coa-form" class="toolbar" style="max-width:560px">
-    <input id="lot" class="field" placeholder="e.g. AP-BPC1-2603" aria-label="Batch number" autocomplete="off">
-    <button class="btn primary" type="submit">Find certificate</button>
-  </form>
-  <div id="coa-out"></div>
-  <h2 style="margin-top:56px">All published batches <span class="sample-badge">Sample data</span></h2>
-  <div class="table-scroll"><table class="coa-table"><thead><tr><th>Batch</th><th>Compound</th><th>Tested</th><th>Purity</th></tr></thead><tbody id="coa-list"></tbody></table></div>
+  <div class="eyebrow">Certificates</div>
+  <h1 style="font-size:2.4rem">Lab reports</h1>
+  <p class="muted">Every product's latest lab report is on its product page, and a printed copy ships with every order.</p>
+  <h2 style="margin-top:40px">All reports <span class="sample-badge">Sample data</span></h2>
+  <div class="table-scroll"><table class="coa-table"><thead><tr><th>Compound</th><th>Batch</th><th>Tested</th><th>Purity</th><th>Content</th></tr></thead><tbody id="coa-list"></tbody></table></div>
 </div></section></main>
 <script src="data.js"></script>
 <script src="prices.js"></script>

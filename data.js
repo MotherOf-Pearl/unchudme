@@ -5,7 +5,7 @@
 //   price = average single-vial price across the competitor sites in research/ (filled in by prices.js).
 //   Supplier costs are kept out of the site (research/supplier-costs.json, not committed).
 // Chemical data: blank where not confirmed. Verify every CAS / MW / formula against the manufacturer's spec sheet before launch.
-// Lot data below is SAMPLE ONLY — replace with real ISO 17025 lab reports before going live.
+// Lot data below is SAMPLE ONLY — replace with the real lab reports before going live.
 
 const BRAND = { name: "Aura Pharma", domain: "aurapharma.us", tagline: "Research peptides, documented to the batch." };
 
@@ -124,13 +124,11 @@ const LOTS = PRODUCTS.flatMap((p, i) =>
     productId: p.id,
     date: `2026-${String(3 + k * 4 + (i % 3)).padStart(2, "0")}-1${i % 9}`,
     purity: (98.6 + ((i * 7 + k * 3) % 13) / 10).toFixed(2),
-    identity: "Conforms (LC-MS)",
-    endotoxin: "< 0.5 EU/mg",
-    heavyMetals: "Pass (USP <232>)",
-    solvents: "Pass (USP <467>)",
-    tfa: `${(0.3 + ((i + k) % 5) / 10).toFixed(1)}%`,
-    water: `${(2.1 + ((i * 3 + k) % 9) / 10).toFixed(1)}%`,
-    lab: "ISO 17025 accredited third-party lab",
+    identity: "Conforms (MS)",
+    // measured peptide in the vial, a little over the labelled amount as on the real reports; single-mg sizes only
+    size: p.sizes[0].label,
+    content: /^[\d.]+ mg$/.test(p.sizes[0].label) ? `${(parseFloat(p.sizes[0].label) * (1.02 + ((i + k) % 7) / 100)).toFixed(2)} mg` : null,
+    lab: "Independent third-party lab",
     sample: true,
   }))
 );
