@@ -16,9 +16,6 @@ const PRICES = {
   "40 mg": 103.99,
   "60 mg": 127.99
  },
- "cagrilintide": {
-  "5 mg": 69.99
- },
  "tesamorelin": {
   "5 mg": 64.99,
   "10 mg": 79.99,
@@ -34,12 +31,6 @@ const PRICES = {
  },
  "cjc-1295": {
   "5 mg": 42.99
- },
- "ghrp-2": {
-  "10 mg": 34.99
- },
- "igf-1-lr3": {
-  "1 mg": 61.99
  },
  "mots-c": {
   "10 mg": 45.99,
@@ -67,31 +58,15 @@ const PRICES = {
  "adamax": {
   "10 mg": 68.99
  },
- "dsip": {
-  "5 mg": 41.99,
-  "10 mg": 42.99
- },
- "pt-141": {
-  "10 mg": 47.99
- },
  "melanotan-2": {
   "Standard vial": 42.99
  },
  "melanotan-1": {
   "Standard vial": 43.99
  },
- "oxytocin": {
-  "5 mg": 33.99
- },
- "kisspeptin-10": {
-  "10 mg": 79.99
- },
  "ghk-cu": {
   "50 mg": 40.99,
   "100 mg": 53.99
- },
- "snap-8": {
-  "10 mg": 34.99
  },
  "bpc-tb": {
   "BPC 5 mg + TB 5 mg": 76.99,
@@ -107,30 +82,13 @@ const PRICES = {
  "glow": {
   "70 mg": 97.99
  },
- "lipo-c": {
-  "With B12": 64.99,
-  "Without B12": 49.99
- },
  "epitalon": {
   "10 mg": 43.99,
   "50 mg": 96.99
  },
- "thymalin": {
-  "10 mg": 44.99
- },
- "vesugen": {
-  "20 mg": 89.99
- },
- "cartalax": {
-  "20 mg": 59.99
- },
  "nad": {
   "500 mg": 75.99,
   "1000 mg": 111.99
- },
- "5-amino-1mq": {
-  "10 mg": 49.99,
-  "50 mg": 99.99
  }
 };
 PRODUCTS.forEach((p) => p.sizes.forEach((s) => { const v = PRICES[p.id]?.[s.label]; if (v != null) s.price = v; }));

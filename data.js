@@ -26,8 +26,6 @@ const PRODUCTS = [
     sizes: mg(5, 10, 20, 30, 40, 60) },
   { id: "glp1-t", name: "GLP1-T", cat: "peptide", aka: "glp1t glp-1 t", code: "GLPT", formula: "C225H348N48O68", mw: 4813.5, cas: "2023788-19-2",
     sizes: mg(10, 15, 20, 30, 40, 60) },
-  { id: "cagrilintide", name: "Cagrilintide", cat: "peptide", aka: "cagri",
-    sizes: mg(5) },
   { id: "tesamorelin", name: "Tesamorelin", cat: "peptide", aka: "tesa", formula: "C221H366N72O67S", mw: 5135.9, cas: "218949-48-5",
     sizes: mg(5, 10, 20) },
   { id: "glp1-s", name: "GLP1-S", cat: "peptide", aka: "glp1s glp-1 s", code: "GLPS", formula: "C149H246N44O42S", mw: 3357.9, cas: "86168-78-7",
@@ -36,10 +34,6 @@ const PRODUCTS = [
     sizes: mg(5, 10) },
   { id: "cjc-1295", name: "CJC-1295 (no DAC)", cat: "peptide", aka: "mod grf 1-29", formula: "C152H252N44O42", mw: 3367.9,
     sizes: mg(5) },
-  { id: "ghrp-2", name: "GHRP-2", cat: "peptide", aka: "G25 G210 acetate", formula: "C45H55N9O6", mw: 817.9, cas: "158861-67-7",
-    sizes: mg(5, 10) },
-  { id: "igf-1-lr3", name: "IGF-1 LR3", cat: "peptide", aka: "IGF1", mw: 9111.4, cas: "946870-92-4",
-    sizes: [o("0.1 mg"), o("1 mg")] },
   { id: "mots-c", name: "MOTS-c", cat: "peptide", seq: "MRWQEMGYIFYPRKLR", formula: "C101H152N28O22S2", mw: 2174.6, cas: "1627580-64-6",
     sizes: mg(10, 20, 40) },
   { id: "bpc-157", name: "BPC-157", cat: "peptide", seq: "GEPPPGKPADDAGLV", formula: "C62H98N16O22", mw: 1419.5, cas: "137525-51-0",
@@ -54,26 +48,12 @@ const PRODUCTS = [
     sizes: mg(5, 10) },
   { id: "adamax", name: "Adamax", cat: "peptide", aka: "984",
     sizes: mg(5, 10) },
-  { id: "dsip", name: "DSIP", cat: "peptide", seq: "WAGGDASGE", formula: "C35H48N10O15", mw: 848.8, cas: "62568-57-4",
-    sizes: mg(5, 10) },
-  { id: "vip", name: "VIP", cat: "peptide", aka: "vasoactive intestinal peptide", formula: "C147H238N44O42S", mw: 3325.8, cas: "40077-57-4",
-    sizes: mg(5) },
-  { id: "pt-141", name: "PT-141", cat: "peptide", aka: "bremelanotide", formula: "C50H68N14O10", mw: 1025.2, cas: "189691-06-3",
-    sizes: mg(10) },
   { id: "melanotan-2", name: "Melanotan II", cat: "peptide", aka: "MT2", formula: "C50H69N15O9", mw: 1024.2, cas: "121062-08-6",
     sizes: [o("Standard vial")] },
   { id: "melanotan-1", name: "Melanotan I", cat: "peptide", aka: "MT1 afamelanotide", formula: "C78H111N21O19", mw: 1646.9, cas: "75921-69-6",
     sizes: [o("Standard vial")] },
-  { id: "oxytocin", name: "Oxytocin acetate", cat: "peptide", aka: "OT5", formula: "C43H66N12O12S2", mw: 1007.2, cas: "50-56-6",
-    sizes: mg(5) },
-  { id: "gonadorelin", name: "Gonadorelin acetate", cat: "peptide", aka: "GND5", formula: "C55H75N17O13", mw: 1182.3, cas: "33515-09-2",
-    sizes: mg(5) },
-  { id: "kisspeptin-10", name: "Kisspeptin-10", cat: "peptide", aka: "kiss10", formula: "C63H83N17O14", mw: 1302.4,
-    sizes: mg(10) },
   { id: "ghk-cu", name: "GHK-Cu", cat: "peptide", seq: "GHK · Cu(II)", formula: "C14H22CuN6O4", mw: 401.9,
     sizes: mg(50, 100) },
-  { id: "snap-8", name: "Snap-8", cat: "peptide", aka: "acetyl octapeptide-3", mw: 1075.2, cas: "868844-74-0",
-    sizes: mg(10) },
 
   // ---- blends ----
   { id: "bpc-tb", name: "BPC-157 + TB-500", cat: "blend", aka: "BB10 BB20",
@@ -84,30 +64,14 @@ const PRODUCTS = [
     sizes: mg(80) },
   { id: "glow", name: "GLOW", cat: "blend", aka: "GLOW70",
     sizes: mg(70) },
-  { id: "lipo-c", name: "Lipo-C", cat: "blend",
-    sizes: [o("With B12"), o("Without B12")] },
 
   // ---- bioregulators ----
   { id: "epitalon", name: "Epitalon", cat: "bioreg", aka: "EPI", seq: "AEDG", formula: "C14H22N4O9", mw: 390.4, cas: "307297-39-8",
     sizes: mg(10, 50) },
-  { id: "thymalin", name: "Thymalin", cat: "bioreg", aka: "TY10",
-    sizes: mg(10) },
-  { id: "vesugen", name: "Vesugen", cat: "bioreg", aka: "VE20", seq: "KED",
-    sizes: mg(10, 20) },
-  { id: "cortagen", name: "Cortagen", cat: "bioreg", seq: "AEDP",
-    sizes: mg(20) },
-  { id: "cartalax", name: "Cartalax", cat: "bioreg", aka: "CT20", seq: "AED",
-    sizes: mg(20) },
 
   // ---- small molecules & cofactors ----
   { id: "nad", name: "NAD+", cat: "small", formula: "C21H27N7O14P2", mw: 663.4, cas: "53-84-9",
     sizes: mg(500, 1000) },
-  { id: "5-amino-1mq", name: "5-Amino-1MQ", cat: "small", aka: "5AM 10AM",
-    sizes: mg(5, 10, 50) },
-  { id: "slu-pp-332", name: "SLU-PP-332", cat: "small", aka: "SLUPP332", formula: "C18H14N2O2", mw: 290.3, cas: "303760-60-3",
-    sizes: [o("Standard vial")] },
-  { id: "dihexa", name: "Dihexa", cat: "small", formula: "C27H44N4O5", mw: 504.7, cas: "1401708-83-5",
-    sizes: mg(10) },
 ];
 
 // Common to every product
@@ -132,3 +96,14 @@ const LOTS = PRODUCTS.flatMap((p, i) =>
     sample: true,
   }))
 );
+
+// Real lab reports: headline results here, the full report as a PDF in media/reports/.
+// Batch, task numbers and verification keys stay off the site (research/lab-reports.json, given on request).
+const REPORTS = [
+  { productId: "glp1-r", size: "10 mg", date: "2026-07-30", lab: "Janoshik Analytical", purity: "99.009", identity: "Confirmed (blind test)",
+    content: "10.60 mg", verify: "janoshik.com/verify", pdf: "media/reports/glp1-r-10mg-2026-07-30.pdf" },
+  { productId: "tesamorelin", size: "10 mg", date: "2026-09-01", lab: "Independent partner lab (report by tjqxgd.com)", purity: "99.52", identity: "Conforms (LC-MS)",
+    content: "11.98 mg", appearance: "White powder", pdf: "media/reports/tesamorelin-10mg-2026-09-01.pdf" },
+];
+// a real report replaces that product's sample lots
+LOTS.splice(0, LOTS.length, ...REPORTS, ...LOTS.filter((l) => !REPORTS.some((r) => r.productId === l.productId)));

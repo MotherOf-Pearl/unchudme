@@ -3,3 +3,5 @@ tools/vials/preview.png
 # private: supplier cost sheet and the margin report built from it
 research/supplier-costs.json
 research/pricing-report.md
+# private: batch numbers, lab task numbers and verification keys (given to customers on request)
+research/lab-reports.json

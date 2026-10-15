@@ -44,7 +44,7 @@ await page.evaluateOnNewDocument((m) => { window.MARK_PARTS = m; }, MARK);
 await page.goto(`http://127.0.0.1:8767/${mode === 'hero' || mode === 'og' ? mode : 'vial'}.html`);
 await page.waitForFunction('window.READY === true', { timeout: 60000 });
 
-const lotOf = (id) => ctx.LOTS.find((l) => l.productId === id).lot;
+const lotOf = (id) => ctx.LOTS.find((l) => l.productId === id && l.lot)?.lot ?? ""; // real reports carry no public lot code
 if (mode === 'og') {
   const specs = OG.map(([id, name, option]) => { const p = ctx.PRODUCTS.find((x) => x.id === id); return { name: name ?? p.name, option: option ?? vialText(p.sizes[0].label), lot: lotOf(id) }; });
   await page.evaluate((s) => window.renderOG(s), specs);

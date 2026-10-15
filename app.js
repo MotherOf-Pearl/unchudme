@@ -174,18 +174,19 @@ function optionSummary(p) {
 // A batch's lab report: the panel the reports cover (purity, identity, measured content)
 function coaPanel(l) {
   const p = byId(l.productId);
-  const rows = [["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`], ["Identity (mass spec)", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
-    ...(l.content ? [["Content", `≥ ${l.size}`, l.content]] : [])];
+  const rows = [["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`], ["Identity", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
+    ...(l.content ? [["Content", `≥ ${l.size}`, l.content]] : []), ...(l.appearance ? [["Appearance", "White to off-white powder", l.appearance]] : [])];
   return `<div class="coa-panel" id="lab-report">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div><div class="eyebrow">Lab report</div><h3 style="margin:0">${esc(p.name)}</h3>
-      <p class="muted mono" style="margin:6px 0 0">Batch ${l.lot} · tested ${l.date}</p></div>
+      <p class="muted mono" style="margin:6px 0 0">${l.sample ? "" : `${esc(l.size)} · `}Tested ${l.date}</p></div>
       ${l.sample ? `<div><span class="sample-badge">Sample data — not a real result</span></div>` : ""}</div>
     <div class="table-scroll" style="margin-top:18px"><table class="coa-table">
       <tr><th>Test</th><th>Specification</th><th>Result</th></tr>
       ${rows.map((r) => `<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="mono pass">${r[2]}</td></tr>`).join("")}
     </table></div>
-    <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${l.lab}. A printed copy ships with every order.</p></div>`;
+    <p class="muted" style="font-size:.85rem;margin-top:16px">Laboratory: ${esc(l.lab)}. A printed copy ships with every order.${l.verify ? ` Verify it at ${l.verify} with the key printed on the report.` : ""}</p>
+    ${l.pdf ? `<a class="btn" href="${l.pdf}" download target="_blank" rel="noopener" style="margin-top:6px">Download full report (PDF)</a>` : ""}</div>`;
 }
 const latestLot = (id) => LOTS.filter((l) => l.productId === id).sort((a, b) => b.date.localeCompare(a.date))[0];
 
@@ -287,12 +288,13 @@ const pages = {
   coa() {
     // old ?batch= links land on the product that batch belongs to
     const old = new URLSearchParams(location.search), code = old.get("batch") ?? old.get("lot");
-    const hit = code && LOTS.find((x) => x.lot.toLowerCase() === code.trim().toLowerCase());
+    const hit = code && LOTS.find((x) => x.lot?.toLowerCase() === code.trim().toLowerCase());
     if (hit) return location.replace(`product.html?id=${hit.productId}#lab-report`);
     const ids = [...new Set(LOTS.map((l) => l.productId))];
     $("#coa-list").innerHTML = ids.map((id) => { const l = latestLot(id), p = byId(id);
-      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}</a></td><td class="mono">${l.lot}</td><td>${l.date}</td>
-        <td class="mono">${l.purity}%</td><td class="mono">${l.content ?? "—"}</td></tr>`; }).join("");
+      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}</a></td><td>${l.date}</td>
+        <td class="mono">${l.purity}%</td><td class="mono">${l.content ?? "—"}</td>
+        <td>${l.pdf ? `<a href="${l.pdf}" download target="_blank" rel="noopener">PDF</a>` : `<span class="sample-badge">Sample</span>`}</td></tr>`; }).join("");
   },
 };
 
