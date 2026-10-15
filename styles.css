@@ -329,6 +329,8 @@ main.portal + footer.site, .portal ~ footer.site { margin-top: 0; }
 .acct-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .acct-head b { display: block; font-size: 1.15rem; }
 .acct-head .muted { font-size: .9rem; }
+.acct-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.acct-note-top { margin: 0 0 22px !important; }
 .acct-badge { padding: 6px 12px; border-radius: 999px; font: 600 .78rem var(--sans); background: var(--warn-soft); color: var(--warn); }
 .acct-badge.ok { background: rgba(80,200,120,.14); color: #7fd99c; }
 .acct form { display: grid; }

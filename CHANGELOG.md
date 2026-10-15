@@ -6,6 +6,8 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 ## 2026-10-15 — Customer accounts (Supabase)
 
+- **Profile badges** split in two so they're not confused: "Email verified" and "Research check pending" / "Verified researcher". Spacing under the research-check note fixed.
+
 - **Account page** (`account.html`, `js/account.js`): sign in, create account (name, email, password, institution, research area, research-use confirmation), forgot / reset password, and a profile view with a "Verification pending / Verified researcher" badge and editable details. The header profile icon now opens it.
 - **Supabase** project "Aura Pharma" for sign-in and the `profiles` table; schema in `supabase/migrations/`; browser library vendored as `vendor/supabase.js` (supabase-js 2.118.0). Customers can read and edit only their own profile and can't set their own verified flag (tested). Full detail in ACCOUNTS.md.
 - Still needed before customers can sign up for real: site URL / redirect URLs and a custom email sender in the Supabase dashboard (ACCOUNTS.md → Set-up still needed).

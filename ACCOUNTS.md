@@ -11,7 +11,7 @@ How customer accounts work on the Aura Pharma site. Built 2026-10-15 on **Supaba
   - **Sign in** (email + password, show-password eye) and **Create account** tabs. `account.html?tab=signup` opens straight on Create account.
   - **Create account** asks for full name, email, password (8+), institution or company (required), research area (optional), and a research-use confirmation (21+, qualified researcher, lab use only). The details go to the profile.
   - **Forgot your password?** emails a reset link; the link brings the customer back to the account page to choose a new password.
-  - **Signed in:** name and email, a **"Verification pending" / "Verified researcher"** badge, editable name / institution / research area, Save, Sign out.
+  - **Signed in:** name and email, two badges — **"Email verified"** (the customer confirmed their email; required to sign in) and **"Research check pending" / "Verified researcher"** (Aura Pharma's manual research-affiliation check, the `verified` column) — then editable name / institution / research area, Save, Sign out.
 - **Who can sign up:** anyone (open sign-up). Every account starts **unverified**; Aura Pharma verifies research affiliation by hand before the first order. Switching to invite-only is a Supabase setting (Authentication → Sign In / Providers → turn off "Allow new users to sign up").
 
 Not built yet: checkout tied to accounts, order history, the affiliate portal's sign-in (it will use these same accounts with `role = 'affiliate'`), an admin screen for verifying customers.

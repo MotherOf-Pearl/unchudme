@@ -101,8 +101,11 @@
     if (error || !p) { box.innerHTML = `<p class="portal-msg err">Couldn't load your profile (${e(error?.message ?? "not found")}).</p><button class="btn" id="out">Sign out</button>`; box.querySelector("#out").onclick = signOut; return; }
     box.innerHTML = `
       <div class="acct-head"><div><b>${e(p.full_name || p.email)}</b><span class="muted">${e(p.email)}</span></div>
-        <span class="acct-badge${p.verified ? " ok" : ""}">${p.verified ? "Verified researcher" : "Verification pending"}</span></div>
-      ${p.verified ? "" : `<p class="acct-note">We check research affiliation before your first order ships. We'll email you if we need anything.</p>`}
+        <div class="acct-badges">
+          ${user.email_confirmed_at ? `<span class="acct-badge ok">Email verified</span>` : `<span class="acct-badge">Email not confirmed</span>`}
+          <span class="acct-badge${p.verified ? " ok" : ""}">${p.verified ? "Verified researcher" : "Research check pending"}</span>
+        </div></div>
+      ${p.verified ? "" : `<p class="acct-note acct-note-top">We check research affiliation before your first order ships. We'll email you if we need anything.</p>`}
       <form id="f" novalidate>
         ${field("name", "Full name", "text", `autocomplete="name" value="${e(p.full_name)}"`)}
         ${field("inst", "Institution or company", "text", `autocomplete="organization" value="${e(p.institution)}"`)}
