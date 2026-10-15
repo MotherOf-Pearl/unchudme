@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+  Aura Pharma certificate template. STAND-IN DESIGN: replace freely, keep the placeholders.
+  Filled by generate.mjs:
+    {{product}} {{size}} {{lab}} {{labReportNo}} {{testDate}} {{receivedDate}} {{issuedDate}}
+    {{method}} {{verifyKey}} {{verifyUrl}} {{notes}}
+    {{{resultsRows}}}            the results table rows (<tr>…</tr>), already escaped
+    {{#name}} … {{/name}}        section kept only when name has a value
+  Relative paths resolve from this folder (the site's media is at ../../media/).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Certificate of Analysis · {{product}} {{size}}</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 10.5pt/1.45 "Segoe UI", Inter, Arial, sans-serif; color: #10161c; }
+  header { background: #05080b; color: #e6f3ff; padding: 26px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .wordmark b { font-size: 20pt; letter-spacing: .18em; font-weight: 700; }
+  .wordmark small { display: block; font-size: 8pt; letter-spacing: .5em; color: #7cc4ff; }
+  header .doc { text-align: right; font-size: 9pt; color: #9fb6c9; }
+  header .doc strong { display: block; font-size: 13pt; color: #e6f3ff; letter-spacing: .04em; }
+  main { padding: 30px 40px; }
+  h1 { font-size: 18pt; margin: 0 0 4px; }
+  .sub { color: #5b6b78; margin: 0 0 22px; }
+  dl { display: grid; grid-template-columns: 150px 1fr; gap: 6px 16px; margin: 0 0 26px; }
+  dt { color: #5b6b78; } dd { margin: 0; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
+  th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; color: #5b6b78; border-bottom: 1.5px solid #10161c; padding: 6px 8px; }
+  td { padding: 8px; border-bottom: 1px solid #dde4ea; }
+  td.result { font-weight: 700; }
+  .box { border: 1px solid #dde4ea; border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; }
+  footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 40px; font-size: 8pt; color: #5b6b78; border-top: 1px solid #dde4ea; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wordmark"><b>ΛURΛ</b><small>PHARMA</small></div>
+  <div class="doc"><strong>CERTIFICATE OF ANALYSIS</strong>Issued {{issuedDate}}</div>
+</header>
+<main>
+  <h1>{{product}} {{size}}</h1>
+  <p class="sub">Research use only. Not for human or veterinary use.</p>
+
+  <dl>
+    <dt>Testing laboratory</dt><dd>{{lab}}</dd>
+    <dt>Lab report no.</dt><dd>{{labReportNo}}</dd>
+    {{#receivedDate}}<dt>Sample received</dt><dd>{{receivedDate}}</dd>{{/receivedDate}}
+    <dt>Analysed</dt><dd>{{testDate}}</dd>
+    {{#method}}<dt>Method</dt><dd>{{method}}</dd>{{/method}}
+  </dl>
+
+  <table>
+    <thead><tr><th>Test</th><th>Method</th><th>Specification</th><th>Result</th></tr></thead>
+    <tbody>{{{resultsRows}}}</tbody>
+  </table>
+
+  {{#notes}}<div class="box">{{notes}}</div>{{/notes}}
+  {{#verifyKey}}<div class="box">Verify this result on the laboratory's own website, {{verifyUrl}}, with key <strong>{{verifyKey}}</strong>.</div>{{/verifyKey}}
+</main>
+<footer>
+  Analysis performed by {{lab}}, an independent third-party laboratory, report {{labReportNo}}. Results apply to the sample tested.
+  Aura Pharma issued this certificate from that report; the original is kept on file and available on request.
+</footer>
+</body>
+</html>

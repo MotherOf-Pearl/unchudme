@@ -1,0 +1,19 @@
+{
+  "productId": "bpc-157",
+  "product": "BPC-157",
+  "size": "10 mg",
+  "lab": "Example Analytical Lab",
+  "labReportNo": "000000",
+  "receivedDate": "2026-01-05",
+  "testDate": "2026-01-12",
+  "method": "HPLC-UV, LC-MS",
+  "verifyKey": "EXAMPLEKEY",
+  "verifyUrl": "example-lab.com/verify",
+  "notes": "EXAMPLE DATA ONLY. Not a real result.",
+  "results": [
+    { "test": "Identity", "method": "LC-MS", "spec": "Conforms", "result": "Conforms" },
+    { "test": "Purity", "method": "HPLC-UV", "spec": "≥ 98.0%", "result": "99.12%" },
+    { "test": "Content", "method": "HPLC-UV", "spec": "≥ 10 mg", "result": "10.41 mg" },
+    { "test": "Appearance", "method": "Visual", "spec": "White powder", "result": "White powder" }
+  ]
+}

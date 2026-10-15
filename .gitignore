@@ -5,3 +5,6 @@ research/supplier-costs.json
 research/pricing-report.md
 # private: batch numbers, lab task numbers and verification keys (given to customers on request)
 research/lab-reports.json
+.wrangler/
+tools/coa/out/
+research/coa/
