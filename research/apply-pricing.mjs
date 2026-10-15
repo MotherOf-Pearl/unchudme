@@ -54,8 +54,11 @@ for (const r of raw.prices) {
 
 const round = (n) => Math.round(n) - 0.01;   // $88.4 → $87.99, $88.6 → $88.99
 // Manual prices — win over the competitor average.
+// GLP1-R (2026-10-15): a per-mg ladder matched to Mile High / Rebirth at 5 mg ($54.99) and just under the market above
+// that; the averages had put 5 mg above 10 mg and copied one outlier for 60 mg.
 const OVERRIDES = {
   tesamorelin: { "10 mg": 79.99 },
+  "glp1-r": { "5 mg": 54.99, "10 mg": 72.99, "20 mg": 129.99, "30 mg": 164.99, "40 mg": 199.99, "60 mg": 269.99 },
 };
 const prices = {}; const rows = [];
 for (const p of PRODUCTS) for (const s of p.sizes) {

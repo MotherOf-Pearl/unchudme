@@ -4,6 +4,11 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — GLP1-R pricing ladder
+
+- **GLP1-R prices** set by hand as a per-mg ladder (`OVERRIDES` in `research/apply-pricing.mjs`): 5 mg $54.99 · 10 mg $72.99 · 20 mg $129.99 · 30 mg $164.99 · 40 mg $199.99 · 60 mg $269.99. Matches Mile High and Rebirth Labs at 5 mg and sits just under the market above that. Fixes two errors from averaging competitor prices: 5 mg had cost more than 10 mg ($74.99 vs $70.99), and 60 mg ($459.99) was copied from a single outlier.
+- **Home**: lab-reports tile ends "A printed copy ships with every order." (the lab-verification clause removed).
+
 ## 2026-10-15 — Static product gallery; domain live
 
 - **Product page**: the image / gallery no longer follows you down the page (it was sticky); it stays in place and scrolls away with the page.
