@@ -4,6 +4,12 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Profile icon, handoff doc
+
+- **Header**: profile (account) icon now on desktop too, between the nav and the cart. Placeholder: nothing behind it yet.
+- **Affiliate page**: grid pattern removed from the background; just the drifting stars.
+- **HANDOFF.md** added: the starting point for picking the project up again (state, how to run and ship, where everything lives, open items).
+
 ## 2026-10-15 — Hero motion, specs placement, Quality page
 
 - **Home**: "Browse certificates" link removed from the lab reports tile; the research-use tile adds "Request full lab documentation from info@aurapharma.us".

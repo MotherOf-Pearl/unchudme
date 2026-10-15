@@ -294,6 +294,7 @@ footer.site .legal { margin-top: 32px; padding-top: 20px; border-top: 1px solid 
 
 /* Affiliate portal: a dark page with one sign-in card */
 .portal { min-height: calc(100vh - 180px); padding: 96px 0 120px; }
+.portal.dark-band::before { display: none; }   /* no grid: just the starfield */
 .portal h1 { text-align: center; font-size: clamp(2.2rem, 5vw, 3.6rem); letter-spacing: -.02em; margin: 0 0 56px; }
 .portal-card { max-width: 620px; margin: 0 auto; padding: 36px 36px 32px; border-radius: 22px;
   background: linear-gradient(180deg, rgba(124,196,255,.07), rgba(124,196,255,.03)), var(--surface);

@@ -9,6 +9,7 @@ Static site (no build step). Open `index.html` in a browser.
 - `media/` — rendered vial photos and the home-page hero shot.
 
 ## Docs
+- [HANDOFF.md](HANDOFF.md) — **start here**: current state, how to run and ship, where everything lives, open items.
 - [CERTIFICATIONS.md](CERTIFICATIONS.md) — the certificate system: lab reports, batch IDs, Cloudflare storage, generator, publishing, lookups.
 - [CHANGELOG.md](CHANGELOG.md) — what changed and why.
 
