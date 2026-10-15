@@ -1,4 +1,4 @@
-// Live home-page hero: three sleek vials floating over the page with idle motion and a little pointer parallax.
+// Live home-page hero: three sleek vials floating over the page with idle motion (they don't follow the pointer).
 // mountHero(container, { mark, specs: [left, centre, right], animate }) → Promise<canvas>. Throws if WebGL is unavailable.
 import * as THREE from 'three';
 import { makeVial, studioEnvironment, FONTS } from './vial-model.js';
@@ -53,17 +53,13 @@ export async function mountHero(container, { mark, specs, animate = true }) {
   };
   resize(); new ResizeObserver(() => { resize(); if (!animate) renderer.render(scene, camera); }).observe(container);
 
-  // idle motion: each vial floats and sways on its own phase; the rig eases toward the pointer
-  const pointer = { x: 0, y: 0 };
-  addEventListener('pointermove', (e) => { pointer.x = e.clientX / innerWidth * 2 - 1; pointer.y = e.clientY / innerHeight * 2 - 1; });
+  // idle motion: each vial floats and sways on its own phase
   const pose = (t) => {
     vials.forEach((v, i) => {
       v.group.position.y = 0.32 + 0.14 * Math.sin(t * 0.9 + i * 2.1);
       v.group.rotation.y = v.baseYaw + 0.22 * Math.sin(t * 0.42 + i * 1.7);
       v.group.rotation.z = 0.03 * Math.sin(t * 0.65 + i * 2.6);
     });
-    rig.rotation.y += (pointer.x * 0.14 - rig.rotation.y) * 0.04;
-    rig.rotation.x += (pointer.y * 0.04 - rig.rotation.x) * 0.04;
   };
 
   if (!animate) { pose(0); renderer.render(scene, camera); return canvas; }

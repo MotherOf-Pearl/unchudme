@@ -1,6 +1,6 @@
 // Home hero backdrop: a starfield over the curve of a planet, drawn on a 2D canvas behind the copy and vials.
-// Motion: each star floats in its own slow, small loop (a few px over tens of seconds, nearer stars a little more),
-// and stars and planet shift slightly with the pointer (parallax). Reduced-motion users get a still sky.
+// Motion: the whole starfield drifts slowly in one direction (leftward), nearer stars a little faster, wrapping
+// around the edges. Nothing follows the pointer. Reduced-motion users get a still sky.
 // The canvas is sized to the hero, so nothing reaches past the dark band.
 (function () {
   const canvas = document.querySelector(".hero-space");
@@ -20,26 +20,19 @@
     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     seed = 7;
     stars = Array.from({ length: Math.round((w * h) / 2600) }, () => {
-      const depth = rand();                      // 0 far … 1 near: nearer stars are bigger, brighter and move more
-      // float: an ellipse of 1.5–6 px, one lap every ~40–120 s, each star at its own phase
-      return { x: rand() * w, y: rand() * h, r: 0.35 + depth * depth * 1.1, a: 0.25 + depth * 0.6, depth,
-        fa: 1.5 + depth * 4.5, fb: 1 + rand() * (1 + depth * 3), fs: (0.05 + rand() * 0.11) * (rand() < 0.5 ? -1 : 1), fp: rand() * Math.PI * 2 };
+      const depth = rand();                      // 0 far … 1 near: nearer stars are bigger, brighter and drift faster
+      return { x: rand() * w, y: rand() * h, r: 0.35 + depth * depth * 1.1, a: 0.25 + depth * 0.6, depth, v: 2 + depth * 6 }; // v: px/s
     });
   };
 
-  // pointer, eased; -1…1 from the viewport centre
-  const target = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
-  if (!still) addEventListener("pointermove", (e) => { target.x = e.clientX / innerWidth * 2 - 1; target.y = e.clientY / innerHeight * 2 - 1; });
-
-  const t0 = performance.now();
+  // seconds of drift so far; only advances while the sky is on screen, so it never jumps
+  let t = 0, last = 0;
   const draw = () => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    const t = still ? 0 : (performance.now() - t0) / 1000;
 
     for (const s of stars) {
-      const k = 6 + s.depth * 22, ph = s.fp + t * s.fs;
-      let x = (s.x + Math.cos(ph) * s.fa - cur.x * k) % w, y = (s.y + Math.sin(ph) * s.fb - cur.y * k * 0.6) % h;
+      let x = (s.x - t * s.v) % w, y = (s.y - t * s.v * 0.12) % h;   // leftward, very slightly upward
       if (x < 0) x += w; if (y < 0) y += h;
       ctx.globalAlpha = s.a; ctx.fillStyle = "#cfe9ff";
       ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
@@ -47,7 +40,7 @@
     ctx.globalAlpha = 1;
 
     // planet: a huge circle low in the band, its crown under the vials
-    const R = Math.max(w, h * 1.6) * 0.95, apexX = w * (w > 860 ? 0.76 : 0.5) - cur.x * 8, apexY = h * (w > 860 ? 0.84 : 0.86) - cur.y * 5;
+    const R = Math.max(w, h * 1.6) * 0.95, apexX = w * (w > 860 ? 0.76 : 0.5), apexY = h * (w > 860 ? 0.84 : 0.86);
     const cx = apexX, cy = apexY + R;
     // dawn: soft light pooled above the horizon
     const dawn = ctx.createRadialGradient(cx, apexY / 0.32, 0, cx, apexY / 0.32, w * 0.55); // drawn in the squashed space below
@@ -69,14 +62,13 @@
   };
 
   let raf = 0, visible = true;
-  const tick = () => {
-    cur.x += (target.x - cur.x) * 0.06; cur.y += (target.y - cur.y) * 0.06;
+  const tick = (now) => {
+    t += Math.min(0.1, last ? (now - last) / 1000 : 0); last = now;
     draw();
-    // keep going while the hero is on screen (the stars are always floating); a still sky stops once parallax settles
-    raf = visible && !document.hidden && (!still || Math.abs(target.x - cur.x) > 0.0005 || Math.abs(target.y - cur.y) > 0.0005) ? requestAnimationFrame(tick) : 0;
+    // keep drifting while the hero is on screen and the tab is visible
+    raf = visible && !document.hidden ? requestAnimationFrame(tick) : (last = 0);
   };
-  const wake = () => { if (!raf && visible) raf = requestAnimationFrame(tick); };
-  addEventListener("pointermove", wake);
+  const wake = () => { if (!raf && visible && !still) raf = requestAnimationFrame(tick); };
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; wake(); }).observe(canvas);
   document.addEventListener("visibilitychange", wake);
   new ResizeObserver(() => { layout(); draw(); }).observe(canvas);

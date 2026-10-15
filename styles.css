@@ -216,15 +216,6 @@ a.float-badge:hover { border-color: var(--accent); }
 .pdp .thumb[aria-pressed="true"] { border: 2px solid var(--accent); }
 .pdp .pdp-info .notice { margin-top: 18px; }
 .pdp .pdp-info .specs h3 { margin-top: 28px; }
-/* desktop: specifications sit beside the title and buy box, in the space to their right */
-@media (min-width: 1100px) {
-  .pdp .pdp-info { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); column-gap: 36px; align-items: start; }
-  .pdp .pdp-info .buy { grid-column: 1; grid-row: 1; }
-  .pdp .pdp-info .specs { grid-column: 2; grid-row: 1; }
-  .pdp .pdp-info .specs h3 { margin-top: 14px; }
-  .pdp .pdp-info .specs .spec th, .pdp .pdp-info .specs .spec td { font-size: .85rem; padding-top: 7px; padding-bottom: 7px; }
-  .pdp .pdp-info .notice, .pdp .pdp-info #coa-slot { grid-column: 1 / -1; }
-}
 .spec { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .spec th, .spec td { text-align: left; padding: 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
 .spec th { color: var(--muted); font-weight: 500; width: 40%; }

@@ -4,6 +4,12 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Hero motion, specs placement, Quality page
+
+- **Home hero**: the stars drift slowly in one direction (leftward, nearer stars a little faster). Nothing follows the mouse any more: the starfield, planet and 3D vials all ignore the pointer.
+- **Product page**: Specifications back under the buy box (the beside-the-title layout was reverted); the gallery stays.
+- **Quality page**: the "Current reports" and "Check it yourself" sections removed; certificates live on the product pages.
+
 ## 2026-10-15 — Fuller certificates, product gallery, affiliate portal
 
 - **Certificate layout** in the style of a manufacturer's COA: a product table (name, CAS, formula, molecular weight, sequence, quantity, form, storage, from the catalog) and a test table (test item, specification, result; method when the lab states one) with NLT specifications and a conclusion line when purity meets NLT 98.0%. Only tests the lab actually ran are listed. All 17 certificates re-issued.
@@ -11,7 +17,6 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 - **Product page gallery**: vial and certificate thumbnails under the main image; the certificate shows in the main window with a "Download PDF" button and opens full size when clicked. Follows the selected size.
 - **Specifications beside the title** on desktop (in the space right of the buy box); stacked as before on tablet and mobile. Spec values wrap by word instead of mid-word.
 - **Affiliate portal** (`affiliate.html`, "Affiliates" in the nav): username/email and password sign-in card with show-password. No account system yet: signing in says the portal isn't open yet.
-- **Home hero**: the stars float slowly in small loops (still for reduced-motion users).
 
 ## 2026-10-15 — Lab reports for 17 products and sizes
 
