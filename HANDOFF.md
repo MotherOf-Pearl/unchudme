@@ -15,7 +15,7 @@ Start here when picking the project up again. It says what the site is, how to r
 
 1. **Code:** `C:\Users\jackb\code\peptide-store` (this repo, `main` branch). Run `git pull` first: a Telegram bot (the "claude" VM on the home server) also pushes here.
 2. **See it locally:** `python -m http.server 8800 --bind 127.0.0.1` in the repo, then open http://127.0.0.1:8800 (Ctrl+F5 after changes; the browser caches `app.js` and `styles.css`).
-3. **Ship it:** commit and push to `main` on GitHub `Peptide-Store/unchudme`. Vercel deploys to **https://unchudme.vercel.app** within about a minute. Push as the GitHub account **MotherOf-Pearl** (token stored in Windows Credential Manager), not `jack-pluton`, which has no access.
+3. **Ship it:** commit and push to `main` on GitHub `Peptide-Store/unchudme`. Vercel deploys to **https://www.aurapharma.us** (also https://unchudme.vercel.app) within about a minute. Push as the GitHub account **MotherOf-Pearl** (token stored in Windows Credential Manager), not `jack-pluton`, which has no access.
 4. **Certificates:** everything is in `tools/coa/` and described in CERTIFICATIONS.md. Most common request: "give me the lab work for AP-0008" → `cd tools/coa && node lookup.mjs AP-0008`.
 5. **How we work:** changes are made and checked locally first; they go live only when Jack says "push".
 
@@ -29,7 +29,7 @@ Aura Pharma: a static storefront for research-use-only peptides. No build step; 
 |---|---|---|---|
 | Home | `index.html` | (logo) | dark hero with a drifting starfield and planet horizon (`js/space.js`), live 3D vials on desktop (`js/hero3d.js`, three.js in `vendor/`), best sellers, "Independent lab reports" tile (shows BPC-157's real report) and "For research use only" tile (ends with "Request full lab documentation from info@aurapharma.us") |
 | Shop | `shop.html` | Shop | catalog grid with search, categories, sort |
-| Product | `product.html?id=…` | — | vial / certificate **gallery**, price, stock, sizes, Specifications (under the buy box), lab report panel for the **selected size** with "Download certificate" |
+| Product | `product.html?id=…` | — | vial / certificate **gallery** (scrolls with the page, not sticky), price, stock, sizes, Specifications (under the buy box), lab report panel for the **selected size** with "Download certificate" |
 | FAQ | `faq.html` | FAQ | |
 | Affiliate portal | `affiliate.html` | Affiliates | sign-in card (username/email, password with show/hide) over a drifting starfield (no grid). **Not connected:** signing in says the portal isn't open yet |
 | Lab reports | `coa.html` | no (footer only) | one row per certified product and size, then products still on sample data |
@@ -107,7 +107,8 @@ Back up the git-ignored `research/` files: they exist only on that machine (the 
 ## 5. Open items
 
 **Needs Jack (decisions, accounts, outside parties)**
-- [ ] **Domain** aurapharma.us: attach to Vercel; put it on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; set up the **info@aurapharma.us** inbox (now printed on the home page).
+- [x] **Domain on Vercel:** live at https://www.aurapharma.us (aurapharma.us redirects to www).
+- [ ] **Rest of the domain work:** link-preview tags (`og:image`, `twitter:image`) in every page's head still point to unchudme.vercel.app; put the domain on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; set up the **info@aurapharma.us** inbox (now printed on the home page).
 - [ ] **Certificate footer domain** says aurapharma.co; the site uses aurapharma.us. Pick one.
 - [ ] **Supplier check:** do the vials on sale come from the batches tested in 2025 (11 of the 17 certificates)?
 - [ ] **TB-500 in the 5 + 5 blend** (AP-0013) was measured as the 889 Da fragment, not thymosin β4 like every other report. Confirm with the supplier.

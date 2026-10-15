@@ -4,6 +4,11 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Static product gallery; domain live
+
+- **Product page**: the image / gallery no longer follows you down the page (it was sticky); it stays in place and scrolls away with the page.
+- **Domain**: the site is live at https://www.aurapharma.us (aurapharma.us redirects there). The unchudme.vercel.app address still works.
+
 ## 2026-10-15 — Profile icon, handoff doc
 
 - **Header**: profile (account) icon now on desktop too, between the nav and the cart. Placeholder: nothing behind it yet.
