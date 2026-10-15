@@ -4,6 +4,10 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-15 — Support email
+
+- **support@aurapharma.us** replaces info@aurapharma.us on the home page ("Request full lab documentation from …") and in the docs. The mailbox exists; use it for the Supabase email sender too.
+
 ## 2026-10-15 — Customer accounts (Supabase)
 
 - **Profile badges** split in two so they're not confused: "Email verified" and "Research check pending" / "Verified researcher". Spacing under the research-check note fixed.

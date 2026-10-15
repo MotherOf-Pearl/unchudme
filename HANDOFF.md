@@ -28,7 +28,7 @@ Aura Pharma: a static storefront for research-use-only peptides. No build step; 
 
 | page | file | in the header nav? | notes |
 |---|---|---|---|
-| Home | `index.html` | (logo) | dark hero with a drifting starfield and planet horizon (`js/space.js`), live 3D vials on desktop (`js/hero3d.js`, three.js in `vendor/`), best sellers, "Independent lab reports" tile (shows BPC-157's real report) and "For research use only" tile (ends with "Request full lab documentation from info@aurapharma.us") |
+| Home | `index.html` | (logo) | dark hero with a drifting starfield and planet horizon (`js/space.js`), live 3D vials on desktop (`js/hero3d.js`, three.js in `vendor/`), best sellers, "Independent lab reports" tile (shows BPC-157's real report) and "For research use only" tile (ends with "Request full lab documentation from support@aurapharma.us") |
 | Shop | `shop.html` | Shop | catalog grid with search, categories, sort |
 | Product | `product.html?id=…` | — | vial / certificate **gallery** (scrolls with the page, not sticky), price, stock, sizes, Specifications (under the buy box), lab report panel for the **selected size** with "Download certificate" |
 | FAQ | `faq.html` | FAQ | |
@@ -111,7 +111,7 @@ Back up the git-ignored `research/` files: they exist only on that machine (the 
 
 **Needs Jack (decisions, accounts, outside parties)**
 - [x] **Domain on Vercel:** live at https://www.aurapharma.us (aurapharma.us redirects to www).
-- [ ] **Rest of the domain work:** link-preview tags (`og:image`, `twitter:image`) in every page's head still point to unchudme.vercel.app; put the domain on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; set up the **info@aurapharma.us** inbox (now printed on the home page).
+- [ ] **Rest of the domain work:** link-preview tags (`og:image`, `twitter:image`) in every page's head still point to unchudme.vercel.app; put the domain on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; set up the **support@aurapharma.us** inbox (now printed on the home page).
 - [ ] **Certificate footer domain** says aurapharma.co; the site uses aurapharma.us. Pick one.
 - [ ] **Supplier check:** do the vials on sale come from the batches tested in 2025 (11 of the 17 certificates)?
 - [ ] **TB-500 in the 5 + 5 blend** (AP-0013) was measured as the 889 Da fragment, not thymosin β4 like every other report. Confirm with the supplier.
