@@ -1,102 +1,67 @@
 <!doctype html>
-<html>
+<!--
+  Aura Pharma certificate template. STAND-IN DESIGN: replace freely, keep the placeholders.
+  Filled by generate.mjs:
+    {{product}} {{size}} {{lab}} {{labReportNo}} {{testDate}} {{receivedDate}} {{issuedDate}}
+    {{method}} {{verifyKey}} {{verifyUrl}} {{notes}}
+    {{{resultsRows}}}            the results table rows (<tr>…</tr>), already escaped
+    {{#name}} … {{/name}}        section kept only when name has a value
+  Relative paths resolve from this folder (the site's media is at ../../media/).
+-->
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<title>Certificate of Analysis · {{product}} {{size}}</title>
 <style>
-  @page { size: Letter; margin: 40px 84px; }
+  @page { size: A4; margin: 0; }
   * { box-sizing: border-box; }
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1f2b; font-size: 12px; margin: 0; }
-
-  /* Header banner with logo */
-  .banner { background: #06090e; margin: -40px -84px 22px; padding: 22px 84px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #2b6cb0; }
-  .banner img { height: 66px; display: block; }
-  .doc-title { text-align: right; }
-  .doc-title .t { font-size: 21px; font-weight: 700; letter-spacing: 1.5px; color: #ffffff; }
-  .doc-title .c { font-size: 10px; color: #9aa7b4; margin-top: 7px; line-height: 1.5; }
-
-  /* Top task block */
-  .task { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
-  .task .tn-label { color: #16457a; font-weight: 600; font-size: 15px; margin-right: 14px; }
-  .task .tn-box { background: #f1f4f8; border: 1px solid #e3e8ef; padding: 7px 18px; font-size: 14px; display: inline-block; min-width: 170px; }
-  .task .dates { text-align: right; font-size: 12.5px; line-height: 2; }
-  .task .dates .lab { color: #16457a; font-weight: 600; }
-  .task .dates .val { background: #f1f4f8; padding: 3px 12px; margin-left: 8px; }
-
-  /* Field rows (Client / Sample / Manufacturer / Batch) */
-  .field { display: flex; align-items: stretch; margin-bottom: 6px; }
-  .field .lbl { color: #16457a; font-weight: 600; font-size: 13px; width: 150px; display: flex; align-items: center; }
-  .field .val { flex: 1; background: #f1f4f8; padding: 9px 16px; font-size: 13.5px; border-radius: 2px; }
-
-  .section-h { font-size: 14px; font-weight: 700; color: #16457a; margin: 22px 0 8px; display: flex; align-items: center; gap: 10px; }
-  .section-h::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
-  .panel { background: #f1f4f8; border-left: 3px solid #16457a; padding: 12px 16px; font-size: 13px; line-height: 1.6; min-height: 50px; }
-
-  table.res { width: 100%; border-collapse: collapse; }
-  table.res td { padding: 10px 16px; border: 1.5px solid #2b6cb0; font-size: 13.5px; }
-  table.res td.k { width: 45%; }
-
-  .bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 28px; }
-  .bottom .ac .lbl { color: #16457a; font-weight: 600; font-size: 13px; }
-  .bottom .ac .val { background: #f1f4f8; padding: 5px 14px; font-size: 13.5px; margin-left: 8px; }
-  .sign { text-align: center; }
-  .sign .lbl { color: #16457a; font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-  .sign .line { width: 210px; border-bottom: 1px solid #1a1f2b; height: 40px; }
-  .sign .who { font-size: 10px; color: #6b7280; margin-top: 4px; }
-
-  .foot { margin-top: 28px; border-top: 2px solid #16457a; padding-top: 12px; font-size: 9.5px; color: #6b7280; line-height: 1.7; }
-  .ruo { color: #b02a37; font-weight: 700; }
+  body { margin: 0; font: 10.5pt/1.45 "Segoe UI", Inter, Arial, sans-serif; color: #10161c; }
+  header { background: #05080b; color: #e6f3ff; padding: 26px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .wordmark b { font-size: 20pt; letter-spacing: .18em; font-weight: 700; }
+  .wordmark small { display: block; font-size: 8pt; letter-spacing: .5em; color: #7cc4ff; }
+  header .doc { text-align: right; font-size: 9pt; color: #9fb6c9; }
+  header .doc strong { display: block; font-size: 13pt; color: #e6f3ff; letter-spacing: .04em; }
+  main { padding: 30px 40px; }
+  h1 { font-size: 18pt; margin: 0 0 4px; }
+  .sub { color: #5b6b78; margin: 0 0 22px; }
+  dl { display: grid; grid-template-columns: 150px 1fr; gap: 6px 16px; margin: 0 0 26px; }
+  dt { color: #5b6b78; } dd { margin: 0; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 22px; }
+  th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; color: #5b6b78; border-bottom: 1.5px solid #10161c; padding: 6px 8px; }
+  td { padding: 8px; border-bottom: 1px solid #dde4ea; }
+  td.result { font-weight: 700; }
+  .box { border: 1px solid #dde4ea; border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; }
+  footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 40px; font-size: 8pt; color: #5b6b78; border-top: 1px solid #dde4ea; }
 </style>
 </head>
 <body>
-  <div class="banner">
-    <img src="aura_logo_new.png" alt="Aura Pharma">
-    <div class="doc-title">
-      <div class="t">CERTIFICATE OF ANALYSIS</div>
-      <div class="c">aurapharma.co<br>qa@aurapharma.co</div>
-    </div>
-  </div>
+<header>
+  <div class="wordmark"><b>ΛURΛ</b><small>PHARMA</small></div>
+  <div class="doc"><strong>CERTIFICATE OF ANALYSIS</strong>Issued {{issuedDate}}</div>
+</header>
+<main>
+  <h1>{{product}} {{size}}</h1>
+  <p class="sub">Research use only. Not for human or veterinary use.</p>
 
-  <div class="task">
-    <div><span class="tn-label">Task Number</span><span class="tn-box">#204025</span></div>
-    <div class="dates">
-      <div><span class="lab">Testing ordered</span><span class="val">03 JUL 2026</span></div>
-      <div><span class="lab">Sample received</span><span class="val">24 JUL 2026</span></div>
-    </div>
-  </div>
+  <dl>
+    <dt>Testing laboratory</dt><dd>{{lab}}</dd>
+    <dt>Lab report no.</dt><dd>{{labReportNo}}</dd>
+    {{#receivedDate}}<dt>Sample received</dt><dd>{{receivedDate}}</dd>{{/receivedDate}}
+    <dt>Analysed</dt><dd>{{testDate}}</dd>
+    {{#method}}<dt>Method</dt><dd>{{method}}</dd>{{/method}}
+  </dl>
 
-  <div class="field"><div class="lbl">Client</div><div class="val">ERP</div></div>
-  <div class="field"><div class="lbl">Sample</div><div class="val">RT10</div></div>
-  <div class="field"><div class="lbl">Manufacturer</div><div class="val">ERP</div></div>
-  <div class="field"><div class="lbl">Batch</div><div class="val">ERP510002</div></div>
-
-  <div class="section-h">Sample description</div>
-  <div class="panel">See picture or pictures attached.</div>
-
-  <div class="section-h">Tests requested</div>
-  <div class="panel">Common GLP-1 peptide blind test (Semaglutide, Tirzepatide and Retatrutide)</div>
-
-  <div class="section-h">Results</div>
-  <table class="res">
-    <tr><td class="k">Retatrutide</td><td>10.60 mg</td></tr>
-    <tr><td class="k">Purity</td><td>99.009%</td></tr>
-    <tr><td class="k">&nbsp;</td><td>&nbsp;</td></tr>
+  <table>
+    <thead><tr><th>Test</th><th>Method</th><th>Specification</th><th>Result</th></tr></thead>
+    <tbody>{{{resultsRows}}}</tbody>
   </table>
 
-  <div class="section-h">Comments</div>
-  <div class="panel" style="min-height:66px">&nbsp;</div>
-
-  <div class="bottom">
-    <div class="ac"><span class="lbl">Analysis conducted</span><span class="val">30 JUL 2026</span></div>
-    <div class="sign">
-      <div class="lbl">Signature</div>
-      <div class="line"></div>
-      <div class="who">Aura Pharma QA</div>
-    </div>
-  </div>
-
-  <div class="foot">
-    <span class="ruo">FOR LABORATORY AND RESEARCH USE ONLY. NOT FOR HUMAN OR VETERINARY CONSUMPTION.</span><br>
-    Analysis performed by an independent third-party laboratory. This certificate reflects analysis of the specific sample/lot identified above and is valid only for that lot. Reproduction except in full is prohibited. Aura Pharma &middot; aurapharma.co
-  </div>
+  {{#notes}}<div class="box">{{notes}}</div>{{/notes}}
+  {{#verifyKey}}<div class="box">Verify this result on the laboratory's own website, {{verifyUrl}}, with key <strong>{{verifyKey}}</strong>.</div>{{/verifyKey}}
+</main>
+<footer>
+  Analysis performed by {{lab}}, an independent third-party laboratory, report {{labReportNo}}. Results apply to the sample tested.
+  Aura Pharma issued this certificate from that report; the original is kept on file and available on request.
+</footer>
 </body>
 </html>
