@@ -9,6 +9,7 @@
   const e = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const here = location.origin + location.pathname;            // where email links bring people back
   let recovering = /type=recovery/.test(location.hash);
+  let confirmed = false;   // set when the visitor lands here from the sign-up confirmation email
 
   const eye = `<button type="button" class="pw-toggle" aria-label="Show password" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>`;
   const field = (id, label, type = "text", attrs = "") => type === "password"
@@ -103,7 +104,7 @@
       <div class="acct-head"><div><b>${e(p.full_name || p.email)}</b><span class="muted">${e(p.email)}</span></div>
         <div class="acct-badges">
           ${user.email_confirmed_at ? `<span class="acct-badge ok">Email verified</span>` : `<span class="acct-badge">Email not confirmed</span>`}
-          <span class="acct-badge${p.verified ? " ok" : ""}">${p.verified ? "Verified researcher" : "Research check pending"}</span>
+          ${p.verified ? `<span class="acct-badge ok">Verified researcher</span>` : ""}
         </div></div>
       ${p.verified ? "" : `<p class="acct-note acct-note-top">We check research affiliation before your first order ships. We'll email you if we need anything.</p>`}
       <form id="f" novalidate>
@@ -115,6 +116,12 @@
         <div class="portal-links"><span class="muted">Member since ${new Date(p.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}</span><a href="#" id="out">Sign out</a></div>
       </form>`;
     if (note) msg(note);
+    // arrived from the confirmation email: say so, with a way into the shop
+    if (confirmed) {
+      confirmed = false;
+      box.insertAdjacentHTML("afterbegin", `<div class="acct-welcome"><b>Your email is confirmed.</b> Your account is ready.
+        <a class="btn small" href="shop.html">Continue to the shop →</a></div>`);
+    }
     box.querySelector("#out").onclick = (ev) => { ev.preventDefault(); signOut(); };
     box.querySelector("#f").onsubmit = async (ev) => {
       ev.preventDefault();
@@ -134,7 +141,10 @@
 
   sb.auth.onAuthStateChange((event) => {
     if (event === "PASSWORD_RECOVERY") { recovering = true; newPassword(); }
-    else if (event === "SIGNED_IN" && /access_token|code=/.test(location.href)) { history.replaceState(null, "", here); show(); }  // back from an email link
+    else if (event === "SIGNED_IN" && /access_token|code=/.test(location.href)) {   // back from an email link
+      confirmed = /type=signup|type=email/.test(location.href) || !/type=recovery/.test(location.href);
+      history.replaceState(null, "", here); show();
+    }
   });
   show();
 })();
