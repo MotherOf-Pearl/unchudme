@@ -106,8 +106,8 @@ function renderChrome() {
     <aside class="drawer" aria-label="Cart"><header><h3 style="margin:0">Cart</h3><button class="link-btn" data-close>Close</button></header>
       <div class="items"></div>
       <footer><div style="display:flex;justify-content:space-between"><span>Subtotal</span><b id="cart-sub">$0.00</b></div>
-        <p class="notice" style="margin:0">Checkout requires account verification of research affiliation. ${RUO_SHORT}</p>
-        <button class="btn primary" disabled>Checkout</button></footer>
+        <p class="notice" style="margin:0">${RUO_SHORT}</p>
+        <a class="btn primary cart-checkout" href="checkout.html">Checkout</a></footer>
     </aside>`);
 
   $(".menu-btn").onclick = (e) => { const n = $("nav.main"); n.classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", n.classList.contains("open")); };
@@ -138,10 +138,10 @@ function gate() {
 
 /* ---------- cart ---------- */
 const cart = () => store.get("cart", []);
-function addToCart(id, label, qty = 1) {
+function addToCart(id, label, qty = 1, open = true) {
   const c = cart(); const hit = c.find((i) => i.id === id && i.label === label);
   hit ? (hit.qty += qty) : c.push({ id, label, qty });
-  store.set("cart", c); renderCart(); openCart();
+  store.set("cart", c); renderCart(); if (open) openCart();
 }
 function renderCart() {
   const c = cart().filter((i) => byId(i.id)?.sizes.some((s) => s.label === i.label && s.price != null));
@@ -157,6 +157,7 @@ function renderCart() {
       <button class="link-btn" data-rm="${idx}">Remove</button></div><div class="mono">${money(price * i.qty)}</div></div>`;
   }).join("") : `<p class="muted" style="padding:20px 0">Your cart is empty.</p>`;
   $("#cart-sub").textContent = money(sub);
+  $(".cart-checkout").classList.toggle("is-disabled", !c.length);
   document.querySelectorAll("[data-rm]").forEach((b) => (b.onclick = () => {
     const c2 = cart(); c2.splice(+b.dataset.rm, 1); store.set("cart", c2); renderCart();
   }));
@@ -200,17 +201,33 @@ const noReport = (size) => `<div class="coa-panel" id="lab-report"><div class="e
   <p class="muted" style="margin:8px 0 0">The lab report for ${esc(size.label)} is coming soon. Other sizes of this product have reports; choose one above to see it.</p></div>`;
 
 const shownSize = (p) => p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0]; // picture the size on the shelf
+const PLUS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`;
+const CHECK = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
+// The whole card links to the product (the name's link stretches over it); the + button adds the pictured size to the cart.
 function productCard(p) {
-  return `<a class="card" href="product.html?id=${p.id}">
+  const s = shownSize(p), q = s.price != null ? s : priced(p)[0];
+  return `<div class="card">
     <div class="vial"><img src="${vialImg(p, shownSize(p))}" alt="${esc(p.name)} vial" loading="lazy" width="1000" height="1000">${stockPill(productAvailability(p))}</div>
     <div class="card-body">
       <span class="tag">${catLabel(p.cat)}</span>
-      <span class="name">${esc(p.name)}</span>
+      <a class="name card-link" href="product.html?id=${p.id}">${esc(p.name)}</a>
       <span class="meta">${optionSummary(p)}</span>
-      <span class="price">${priceTag(p)}<span class="go" aria-hidden="true">→</span></span>
+      <span class="price">${priceTag(p)}${q
+        ? `<button class="go quick-add" data-add="${p.id}" data-label="${esc(q.label)}" aria-label="Add ${esc(p.name)} ${esc(q.label)} to cart" title="Add ${esc(q.label)} to cart">${PLUS}</button>`
+        : `<span class="go" aria-hidden="true">→</span>`}</span>
     </div>
-  </a>`;
+  </div>`;
 }
+// quick add from any product card: add one vial, tick the button, bump the cart count (the drawer stays closed)
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".quick-add"); if (!b) return;
+  e.preventDefault();
+  addToCart(b.dataset.add, b.dataset.label, 1, false);
+  const label = b.getAttribute("aria-label");
+  b.classList.add("added"); b.innerHTML = CHECK; b.setAttribute("aria-label", "Added to cart");
+  const c = $(".cart-btn"); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+  clearTimeout(b._t); b._t = setTimeout(() => { b.classList.remove("added"); b.innerHTML = PLUS; b.setAttribute("aria-label", label); }, 1400);
+});
 
 /* ---------- pages ---------- */
 const pages = {

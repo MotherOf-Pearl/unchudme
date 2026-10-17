@@ -10,3 +10,4 @@ tools/coa/out/
 research/coa/
 tools/coa/.render-*.html
 supabase/.temp/
+tools/checkout/.prices.sql

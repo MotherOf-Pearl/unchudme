@@ -4,6 +4,18 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-17 — Guest checkout and quick add
+
+- **Continue as guest** on checkout: guests give an email and order without an account; their status link carries a private token (`&t=…`). Unverified accounts can now order too; guest and unverified orders get a research-use check before shipping (`buyer_verified` on each order). At most 5 orders per email per hour.
+- **Quick add** on product cards: the arrow is now a **+** button that adds the pictured size to the cart without opening the drawer (tick on the button, cart count bumps). The rest of the card still opens the product. Products with no price keep the arrow.
+
+## 2026-10-17 — Checkout and payment
+
+- **Checkout page** (`checkout.html`, `js/checkout.js`): the cart's Checkout button now opens it. Verified accounts enter a US shipping address and choose **pay by invoice** (bank transfer, invoice emailed by hand) or **crypto** (NOWPayments; switched off in `js/checkout-config.js` until the keys are set). Signed-out and not-yet-verified visitors are told what to do; sign-in returns to checkout.
+- **Orders in Supabase**: `orders` table, `catalog_prices` (server copy of `prices.js`, synced by `tools/checkout/sync-prices.mjs`) and `place_order()`, which re-prices the cart so the browser can't set a price. Customers see only their own orders. Shipping $15, free from $200.
+- **Order status view** (`checkout.html?order=AO-1001`) and a **Your orders** list on the account page.
+- **Crypto endpoints** `api/crypto-invoice.js` and `api/crypto-webhook.js` (signature-checked; marks orders paid). See CHECKOUT.md.
+
 ## 2026-10-15 — Account page tweaks
 
 - "Research check pending" badge removed; "Verified researcher" shows only once Aura Pharma has verified the account.

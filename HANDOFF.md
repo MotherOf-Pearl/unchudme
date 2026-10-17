@@ -5,10 +5,11 @@ Start here when picking the project up again. It says what the site is, how to r
 - [CERTIFICATIONS.md](CERTIFICATIONS.md) — the certificate (COA) system: lab reports, batch IDs, Cloudflare, generator, lookups.
 - [CHANGELOG.md](CHANGELOG.md) — every change, newest first, with the reasons.
 - [ACCOUNTS.md](ACCOUNTS.md) — customer accounts: the Supabase project, the profiles table and its rules, set-up still needed.
+- [CHECKOUT.md](CHECKOUT.md) — checkout, orders, invoice and crypto payment, marking orders paid/shipped, price sync.
 
 > **This repo is public** and Vercel serves the site from it. Never commit supplier names, supplier batch numbers, lab task numbers, verification keys, costs or margins. The private material listed under "Where things live" stays out of git.
 
-*Last updated: 2026-10-15.*
+*Last updated: 2026-10-17.*
 
 ---
 
@@ -32,7 +33,8 @@ Aura Pharma: a static storefront for research-use-only peptides. No build step; 
 | Shop | `shop.html` | Shop | catalog grid with search, categories, sort |
 | Product | `product.html?id=…` | — | vial / certificate **gallery** (scrolls with the page, not sticky), price, stock, sizes, Specifications (under the buy box), lab report panel for the **selected size** with "Download certificate" |
 | FAQ | `faq.html` | FAQ | |
-| Account | `account.html` | profile icon | sign in / create account / reset password / profile with verification badge (Supabase; see ACCOUNTS.md) |
+| Account | `account.html` | profile icon | sign in / create account / reset password / profile with verification badge and order list (Supabase; see ACCOUNTS.md) |
+| Checkout | `checkout.html` | cart → Checkout | accounts or guests; US address, pay by invoice or crypto, order status at `?order=AO-…` (see CHECKOUT.md) |
 | Affiliate portal | `affiliate.html` | Affiliates | sign-in card (username/email, password with show/hide) over a drifting starfield (no grid). **Not connected:** signing in says the portal isn't open yet |
 | Lab reports | `coa.html` | no (footer only) | one row per certified product and size, then products still on sample data |
 | Quality | `quality.html` | no (footer only) | what the labs test (purity, identity, content, appearance) |
@@ -117,14 +119,18 @@ Back up the git-ignored `research/` files: they exist only on that machine (the 
 - [ ] **TB-500 in the 5 + 5 blend** (AP-0013) was measured as the 889 Da fragment, not thymosin β4 like every other report. Confirm with the supplier.
 - [ ] **Reports for the uncertified products and sizes** (list in section 3).
 - [ ] **R2 API token** (R2 → Manage API tokens, Object Read & Write on the two buckets) to send customers expiring links to originals.
-- [ ] **Payments:** checkout button is disabled until a processor that accepts research-use products is connected.
+- [x] **Checkout** built 2026-10-17: invoice payment live; orders in Supabase (CHECKOUT.md).
+- [ ] **Crypto payments:** open a NOWPayments account and set the Vercel keys, then `crypto: true` in `js/checkout-config.js` (CHECKOUT.md → Turning crypto on).
+- [ ] **New-order alert:** nothing notifies you of new orders yet; check the `orders` table daily.
+- [ ] **Shipping price** is a placeholder: $15 flat, free from $200, US only. Confirm.
+- [ ] **Terms of sale / Privacy** footer links are still `#`; checkout asks customers to accept the terms of sale.
 - [ ] **Legal review** before selling, especially the GLP-1 class (FDA exposure).
 - [ ] **Repo visibility:** this repo is public. Making it private needs a Vercel plan that deploys private organisation repos, or moving the repo to the personal account.
 
 **Build when asked**
 - [ ] Affiliate portal backend: reuse the Supabase accounts (`role = 'affiliate'`), add applications and tracking. The page is a front end only.
 - [x] Customer accounts: sign-in, sign-up, password reset, profiles (Supabase). **Before real customers:** set the site URL and a custom email sender in Supabase (ACCOUNTS.md).
-- [ ] Verify-customers admin screen, order history, checkout tied to accounts.
+- [ ] Verify-customers and orders admin screen.
 - [ ] Certifications page as cards (search, purity, labelled vs measured, "View certificate"), designed in the style Jack shared; not started.
 - [ ] Automatic reading of values from lab PDFs (text for tjqxgd, OCR for Janoshik images).
 - [ ] Vial images still print old sample lot codes on their labels; re-render without them.

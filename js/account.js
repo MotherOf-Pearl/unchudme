@@ -10,6 +10,9 @@
   const here = location.origin + location.pathname;            // where email links bring people back
   let recovering = /type=recovery/.test(location.hash);
   let confirmed = false;   // set when the visitor lands here from the sign-up confirmation email
+  // ?next=checkout… sends a signed-in visitor back to checkout (same-site checkout pages only)
+  const next = new URLSearchParams(location.search).get("next");
+  const nextUrl = next && /^checkout(\.html)?(\?[\w=&%.-]*)?$/.test(next) ? next : null;
 
   const eye = `<button type="button" class="pw-toggle" aria-label="Show password" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>`;
   const field = (id, label, type = "text", attrs = "") => type === "password"
@@ -123,6 +126,7 @@
         <a class="btn small" href="shop.html">Continue to the shop →</a></div>`);
     }
     box.querySelector("#out").onclick = (ev) => { ev.preventDefault(); signOut(); };
+    orders(user);
     box.querySelector("#f").onsubmit = async (ev) => {
       ev.preventDefault();
       const v = (id) => box.querySelector("#" + id).value.trim() || null;
@@ -131,11 +135,24 @@
     };
   }
 
+  // ---- the customer's orders, newest first, under the profile
+  async function orders(user) {
+    const { data } = await sb.from("orders").select("order_no, total, status, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20);
+    if (!data?.length) return;
+    const label = { awaiting_payment: "Awaiting payment", paid: "Paid", shipped: "Shipped", cancelled: "Cancelled" };
+    box.insertAdjacentHTML("beforeend", `<div class="acct-orders"><b>Your orders</b>${data.map((o) => `
+      <a href="checkout.html?order=${e(o.order_no)}"><span class="mono">${e(o.order_no)}</span>
+        <span class="muted">${new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+        <span class="acct-badge ${o.status === "paid" || o.status === "shipped" ? "ok" : ""}">${label[o.status]}</span>
+        <span class="mono">$${(+o.total).toFixed(2)}</span></a>`).join("")}</div>`);
+  }
+
   async function signOut() { await sb.auth.signOut(); signedOut("in"); }
 
   async function show(note) {
     if (recovering) return newPassword();
     const { data: { session } } = await sb.auth.getSession();
+    if (session && nextUrl && !confirmed) return location.replace(nextUrl);
     session ? profile(session.user, note) : signedOut(new URLSearchParams(location.search).get("tab") === "signup" ? "up" : "in");
   }
 
