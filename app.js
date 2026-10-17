@@ -172,10 +172,9 @@ function closeCart() { $(".drawer").classList.remove("open"); $(".drawer-bg").cl
 
 /* ---------- shared pieces ---------- */
 // "6 sizes · 5–60 mg" for plain mg ranges, otherwise "2 options"
+// every size, e.g. "10 mg · 40 mg"
 function optionSummary(p) {
-  const n = p.sizes.length, mgs = p.sizes.map((s) => s.label.match(/^([\d.]+) mg$/)?.[1]);
-  if (n === 1) return esc(sizeText(p.sizes[0].label));
-  return mgs.every(Boolean) ? `${n} sizes · ${mgs[0]}–${mgs.at(-1)} mg` : `${n} options`;
+  return p.sizes.map((s) => esc(sizeText(s.label))).join(" · ");
 }
 // A batch's lab report: the panel the reports cover (purity, identity, measured content)
 function coaPanel(l) {
