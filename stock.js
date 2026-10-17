@@ -1,17 +1,35 @@
-// Vials on hand, by product id and option label. Update by hand after each sale or delivery.
+// GENERATED from Peptide-Store/aura-ops docs/inventory.md (the inventory source of truth) by tools/stock/sync-stock.mjs.
+// Don't edit by hand: update inventory.md, run the script, push.
 //   number > 0  → "In stock"
 //   0           → "Backordered" (sold out, kit on reorder)
 //   not listed  → "Ships in ~7 days" (ordered from the wholesaler on demand)
-// One wholesaler kit = 10 vials.
 const STOCK = {
-  "glp1-r": { "10 mg": 10 },
-  "glp1-t": { "10 mg": 10 },
-  "bpc-157": { "10 mg": 10 },
-  "tb-500": { "10 mg": 10 },
-  "bpc-tb": { "BPC 10 mg + TB 10 mg": 10 },
-  "ghk-cu": { "50 mg": 10 },
-  "tesamorelin": { "10 mg": 10 },
-  "mots-c": { "10 mg": 10 },
-  "nad": { "500 mg": 10 },
+  "glp1-r": {
+    "10 mg": 20
+  },
+  "tesamorelin": {
+    "10 mg": 10
+  },
+  "mots-c": {
+    "40 mg": 10
+  },
+  "epitalon": {
+    "50 mg": 10
+  },
+  "adamax": {
+    "10 mg": 10
+  },
+  "klow": {
+    "80 mg": 10
+  },
+  "ss-31": {
+    "10 mg": 10
+  },
+  "cjc-ipa": {
+    "CJC 10 mg + Ipa 10 mg": 10
+  },
+  "bac-water": {
+    "3 ml": 10
+  }
 };
 const LEAD_TIME = "~7 days";

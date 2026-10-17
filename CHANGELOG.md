@@ -4,6 +4,12 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-17 — Catalog trimmed to 19 sizes; one inventory record
+
+- **Catalog:** 17 products, 19 sizes: GLP1-R 10 mg, GLP1-T 10 mg, Tesamorelin 10 mg, Ipamorelin 10 mg, MOTS-c 10 and 40 mg, SS-31 10 mg (back), BPC-157 10 mg, TB-500 10 mg, Adamax 10 mg, Melanotan II 10 mg (was "Standard vial"), GHK-Cu 50 and 100 mg, BPC-157 + TB-500 10 + 10 mg, CJC-1295 + Ipamorelin 10 + 10 mg, KLOW 80 mg, Epitalon 50 mg, NAD+ 500 mg, and BAC water 3 ml (new "Supplies" category; price on request until set). Dropped: GLP1-S, CJC-1295, KPV, Selank, Semax, Melanotan I, GLOW and the other sizes. Lab reports for sizes no longer sold are hidden from the site.
+- **Inventory:** `Peptide-Store/aura-ops` → `docs/inventory.md` is the only inventory record. `stock.js` is now generated from it (`node tools/stock/sync-stock.mjs`), not kept by hand.
+- Products can override the common spec rows (`spec` in data.js); BAC water shows its own form and storage.
+
 ## 2026-10-17 — Signed-in header, existing accounts, size labels
 
 - **Signed-in header:** the account icon becomes a round badge with the customer's initial (from their name) on every page, so they can see they're signed in. Back to the person icon after sign-out. `app.js` reads the Supabase session from the browser; the account page caches the profile name (`aura-name`).

@@ -19,7 +19,7 @@ How a customer pays on the Aura Pharma site. Built 2026-10-17. Two ways to pay: 
 - The browser never sets a price. `place_order()` (database function) prices each line from `public.catalog_prices`, adds shipping, and **refuses the order if the total differs from what the customer saw** ("prices have changed").
 - `catalog_prices` is a copy of `prices.js`. **After every price change:** `node tools/checkout/sync-prices.mjs` (applies to the live database), then push the site.
 - Shipping: **$15 flat, free from $200**, US only. It's set in two places that must match: `place_order()` in `supabase/migrations/20261017120000_orders.sql` and `js/checkout-config.js`.
-- Stock isn't decremented automatically; update `stock.js` by hand after orders as before.
+- Stock isn't decremented automatically. After orders, update `aura-ops/docs/inventory.md` (the only inventory record), run `node tools/stock/sync-stock.mjs`, push.
 
 ## Running orders (Aura Pharma)
 

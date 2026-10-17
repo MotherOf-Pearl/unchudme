@@ -275,6 +275,7 @@ const pages = {
     document.title = `${p.name} · ${BRAND.name}`;
     let size = p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0];
     const lots = LOTS.filter((l) => l.productId === p.id);
+    const spec = { ...SPEC, ...p.spec };
     $("#pdp").innerHTML = `
       <div class="pdp-media">
         <div class="vial-lg" id="pdp-main"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(sizeText(size.label))} vial" width="1000" height="1000"></div>
@@ -299,9 +300,7 @@ const pages = {
           ${p.formula ? `<tr><th>Molecular formula</th><td>${esc(p.formula)}</td></tr>` : ""}
           ${p.mw ? `<tr><th>Molecular weight</th><td>${p.mw} g/mol</td></tr>` : ""}
           ${p.cas ? `<tr><th>CAS</th><td>${p.cas}</td></tr>` : ""}
-          <tr><th>Form</th><td>${SPEC.form}</td></tr>
-          <tr><th>Purity</th><td>${SPEC.purity}</td></tr>
-          <tr><th>Storage</th><td>${SPEC.storage}</td></tr>
+          ${[["Form", spec.form], ["Purity", spec.purity], ["Storage", spec.storage]].filter((r) => r[1]).map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}
         </table>
         </div>
         <div id="coa-slot"></div>

@@ -4,7 +4,7 @@ Static site (no build step). Open `index.html` in a browser.
 
 - `data.js` — catalog: one listing per compound, sizes/blends as options. `REPORTS` (real lab reports) is generated from the certificate register by `tools/coa/site-data.mjs`; products without a report show sample data marked "Sample".
 - `prices.js` — generated. Each option's price is the average single-vial price across 10 competitor sites (`research/competitor-prices.json`). Options no competitor sells show "Price on request".
-- `stock.js` — vials on hand per option, edited by hand. Drives the In stock / Backordered / Ships in ~7 days badges. Unlisted options are ordered from the wholesaler on demand.
+- `stock.js` — vials on hand per option, GENERATED from the inventory source of truth (`Peptide-Store/aura-ops` → `docs/inventory.md`) by `node tools/stock/sync-stock.mjs`; never edit it by hand. Drives the In stock / Backordered / Ships in ~7 days badges. Unlisted options are ordered from the wholesaler on demand.
 - `app.js` / `styles.css` — shared header, footer, researcher gate, cart and page renderers.
 - `media/` — rendered vial photos and the home-page hero shot.
 

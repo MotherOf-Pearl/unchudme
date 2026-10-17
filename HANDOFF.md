@@ -51,7 +51,7 @@ Header: logo · Shop · FAQ · Affiliates · **profile icon** (opens the account
 |---|---|---|
 | `data.js` | the catalog (22 products, sizes as options), shared specs, sample lab data, and `REPORTS` (real certificates) | catalog by hand; `REPORTS` **only** via `tools/coa/site-data.mjs` |
 | `prices.js` | price per option (average of competitor prices) | generated: `node research/apply-pricing.mjs` |
-| `stock.js` | vials on hand per option | by hand after sales or deliveries |
+| `stock.js` | vials on hand per option | generated: update `aura-ops/docs/inventory.md` (the only inventory record), run `node tools/stock/sync-stock.mjs`, push |
 | `app.js` | header, footer, gate, cart, and every page's rendering | code |
 | `styles.css` | all styling | code |
 | `media/` | vial photos, hero image, link-preview card | `tools/vials/render.mjs` |
