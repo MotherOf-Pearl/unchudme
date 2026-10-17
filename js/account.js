@@ -23,10 +23,15 @@
     const i = t.previousElementSibling, show = i.type === "password";
     i.type = show ? "text" : "password"; t.setAttribute("aria-pressed", show); t.setAttribute("aria-label", show ? "Hide password" : "Show password");
   }));
+  // the header's initial (app.js accountBadge) uses the profile name cached here
+  const badge = (user, name) => {
+    try { name ? localStorage.setItem("aura-name", JSON.stringify({ id: user.id, name })) : localStorage.removeItem("aura-name"); } catch {}
+    window.accountBadge?.();
+  };
   const busy = (form, on) => form.querySelectorAll("button, input").forEach((x) => (x.disabled = on));
 
   // ---- signed out: sign in / create account
-  function signedOut(tab = "in") {
+  function signedOut(tab = "in", email = "") {
     title.textContent = tab === "in" ? "Sign in" : "Create account";
     box.innerHTML = `
       <div class="acct-tabs" role="tablist">
@@ -34,7 +39,7 @@
         <button role="tab" aria-selected="${tab === "up"}" data-t="up">Create account</button>
       </div>
       <form id="f" novalidate>${tab === "in" ? `
-        ${field("email", "Email", "email", 'autocomplete="email" required')}
+        ${field("email", "Email", "email", `autocomplete="email" required value="${e(email)}"`)}
         ${field("pass", "Password", "password", 'autocomplete="current-password" required')}
         <button class="btn portal-login" type="submit">Sign in</button>
         <p class="portal-msg" role="status"></p>
@@ -76,9 +81,27 @@
       busy(f, false);
       if (error) return msg(error.message, true);
       if (data.session) return show();
+      // Supabase answers a sign-up for an already-registered email with a user that has no identities
+      // (and sends nothing), so say so instead of "check your email"
+      if (data.user && !data.user.identities?.length) return exists(v("email"));
       title.textContent = "Check your email";
       box.innerHTML = `<p>We sent a confirmation link to <b>${e(v("email"))}</b>. Open it to finish creating your account, then sign in here.</p>
         <p class="portal-msg" role="status"></p><div class="portal-links"><a href="account.html">Back to sign in</a></div>`;
+    };
+  }
+
+  // ---- sign-up with an email that already has an account
+  function exists(email) {
+    title.textContent = "Account already exists";
+    box.innerHTML = `<p>There's already an account for <b>${e(email)}</b>. Sign in, or reset your password if you've forgotten it.</p>
+      <button class="btn portal-login" type="button" id="go-in">Sign in</button>
+      <p class="portal-msg" role="status"></p>
+      <div class="portal-links"><a href="#" id="forgot">Forgot your password?</a></div>`;
+    box.querySelector("#go-in").onclick = () => { signedOut("in", email); box.querySelector("#pass").focus(); };
+    box.querySelector("#forgot").onclick = async (ev) => {
+      ev.preventDefault();
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: here });
+      msg(error ? error.message : `A password reset link is on its way to ${email}.`, !!error);
     };
   }
 
@@ -102,6 +125,7 @@
   async function profile(user, note = "") {
     title.textContent = "Your account";
     const { data: p, error } = await sb.from("profiles").select("email, full_name, institution, research_area, verified, role, created_at").eq("id", user.id).maybeSingle();
+    if (!error && p) badge(user, p.full_name);
     if (error || !p) { box.innerHTML = `<p class="portal-msg err">Couldn't load your profile (${e(error?.message ?? "not found")}).</p><button class="btn" id="out">Sign out</button>`; box.querySelector("#out").onclick = signOut; return; }
     box.innerHTML = `
       <div class="acct-head"><div><b>${e(p.full_name || p.email)}</b><span class="muted">${e(p.email)}</span></div>
@@ -131,6 +155,7 @@
       ev.preventDefault();
       const v = (id) => box.querySelector("#" + id).value.trim() || null;
       const { error } = await sb.from("profiles").update({ full_name: v("name"), institution: v("inst"), research_area: v("area") }).eq("id", user.id);
+      if (!error) badge(user, v("name"));
       msg(error ? error.message : "Saved.", !!error);
     };
   }
@@ -147,7 +172,7 @@
         <span class="mono">$${(+o.total).toFixed(2)}</span></a>`).join("")}</div>`);
   }
 
-  async function signOut() { await sb.auth.signOut(); signedOut("in"); }
+  async function signOut() { await sb.auth.signOut(); badge(null, null); signedOut("in"); }
 
   async function show(note) {
     if (recovering) return newPassword();

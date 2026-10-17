@@ -32,7 +32,7 @@
       ${ls.map((l) => {
         const n = onHand(l.p, l.s) ?? 0, note = n >= l.qty ? "" : n > 0 ? `${n} in stock, ${l.qty - n} ships in ${LEAD_TIME}` : `Ships in ${LEAD_TIME}`;
         return `<div class="co-line"><img src="${vialImg(l.p, l.s)}" alt="" width="56" height="56">
-          <div><b>${esc(l.p.name)}</b><span class="muted mono">${esc(l.label)} × ${l.qty}</span>${note ? `<span class="cart-note">${note}</span>` : ""}</div>
+          <div><b>${esc(l.p.name)}</b><span class="muted mono">${esc(sizeText(l.label))} × ${l.qty}</span>${note ? `<span class="cart-note">${note}</span>` : ""}</div>
           <span class="mono">${money(l.price * l.qty)}</span></div>`;
       }).join("")}
       <div class="co-row"><span>Subtotal</span><span class="mono">${money(t.sub)}</span></div>
@@ -162,7 +162,7 @@
         <div class="co-actions"><a class="btn" href="shop.html">Continue shopping</a>${token ? "" : `<a class="btn" href="account.html">Your orders</a>`}</div>`)}
     </div>
     <aside class="co-summary"><h3>Items</h3>
-      ${o.items.map((i) => `<div class="co-line co-line-plain"><div><b>${esc(i.name)}</b><span class="muted mono">${esc(i.label)} × ${i.qty}</span></div><span class="mono">${money(i.price * i.qty)}</span></div>`).join("")}
+      ${o.items.map((i) => `<div class="co-line co-line-plain"><div><b>${esc(i.name)}</b><span class="muted mono">${esc(sizeText(i.label))} × ${i.qty}</span></div><span class="mono">${money(i.price * i.qty)}</span></div>`).join("")}
       <div class="co-row"><span>Subtotal</span><span class="mono">${money(+o.subtotal)}</span></div>
       <div class="co-row"><span>Shipping</span><span class="mono">${+o.shipping ? money(+o.shipping) : "Free"}</span></div>
       <div class="co-row co-total"><span>Total</span><span class="mono">${money(+o.total)}</span></div>

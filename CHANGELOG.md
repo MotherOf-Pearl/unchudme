@@ -4,6 +4,12 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-17 — Signed-in header, existing accounts, size labels
+
+- **Signed-in header:** the account icon becomes a round badge with the customer's initial (from their name) on every page, so they can see they're signed in. Back to the person icon after sign-out. `app.js` reads the Supabase session from the browser; the account page caches the profile name (`aura-name`).
+- **"Account already exists":** signing up with an email that already has a confirmed account now says so, with Sign in (email filled in) and Forgot your password, instead of "Check your email" (Supabase sends nothing in that case). An unconfirmed account still gets "Check your email", because Supabase re-sends the confirmation.
+- **Size options show amounts only:** blends read "5 mg + 5 mg" rather than "BPC 5 mg + TB 5 mg" on the product page, cart, checkout and certificates (`sizeText()` in app.js). The full labels stay as the keys for prices, stock, images and certificates.
+
 ## 2026-10-17 — Email on Zoho
 
 - **support@aurapharma.us** is live on **Zoho Mail Lite** (5 GB, $12/year). Google Workspace and Microsoft 365 both blocked the sign-up. MX, SPF and DKIM records added in Cloudflare via Zoho's one-click setup. Supabase SMTP settings for account emails documented. See EMAIL.md.

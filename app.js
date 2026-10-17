@@ -18,6 +18,10 @@ const productAvailability = (p) => (inStock(p) ? availability(1)
 const stockPill = ({ cls, text }) => `<span class="stock-pill ${cls}">${text}</span>`;
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+// Size as shown to customers: just the amounts ("BPC 5 mg + TB 5 mg" → "5 mg + 5 mg"). The full label stays the key
+// for prices, stock, images and certificates.
+const sizeText = (label) => String(label).replace(/\b[A-Za-z][\w-]*\s+(?=[\d.]+\s*mg\b)/g, "");
+
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
@@ -77,6 +81,7 @@ function setFavicon() {
 }
 
 /* ---------- chrome ---------- */
+const ACCOUNT_ICON = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>`;
 function renderChrome() {
   setFavicon();
   const page = document.body.dataset.page;
@@ -88,7 +93,7 @@ function renderChrome() {
       ${logoHTML()}
       <button class="menu-btn" aria-label="Menu" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <nav class="main">${nav.map(([k, h, l]) => `<a href="${h}"${k === page ? ' aria-current="page"' : ""}>${l}</a>`).join("")}</nav>
-      <a class="account-btn" href="account.html" aria-label="Account"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></a>
+      <a class="account-btn" href="account.html" aria-label="Account">${ACCOUNT_ICON}</a>
       <button class="cart-btn" aria-label="Open cart"><svg class="cart-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.8L21 7H6.2"/></svg><span class="cart-word">Cart (</span><span id="cart-count">0</span><span class="cart-word">)</span></button>
     </div></header>`);
 
@@ -152,7 +157,7 @@ function renderCart() {
   $(".drawer .items").innerHTML = c.length ? c.map((i, idx) => {
     const p = byId(i.id), s = p.sizes.find((x) => x.label === i.label), price = s.price; sub += price * i.qty;
     const n = onHand(p, s) ?? 0, note = n >= i.qty ? "" : n > 0 ? `${n} in stock, ${i.qty - n} ships in ${LEAD_TIME}` : `Ships in ${LEAD_TIME}`;
-    return `<div class="item"><div><b>${esc(p.name)}</b> <span class="muted mono">${esc(i.label)} × ${i.qty}</span><br>
+    return `<div class="item"><div><b>${esc(p.name)}</b> <span class="muted mono">${esc(sizeText(i.label))} × ${i.qty}</span><br>
       ${note ? `<span class="cart-note">${note}</span><br>` : ""}
       <button class="link-btn" data-rm="${idx}">Remove</button></div><div class="mono">${money(price * i.qty)}</div></div>`;
   }).join("") : `<p class="muted" style="padding:20px 0">Your cart is empty.</p>`;
@@ -169,7 +174,7 @@ function closeCart() { $(".drawer").classList.remove("open"); $(".drawer-bg").cl
 // "6 sizes · 5–60 mg" for plain mg ranges, otherwise "2 options"
 function optionSummary(p) {
   const n = p.sizes.length, mgs = p.sizes.map((s) => s.label.match(/^([\d.]+) mg$/)?.[1]);
-  if (n === 1) return esc(p.sizes[0].label);
+  if (n === 1) return esc(sizeText(p.sizes[0].label));
   return mgs.every(Boolean) ? `${n} sizes · ${mgs[0]}–${mgs.at(-1)} mg` : `${n} options`;
 }
 // A batch's lab report: the panel the reports cover (purity, identity, measured content)
@@ -178,11 +183,11 @@ function coaPanel(l) {
   // blends report each ingredient's amount and no purity
   const rows = [...(l.purity ? [["Purity (HPLC)", "≥ 98.0%", `${l.purity}%`]] : []),
     ["Identity", p.mw ? `MW ${p.mw}` : "Matches reference", l.identity],
-    ...(l.content ? [["Content", `${l.size} on the label`, l.content]] : []), ...(l.appearance ? [["Appearance", "White to off-white powder", l.appearance]] : [])];
+    ...(l.content ? [["Content", `${esc(sizeText(l.size))} on the label`, l.content]] : []), ...(l.appearance ? [["Appearance", "White to off-white powder", l.appearance]] : [])];
   return `<div class="coa-panel" id="lab-report">
     <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
       <div><div class="eyebrow">Lab report</div><h3 style="margin:0">${esc(p.name)}</h3>
-      <p class="muted mono" style="margin:6px 0 0">${l.certNo ? `Batch ${esc(l.certNo)} · ` : ""}${l.sample ? "" : `${esc(l.size)} · `}Tested ${l.date}</p></div>
+      <p class="muted mono" style="margin:6px 0 0">${l.certNo ? `Batch ${esc(l.certNo)} · ` : ""}${l.sample ? "" : `${esc(sizeText(l.size))} · `}Tested ${l.date}</p></div>
       ${l.sample ? `<div><span class="sample-badge">Sample data — not a real result</span></div>` : ""}</div>
     <div class="table-scroll" style="margin-top:18px"><table class="coa-table">
       <tr><th>Test</th><th>Specification</th><th>Result</th></tr>
@@ -198,7 +203,7 @@ const reportFor = (p, size) => {
   return real.length ? real.find((l) => l.size === size.label) ?? null : latestLot(p.id);
 };
 const noReport = (size) => `<div class="coa-panel" id="lab-report"><div class="eyebrow">Lab report</div>
-  <p class="muted" style="margin:8px 0 0">The lab report for ${esc(size.label)} is coming soon. Other sizes of this product have reports; choose one above to see it.</p></div>`;
+  <p class="muted" style="margin:8px 0 0">The lab report for ${esc(sizeText(size.label))} is coming soon. Other sizes of this product have reports; choose one above to see it.</p></div>`;
 
 const shownSize = (p) => p.sizes.find((s) => onHand(p, s) > 0) || p.sizes[0]; // picture the size on the shelf
 const PLUS = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>`;
@@ -213,7 +218,7 @@ function productCard(p) {
       <a class="name card-link" href="product.html?id=${p.id}">${esc(p.name)}</a>
       <span class="meta">${optionSummary(p)}</span>
       <span class="price">${priceTag(p)}${q
-        ? `<button class="go quick-add" data-add="${p.id}" data-label="${esc(q.label)}" aria-label="Add ${esc(p.name)} ${esc(q.label)} to cart" title="Add ${esc(q.label)} to cart">${PLUS}</button>`
+        ? `<button class="go quick-add" data-add="${p.id}" data-label="${esc(q.label)}" aria-label="Add ${esc(p.name)} ${esc(sizeText(q.label))} to cart" title="Add ${esc(sizeText(q.label))} to cart">${PLUS}</button>`
         : `<span class="go" aria-hidden="true">→</span>`}</span>
     </div>
   </div>`;
@@ -236,7 +241,7 @@ const pages = {
     $("#featured").innerHTML = [...onShelf, ...PRODUCTS.filter((p) => !onShelf.includes(p))].slice(0, 8).map(productCard).join("");
     const l = LOTS.find((x) => x.productId === "bpc-157" && !x.sample) ?? LOTS.find((x) => x.productId === "bpc-157"), p = byId(l.productId);
     $("#mini-coa").innerHTML = `
-      <div class="mini-coa-head"><b>${esc(p.name)}${l.sample ? "" : ` ${esc(l.size)}`}</b>${l.sample ? `<span class="sample-badge">Sample</span>` : ""}</div>
+      <div class="mini-coa-head"><b>${esc(p.name)}${l.sample ? "" : ` ${esc(sizeText(l.size))}`}</b>${l.sample ? `<span class="sample-badge">Sample</span>` : ""}</div>
       <div class="row"><span>Batch</span><span class="mono">${esc(l.certNo ?? l.lot)}</span></div>
       <div class="row"><span>Purity (HPLC)</span><span class="mono pass">${l.purity}%</span></div>
       <div class="row"><span>Identity</span><span class="mono pass">${l.sample ? "Conforms" : esc(l.identity)}</span></div>
@@ -272,7 +277,7 @@ const pages = {
     const lots = LOTS.filter((l) => l.productId === p.id);
     $("#pdp").innerHTML = `
       <div class="pdp-media">
-        <div class="vial-lg" id="pdp-main"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000"></div>
+        <div class="vial-lg" id="pdp-main"><img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(sizeText(size.label))} vial" width="1000" height="1000"></div>
         <div class="thumbs" id="pdp-thumbs" role="group" aria-label="Pictures"></div>
       </div>
       <div class="pdp-info">
@@ -282,7 +287,7 @@ const pages = {
         <div class="price" style="font-size:1.4rem;font-weight:650" id="price"></div>
         <div class="avail" id="avail"></div>
         <div class="sizes" role="group" aria-label="Option">${p.sizes.map((s, i) =>
-          `<button class="size${onHand(p, s) > 0 ? " has-stock" : ""}" data-i="${i}" aria-pressed="${s === size}">${esc(s.label)}</button>`).join("")}</div>
+          `<button class="size${onHand(p, s) > 0 ? " has-stock" : ""}" data-i="${i}" aria-pressed="${s === size}">${esc(sizeText(s.label))}</button>`).join("")}</div>
         <div class="qty"><label for="qty" class="muted">Qty</label><input id="qty" class="field" type="number" min="1" max="50" value="1"></div>
         <button class="btn primary" id="add">Add to cart</button>
         </div>
@@ -316,9 +321,9 @@ const pages = {
       const main = $("#pdp-main");
       main.classList.toggle("cert", view === "cert");
       main.innerHTML = view === "cert"
-        ? `<a href="${cert.img}" target="_blank" rel="noopener" title="Open full size"><img id="pdp-img" src="${cert.img}" alt="Certificate of analysis ${esc(cert.certNo)}, ${esc(p.name)} ${esc(size.label)}"></a>
+        ? `<a href="${cert.img}" target="_blank" rel="noopener" title="Open full size"><img id="pdp-img" src="${cert.img}" alt="Certificate of analysis ${esc(cert.certNo)}, ${esc(p.name)} ${esc(sizeText(size.label))}"></a>
            <a class="cert-dl" href="${cert.pdf}" download target="_blank" rel="noopener">Download PDF</a>`
-        : `<img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(size.label)} vial" width="1000" height="1000">`;
+        : `<img id="pdp-img" src="${vialImg(p, size)}" alt="${esc(p.name)} ${esc(sizeText(size.label))} vial" width="1000" height="1000">`;
       $("#pdp-thumbs").innerHTML = cert ? [
         `<button class="thumb" data-v="vial" aria-pressed="${view === "vial"}" aria-label="Vial"><img src="${vialImg(p, size)}" alt=""></button>`,
         `<button class="thumb cert" data-v="cert" aria-pressed="${view === "cert"}" aria-label="Certificate of analysis ${esc(cert.certNo)}"><img src="${cert.img}" alt=""></button>`].join("") : "";
@@ -362,11 +367,29 @@ const pages = {
     const real = LOTS.filter((l) => !l.sample).sort((a, b) => byId(a.productId).name.localeCompare(byId(b.productId).name) || parseFloat(a.size.replace(/^\D+/, "")) - parseFloat(b.size.replace(/^\D+/, "")));
     const rows = [...real, ...[...new Set(LOTS.filter((l) => l.sample).map((l) => l.productId))].map(latestLot)];
     $("#coa-list").innerHTML = rows.map((l) => { const id = l.productId, p = byId(id);
-      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}${l.sample ? "" : ` ${esc(l.size)}`}</a></td><td>${l.date}</td>
+      return `<tr><td><a href="product.html?id=${id}#lab-report">${esc(p.name)}${l.sample ? "" : ` ${esc(sizeText(l.size))}`}</a></td><td>${l.date}</td>
         <td class="mono">${l.purity ? `${l.purity}%` : "—"}</td><td class="mono">${l.content ?? "—"}</td>
         <td>${l.pdf ? `<a class="mono" href="${l.pdf}" download target="_blank" rel="noopener">${esc(l.certNo ?? "PDF")}</a>` : `<span class="sample-badge">Sample</span>`}</td></tr>`; }).join("");
   },
 };
 
+/* ---------- signed in: the account icon becomes the customer's initial ----------
+   Reads the session Supabase keeps in localStorage, so pages don't need the Supabase library. The account
+   page caches the profile name under aura-name ({ id, name }) and calls accountBadge() on sign-in / sign-out. */
+const SB_SESSION_KEY = "sb-guzqebqtxiwngutbdmkl-auth-token";
+function accountBadge() {
+  const btn = document.querySelector(".account-btn");
+  if (!btn) return;
+  const u = store.get(SB_SESSION_KEY, null)?.user, cached = store.get("aura-name", null);
+  const name = (u && ((cached?.id === u.id && cached.name) || u.user_metadata?.full_name || u.email) || "").trim();
+  btn.classList.toggle("signed-in", !!name);
+  btn.setAttribute("aria-label", name ? `Account: ${name}` : "Account");
+  btn.title = name;
+  btn.innerHTML = name ? `<span class="acct-initial" aria-hidden="true">${esc(name[0].toUpperCase())}</span>` : ACCOUNT_ICON;
+}
+window.accountBadge = accountBadge;
+addEventListener("storage", (ev) => { if (ev.key === SB_SESSION_KEY || ev.key === "aura-name") accountBadge(); });   // other tabs
+
 renderChrome();
+accountBadge();
 pages[document.body.dataset.page]?.();
