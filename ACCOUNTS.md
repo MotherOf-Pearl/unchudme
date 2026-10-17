@@ -64,5 +64,5 @@ update public.profiles set verified = true, verified_at = now() where email = 'c
    - Redirect URLs: `https://www.aurapharma.us/**` (accounts are tested on the live site only; sign-up from unchudme.vercel.app isn't supported)
 
    Without this, confirmation and password-reset emails link to the wrong place.
-2. **Email sending (before real customers)** — Supabase's built-in email only delivers to members of your Supabase organization and is limited to a few per hour, so customers won't get confirmation emails until a custom sender is set: Authentication → Emails → SMTP Settings, using the support@aurapharma.us mailbox (or a sending service such as Resend or Postmark). Also edit the email templates there to say Aura Pharma.
+2. **Email sending (before real customers)** — Supabase's built-in email only delivers to members of your Supabase organization and is limited to a few per hour, so customers won't get confirmation emails until a custom sender is set: Authentication → Emails → SMTP Settings, using the support@aurapharma.us Zoho mailbox — exact settings in [EMAIL.md](EMAIL.md#supabase-account-emails-sign-up-confirmation-password-reset). Also edit the email templates there to say Aura Pharma.
 3. **Free plan pauses** after a week without activity; upgrade (Pro) before launch.

@@ -4,6 +4,10 @@ What changed on the Aura Pharma storefront and why. Newest first. The certificat
 
 > Public repo: no supplier names, supplier batches, lab task numbers or verification keys here.
 
+## 2026-10-17 — Email on Zoho
+
+- **support@aurapharma.us** is live on **Zoho Mail Lite** (5 GB, $12/year). Google Workspace and Microsoft 365 both blocked the sign-up. MX, SPF and DKIM records added in Cloudflare via Zoho's one-click setup. Supabase SMTP settings for account emails documented. See EMAIL.md.
+
 ## 2026-10-17 — Guest checkout and quick add
 
 - **Continue as guest** on checkout: guests give an email and order without an account; their status link carries a private token (`&t=…`). Unverified accounts can now order too; guest and unverified orders get a research-use check before shipping (`buyer_verified` on each order). At most 5 orders per email per hour.

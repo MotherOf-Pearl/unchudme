@@ -6,6 +6,7 @@ Start here when picking the project up again. It says what the site is, how to r
 - [CHANGELOG.md](CHANGELOG.md) — every change, newest first, with the reasons.
 - [ACCOUNTS.md](ACCOUNTS.md) — customer accounts: the Supabase project, the profiles table and its rules, set-up still needed.
 - [CHECKOUT.md](CHECKOUT.md) — checkout, orders, invoice and crypto payment, marking orders paid/shipped, price sync.
+- [EMAIL.md](EMAIL.md) — the support@aurapharma.us mailbox (Zoho Mail Lite, $12/year), its Cloudflare DNS records, and the Supabase email sender.
 
 > **This repo is public** and Vercel serves the site from it. Never commit supplier names, supplier batch numbers, lab task numbers, verification keys, costs or margins. The private material listed under "Where things live" stays out of git.
 
@@ -113,7 +114,7 @@ Back up the git-ignored `research/` files: they exist only on that machine (the 
 
 **Needs Jack (decisions, accounts, outside parties)**
 - [x] **Domain on Vercel:** live at https://www.aurapharma.us (aurapharma.us redirects to www).
-- [ ] **Rest of the domain work:** link-preview tags (`og:image`, `twitter:image`) in every page's head still point to unchudme.vercel.app; put the domain on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; set up the **support@aurapharma.us** inbox (now printed on the home page).
+- [ ] **Rest of the domain work:** link-preview tags (`og:image`, `twitter:image`) in every page's head still point to unchudme.vercel.app; put the domain on Cloudflare; serve `aura-reports` at `reports.aurapharma.us` and update `REPORTS_URL`; ~~set up the support@aurapharma.us inbox~~ done 2026-10-17 on Zoho Mail (EMAIL.md).
 - [ ] **Certificate footer domain** says aurapharma.co; the site uses aurapharma.us. Pick one.
 - [ ] **Supplier check:** do the vials on sale come from the batches tested in 2025 (11 of the 17 certificates)?
 - [ ] **TB-500 in the 5 + 5 blend** (AP-0013) was measured as the 889 Da fragment, not thymosin β4 like every other report. Confirm with the supplier.
